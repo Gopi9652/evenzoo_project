@@ -1,0 +1,141 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #1a1a2e;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+
+  .logo-text {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+  }
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: 3rem;
+
+  .nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #e8650a;
+    }
+  }
+}
+
+.nav-user {
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e8650a, #f5a623);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+}
+
+.menu-header {
+  padding: 0.5rem 1rem;
+
+  .menu-name {
+    font-weight: 700;
+    margin: 0;
+    color: #1a1a2e;
+  }
+}
+
+.bell-btn {
+  color: rgba(255, 255, 255, 0.85);
+  margin-left: auto;
+  margin-right: 0.5rem;
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0e6d3;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #1a1a2e;
+
+  .mark-all-btn {
+    font-size: 0.72rem;
+    color: #e8650a;
+    min-width: unset;
+    padding: 0 8px;
+  }
+}
+
+.notif-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.notif-item {
+  height: auto !important;
+  padding: 0.75rem 1rem !important;
+  border-bottom: 1px solid #f8f4ec;
+  white-space: normal !important;
+  line-height: 1.4;
+
+  &.unread {
+    background: #fff7ed;
+  }
+}
+
+.notif-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.notif-title {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.notif-message {
+  font-size: 0.78rem;
+  color: #64748b;
+  white-space: normal;
+}
+
+.notif-time {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+

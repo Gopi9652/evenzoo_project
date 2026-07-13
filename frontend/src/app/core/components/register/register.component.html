@@ -1,0 +1,76 @@
+<div class="auth-container">
+  <mat-card class="auth-card">
+    <div class="auth-header">
+      <div class="logo-icon">🎪</div>
+      <h1>Join Evenzoo</h1>
+      <p>Create your account</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <div class="role-toggle">
+        <mat-button-toggle-group formControlName="role" class="full-width">
+          <mat-button-toggle value="customer" class="toggle-btn">
+            👤 I'm a Customer
+          </mat-button-toggle>
+          <mat-button-toggle value="vendor" class="toggle-btn">
+            🏪 I'm a Vendor
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="name" placeholder="Your name">
+        @if (name?.invalid && name?.touched) {
+          <mat-error>Name is required (min 2 characters)</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" placeholder="you@example.com">
+        @if (email?.invalid && email?.touched) {
+          <mat-error>Enter a valid email</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phone" placeholder="9876543210" maxlength="10">
+        <span matTextPrefix>+91 &nbsp;</span>
+        @if (phone?.invalid && phone?.touched) {
+          <mat-error>Enter a valid 10-digit Indian mobile number</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+        <mat-icon matSuffix (click)="hidePassword = !hidePassword" style="cursor: pointer">
+          {{ hidePassword ? 'visibility_off' : 'visibility' }}
+        </mat-icon>
+        @if (password?.invalid && password?.touched) {
+          <mat-error>Password must be at least 6 characters</mat-error>
+        }
+      </mat-form-field>
+
+      @if (errorMessage) {
+        <div class="error-banner">{{ errorMessage }}</div>
+      }
+
+      <button mat-raised-button color="primary" type="submit"
+              class="full-width submit-btn" [disabled]="loading">
+        @if (loading) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          Create Account
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/login">Login here</a></p>
+    </div>
+  </mat-card>
+</div>

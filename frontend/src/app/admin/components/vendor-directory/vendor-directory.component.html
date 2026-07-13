@@ -1,0 +1,44 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <div>
+    <h1>Vendor Directory</h1>
+    <p>{{ vendors.length }} total vendors on the platform</p>
+  </div>
+  <mat-button-toggle-group [(ngModel)]="viewMode">
+    <mat-button-toggle value="grid"><mat-icon>grid_view</mat-icon></mat-button-toggle>
+    <mat-button-toggle value="list"><mat-icon>view_list</mat-icon></mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<div class="directory-container">
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (viewMode === 'grid') {
+    <div class="grid-view">
+      @for (v of vendors; track v.id) {
+        <div class="vendor-tile">
+          <div class="tile-avatar">🏪</div>
+          <span class="tile-name">{{ v.business_name }}</span>
+          <span class="tile-status" [class.approved]="v.is_approved">
+            {{ v.is_approved ? 'Approved' : 'Pending' }}
+          </span>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="list-view">
+      @for (v of vendors; track v.id) {
+        <div class="list-row">
+          <div class="row-avatar">🏪</div>
+          <span class="row-name">{{ v.business_name }}</span>
+          <span class="row-rating">⭐ {{ v.avg_rating || 0 }}</span>
+          <span class="row-bookings">{{ v.total_bookings }} bookings</span>
+          <span class="row-status" [class.approved]="v.is_approved">
+            {{ v.is_approved ? 'Approved' : 'Pending' }}
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,82 @@
+<app-navbar></app-navbar>
+<app-approval-banner></app-approval-banner>
+
+
+<div class="page-header">
+  <div>
+    <h1>Manage Services</h1>
+    <p>Add and update the services you offer</p>
+  </div>
+  <button mat-raised-button color="primary" (click)="toggleForm()">
+    {{ showForm ? 'Cancel' : '+ Add Service' }}
+  </button>
+</div>
+
+<div class="services-container">
+  @if (showForm) {
+    <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()" class="service-form">
+      <h3>New Service</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Service Name</mat-label>
+        <input matInput formControlName="name" placeholder="e.g. Full Day Wedding Photography">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="2"></textarea>
+      </mat-form-field>
+
+      <div class="price-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Price (₹)</mat-label>
+          <input matInput type="number" formControlName="price">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Price Type</mat-label>
+          <mat-select formControlName="price_type">
+            <mat-option value="fixed">Fixed Price</mat-option>
+            <mat-option value="per_hour">Per Hour</mat-option>
+            <mat-option value="per_day">Per Day</mat-option>
+            <mat-option value="per_person">Per Person</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="submitting">
+        {{ submitting ? 'Adding...' : 'Add Service' }}
+      </button>
+    </form>
+  }
+
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (services.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">🛠️</span>
+      <h3>No services added yet</h3>
+      <p>Add your first service to start receiving bookings</p>
+    </div>
+  } @else {
+    <div class="services-grid">
+      @for (service of services; track service.id) {
+        <div class="service-card">
+          <div class="service-header">
+            <h4>{{ service.name }}</h4>
+            <button mat-icon-button (click)="deleteService(service.id)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+          <p class="service-desc">{{ service.description }}</p>
+          <div class="service-footer">
+            <span class="price">₹{{ service.price | number }}</span>
+            <span class="price-type">{{ service.price_type }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

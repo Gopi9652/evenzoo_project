@@ -1,0 +1,77 @@
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.services-select {
+  margin: 0.5rem 0 1rem;
+
+  label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 0.6rem;
+  }
+}
+
+.service-checkbox {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f0e6d3;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  mat-checkbox {
+    width: 100%;
+  }
+
+  .service-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .service-cost {
+    float: right;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e8650a;
+  }
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #fff7ed;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+
+  .total-value {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #e8650a;
+  }
+}
+
+.error-banner {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-size: 0.83rem;
+  margin-top: 0.5rem;
+}

@@ -1,0 +1,334 @@
+<app-navbar></app-navbar>
+
+@if (loading) {
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+} @else if (vendor) {
+
+  <div class="detail-hero">
+    <div class="hero-inner">
+      <span class="hero-icon">🏪</span>
+
+      @if (vendor.is_approved) {
+        <span class="verified-tag">✓ Verified Vendor</span>
+      }
+    </div>
+  </div>
+
+  <div class="detail-container">
+
+    <div class="detail-main">
+
+      <div class="detail-header">
+        <h1>{{ vendor.business_name }}</h1>
+
+        <div class="rating-row">
+          <div class="stars">
+            @for (star of ratingStars; track $index) {
+              <mat-icon class="star-icon"
+                        [class.filled]="star === 1">
+                star
+              </mat-icon>
+            }
+          </div>
+
+          <span class="rating-text">
+            {{ vendor.avg_rating || 0 }}
+            · {{ vendor.total_reviews }} reviews
+            · {{ vendor.total_bookings }} bookings
+          </span>
+        </div>
+
+        <p class="address" *ngIf="vendor.address">
+          <mat-icon>place</mat-icon>
+          {{ vendor.address }}
+        </p>
+      </div>
+
+      <mat-tab-group class="detail-tabs">
+
+        <!-- ABOUT -->
+
+        <mat-tab label="About">
+          <div class="tab-content">
+            <p class="description">
+              {{ vendor.description || 'No description provided.' }}
+            </p>
+          </div>
+        </mat-tab>
+
+        <!-- SERVICES -->
+
+        <mat-tab label="Services & Pricing">
+          <div class="tab-content">
+
+            @if (services.length === 0) {
+
+              <p class="empty-text">
+                No services listed yet.
+              </p>
+
+            } @else {
+
+              <div class="services-list">
+
+                @for (service of services; track service.id) {
+
+                  <div class="service-item">
+
+                    <div class="service-info">
+                      <h4>{{ service.name }}</h4>
+                      <p>{{ service.description }}</p>
+                    </div>
+
+                    <div class="service-price">
+                      <span class="price">
+                        ₹{{ service.price | number }}
+                      </span>
+
+                      <span class="price-type">
+                        {{ service.price_type }}
+                      </span>
+                    </div>
+
+                  </div>
+
+                }
+
+              </div>
+
+            }
+
+          </div>
+        </mat-tab>
+
+        <!-- PHOTOS -->
+
+        <mat-tab label="Photos">
+
+          <div class="tab-content">
+
+            @if (photos.length === 0) {
+
+              <p class="empty-text">
+                No photos uploaded yet.
+              </p>
+
+            } @else {
+
+              <div class="photo-grid">
+
+                @for (photo of photos; track photo.id) {
+
+                  <div class="photo-item">
+                    <img
+                      [src]="photo.photo_url"
+                      [alt]="photo.caption">
+                  </div>
+
+                }
+
+              </div>
+
+            }
+
+          </div>
+
+        </mat-tab>
+
+        <!-- REVIEWS -->
+
+        <mat-tab [label]="'Reviews (' + reviews.length + ')'">
+
+          <div class="tab-content">
+
+            @if (reviewsLoading) {
+
+              <div class="reviews-loading">
+                <mat-spinner diameter="30"></mat-spinner>
+              </div>
+
+            } @else if (reviews.length === 0) {
+
+              <p class="empty-text">
+                No reviews yet. Be the first to book and review this vendor!
+              </p>
+
+            } @else {
+
+              <div class="review-summary">
+
+                <div class="summary-score">
+
+                  <span class="big-score">
+                    {{ vendor.avg_rating || 0 }}
+                  </span>
+
+                  <div class="summary-stars">
+
+                    @for (star of ratingStars; track $index) {
+
+                      <mat-icon
+                        class="star-icon"
+                        [class.filled]="star === 1">
+                        star
+                      </mat-icon>
+
+                    }
+
+                  </div>
+
+                  <span class="summary-count">
+                    {{ reviews.length }}
+                    review{{ reviews.length !== 1 ? 's' : '' }}
+                  </span>
+
+                </div>
+
+                <div class="summary-bars">
+
+                  @for (row of ratingBreakdown; track row.star) {
+
+                    <div class="bar-row">
+
+                      <span class="bar-label">
+                        {{ row.star }}★
+                      </span>
+
+                      <div class="bar-track">
+                        <div
+                          class="bar-fill"
+                          [style.width.%]="row.percent">
+                        </div>
+                      </div>
+
+                      <span class="bar-count">
+                        {{ row.count }}
+                      </span>
+
+                    </div>
+
+                  }
+
+                </div>
+
+              </div>
+
+              <div class="reviews-list-public">
+                                @for (review of reviews; track review.id) {
+
+                  <div class="public-review-card">
+
+                    <div class="public-review-header">
+
+                      <div class="reviewer-stars">
+                        @for (star of starsFor(review.overall_rating); track $index) {
+                          <span [class.filled]="star === 1">★</span>
+                        }
+                      </div>
+
+                      <span class="public-review-date">
+                        {{ review.created_at | date:'mediumDate' }}
+                      </span>
+
+                    </div>
+
+                    <h5>{{ review.title }}</h5>
+
+                    <p>{{ review.body }}</p>
+
+                    <div class="public-rating-breakdown">
+
+                      <span>
+                        Quality:
+                        {{ review.quality_rating }}★
+                      </span>
+
+                      <span>
+                        Price:
+                        {{ review.price_rating }}★
+                      </span>
+
+                      <span>
+                        Service:
+                        {{ review.service_rating }}★
+                      </span>
+
+                    </div>
+
+                    @if (review.vendor_reply) {
+
+                      <div class="public-vendor-reply">
+
+                        <strong>
+                          {{ vendor.business_name }} replied:
+                        </strong>
+
+                        {{ review.vendor_reply }}
+
+                      </div>
+
+                    }
+
+                  </div>
+
+                }
+
+              </div>
+
+            }
+
+          </div>
+
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </div>
+
+    <!-- SIDEBAR -->
+
+    <div class="detail-sidebar">
+
+      <div class="booking-card">
+
+        <h3>Ready to book?</h3>
+
+        <p>
+          Select services and pick your event date
+        </p>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="book-btn"
+          (click)="openBookingDialog()">
+
+          📅 Book Now
+
+        </button>
+        <button mat-stroked-button class="message-btn"
+            (click)="router.navigate(['/chat/user', vendor.user_id], { queryParams: { name: vendor.business_name } })">
+          💬 Message Vendor
+        </button>
+
+        <p class="disclaimer">
+          You won't be charged until the vendor confirms
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+} @else {
+
+  <div class="error-container">
+
+    <p>Vendor not found</p>
+
+  </div>
+
+}

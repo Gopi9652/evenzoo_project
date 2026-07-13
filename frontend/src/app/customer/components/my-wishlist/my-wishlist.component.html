@@ -1,0 +1,48 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>Saved Vendors</h1>
+  <p>Vendors you've bookmarked for later</p>
+</div>
+
+<div class="wishlist-container">
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (items.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">💔</span>
+      <h3>No saved vendors yet</h3>
+      <p>Tap the heart icon on any vendor to save them here</p>
+      <button mat-raised-button color="primary" routerLink="/customer/home">
+        Browse Vendors
+      </button>
+    </div>
+  } @else {
+    <div class="wishlist-grid">
+      @for (item of items; track item.wishlist_id) {
+        <div class="wishlist-card">
+          <a [routerLink]="['/customer/vendor', item.vendor_id]" class="card-link">
+            <div class="card-icon">🏪</div>
+            <div class="card-body">
+              <h4>{{ item.business_name }}</h4>
+              <p>{{ item.description || 'No description available' }}</p>
+              <div class="card-meta">
+                <span>⭐ {{ item.avg_rating || 0 }} ({{ item.total_reviews }} reviews)</span>
+                @if (!item.is_approved) {
+                  <span class="pending-tag">Pending Approval</span>
+                }
+              </div>
+            </div>
+          </a>
+          <button mat-icon-button class="remove-btn"
+                  [disabled]="removingId === item.vendor_id"
+                  (click)="remove(item.vendor_id)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

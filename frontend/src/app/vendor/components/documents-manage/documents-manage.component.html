@@ -1,0 +1,55 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>Business Documents</h1>
+  <p>Upload verification documents to build trust with customers</p>
+</div>
+
+<div class="docs-container">
+  <div class="upload-section">
+    <mat-select [(ngModel)]="selectedType" class="type-select">
+      @for (t of documentTypes; track t.value) {
+        <mat-option [value]="t.value">{{ t.label }}</mat-option>
+      }
+    </mat-select>
+
+    <input type="file" id="docUpload" accept="image/*,.pdf" (change)="onFileSelected($event)" hidden>
+    <label for="docUpload" class="upload-btn">
+      @if (uploading) {
+        <mat-spinner diameter="18"></mat-spinner>
+        <span>Uploading...</span>
+      } @else {
+        <mat-icon>upload_file</mat-icon>
+        <span>Upload Document</span>
+      }
+    </label>
+  </div>
+
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (documents.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">📄</span>
+      <h3>No documents uploaded yet</h3>
+      <p>Upload Aadhar, PAN, GST or license to get verified faster</p>
+    </div>
+  } @else {
+    <div class="docs-list">
+      @for (doc of documents; track doc.id) {
+        <div class="doc-card">
+          <div class="doc-icon">📄</div>
+          <div class="doc-info">
+            <span class="doc-type">{{ typeLabel(doc.document_type) }}</span>
+            <span class="doc-status" [class.verified]="doc.is_verified">
+              {{ doc.is_verified ? '✓ Verified' : 'Pending Review' }}
+            </span>
+          </div>
+          <a [href]="doc.document_url" target="_blank" mat-button>View</a>
+          <button mat-icon-button (click)="deleteDocument(doc.id)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,39 @@
+<div class="cine-bg">
+  @for (scene of scenes; track scene.key) {
+    <div class="cine-scene"
+         [class.active]="isActive(scene.key)"
+         [attr.data-key]="scene.key">
+
+      @if (scene.type === 'image') {
+        <div class="cine-media cine-image"
+             [style.background-image]="'linear-gradient(rgba(11,11,15,0.35), rgba(11,11,15,0.35)), url(' + scene.src + ')'">
+        </div>
+      } @else {
+        <video
+          class="cine-media cine-video"
+          [poster]="scene.poster || ''"
+          muted
+          loop
+          playsinline
+          preload="metadata">
+          <source [src]="scene.src" type="video/mp4">
+        </video>
+        <div class="cine-video-overlay"></div>
+      }
+
+    </div>
+  }
+</div>
+
+<div class="cine-scrim"></div>
+<div class="cine-grain"></div>
+
+<div class="scene-rail">
+  @for (scene of scenes; track scene.key) {
+    <div class="scene-dot"
+         [class.active]="isActive(scene.key)"
+         (click)="scrollTo(scene.sectionId)">
+      <span class="tip">{{ scene.label }}</span>
+    </div>
+  }
+</div>

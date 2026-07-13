@@ -1,0 +1,33 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>Active Sessions</h1>
+  <p>Devices currently logged into your account</p>
+</div>
+
+<div class="sessions-container">
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else {
+    <button mat-stroked-button color="warn" class="revoke-all-btn" (click)="revokeAll()">
+      Log Out All Other Devices
+    </button>
+
+    <div class="sessions-list">
+      @for (session of sessions; track session.id) {
+        <div class="session-row">
+          <mat-icon class="device-icon">{{ deviceIcon(session.device_info) }}</mat-icon>
+          <div class="session-info">
+            <span class="device-name">{{ session.device_info || 'Unknown Device' }}</span>
+            <span class="session-meta">
+              IP: {{ session.ip_address || 'Unknown' }} · Last active: {{ session.last_used_at | date:'medium' }}
+            </span>
+          </div>
+          <button mat-button color="warn" (click)="revoke(session.id)">Log Out</button>
+        </div>
+      } @empty {
+        <p class="empty-text">No active sessions found</p>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,402 @@
+-- 1. users
+CREATE TABLE users (
+    id            SERIAL PRIMARY KEY,
+    name          VARCHAR(100) NOT NULL,
+    email         VARCHAR(150) UNIQUE NOT NULL,
+    phone         VARCHAR(15) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role          VARCHAR(20) NOT NULL, -- customer / vendor / admin
+    is_active     BOOLEAN DEFAULT TRUE,
+    is_verified   BOOLEAN DEFAULT FALSE,
+    profile_photo VARCHAR(500),
+    created_at    TIMESTAMP DEFAULT NOW(),
+    updated_at    TIMESTAMP DEFAULT NOW()
+);
+
+-- 2. otp_verifications
+CREATE TABLE otp_verifications (
+    id         SERIAL PRIMARY KEY,
+    user_id    INT REFERENCES users(id) ON DELETE CASCADE,
+    otp_code   VARCHAR(6) NOT NULL,
+    purpose    VARCHAR(30), -- register / login / reset_password
+    expires_at TIMESTAMP NOT NULL,
+    is_used    BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 3. refresh_tokens
+CREATE TABLE refresh_tokens (
+    id         SERIAL PRIMARY KEY,
+    user_id    INT REFERENCES users(id) ON DELETE CASCADE,
+    token      TEXT UNIQUE NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 4. password_resets
+CREATE TABLE password_resets (
+    id         SERIAL PRIMARY KEY,
+    user_id    INT REFERENCES users(id) ON DELETE CASCADE,
+    token      TEXT UNIQUE NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    is_used    BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- 5. states
+CREATE TABLE states (
+    id   SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+-- 6. cities
+CREATE TABLE cities (
+    id       SERIAL PRIMARY KEY,
+    state_id INT REFERENCES states(id),
+    name     VARCHAR(100) NOT NULL
+);
+
+
+
+
+
+
+
+
+
+
+-- 7. vendor_profiles
+CREATE TABLE vendor_profiles (
+    id               SERIAL PRIMARY KEY,
+    user_id          INT REFERENCES users(id) ON DELETE CASCADE,
+    business_name    VARCHAR(200) NOT NULL,
+    description      TEXT,
+    city_id          INT REFERENCES cities(id),
+    address          TEXT,
+    gstin            VARCHAR(20),
+    pan_number       VARCHAR(20),
+    bank_account     VARCHAR(30),
+    bank_ifsc        VARCHAR(20),
+    bank_name        VARCHAR(100),
+    is_approved      BOOLEAN DEFAULT FALSE,
+    approval_date    TIMESTAMP,
+    rejection_reason TEXT,
+    avg_rating       DECIMAL(3,2) DEFAULT 0.00,
+    total_reviews    INT DEFAULT 0,
+    total_bookings   INT DEFAULT 0,
+    rank_score       DECIMAL(5,2) DEFAULT 0.00,
+    created_at       TIMESTAMP DEFAULT NOW(),
+    updated_at       TIMESTAMP DEFAULT NOW()
+);
+
+-- 8. vendor_categories
+CREATE TABLE vendor_categories (
+    id          SERIAL PRIMARY KEY,
+    name        VARCHAR(100) NOT NULL, -- Photography, Catering, Decoration etc
+    description TEXT,
+    icon        VARCHAR(100),
+    is_active   BOOLEAN DEFAULT TRUE
+);
+
+-- 9. vendor_category_map
+CREATE TABLE vendor_category_map (
+    id          SERIAL PRIMARY KEY,
+    vendor_id   INT REFERENCES vendor_profiles(id) ON DELETE CASCADE,
+    category_id INT REFERENCES vendor_categories(id),
+    UNIQUE(vendor_id, category_id)
+);
+
+-- 10. vendor_services
+CREATE TABLE vendor_services (
+    id           SERIAL PRIMARY KEY,
+    vendor_id    INT REFERENCES vendor_profiles(id) ON DELETE CASCADE,
+    name         VARCHAR(200) NOT NULL,
+    description  TEXT,
+    price        DECIMAL(10,2) NOT NULL,
+    price_type   VARCHAR(20), -- fixed / per_hour / per_day / per_person
+    min_quantity INT DEFAULT 1,
+    max_quantity INT,
+    is_active    BOOLEAN DEFAULT TRUE,
+    created_at   TIMESTAMP DEFAULT NOW()
+);
+
+-- 11. vendor_photos
+CREATE TABLE vendor_photos (
+    id          SERIAL PRIMARY KEY,
+    vendor_id   INT REFERENCES vendor_profiles(id) ON DELETE CASCADE,
+    photo_url   VARCHAR(500) NOT NULL,
+    caption     VARCHAR(200),
+    is_cover    BOOLEAN DEFAULT FALSE,
+    sort_order  INT DEFAULT 0,
+    created_at  TIMESTAMP DEFAULT NOW()
+);
+
+-- 12. vendor_documents
+CREATE TABLE vendor_documents (
+    id            SERIAL PRIMARY KEY,
+    vendor_id     INT REFERENCES vendor_profiles(id) ON DELETE CASCADE,
+    document_type VARCHAR(50), -- aadhar / pan / gst / license
+    document_url  VARCHAR(500) NOT NULL,
+    is_verified   BOOLEAN DEFAULT FALSE,
+    created_at    TIMESTAMP DEFAULT NOW()
+);
+
+-- 13. vendor_availability
+CREATE TABLE vendor_availability (
+    id          SERIAL PRIMARY KEY,
+    vendor_id   INT REFERENCES vendor_profiles(id) ON DELETE CASCADE,
+    date        DATE NOT NULL,
+    is_available BOOLEAN DEFAULT TRUE,
+    reason      VARCHAR(200), -- booked / holiday / personal
+    UNIQUE(vendor_id, date)
+);
+
+-- 14. vendor_working_hours
+CREATE TABLE vendor_working_hours (
+    id         SERIAL PRIMARY KEY,
+    vendor_id  INT REFERENCES vendor_profiles(id) ON DELETE CASCADE,
+    day_of_week INT NOT NULL, -- 0=Mon 6=Sun
+    open_time  TIME,
+    close_time TIME,
+    is_off_day BOOLEAN DEFAULT FALSE
+);
+
+
+
+
+
+
+
+
+
+
+
+-- 15. customer_profiles
+CREATE TABLE customer_profiles (
+    id         SERIAL PRIMARY KEY,
+    user_id    INT REFERENCES users(id) ON DELETE CASCADE,
+    city_id    INT REFERENCES cities(id),
+    address    TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 16. customer_wishlist
+CREATE TABLE customer_wishlist (
+    id         SERIAL PRIMARY KEY,
+    user_id    INT REFERENCES users(id) ON DELETE CASCADE,
+    vendor_id  INT REFERENCES vendor_profiles(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(user_id, vendor_id)
+);
+
+
+
+
+
+
+-- 17. event_types
+CREATE TABLE event_types (
+    id   SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL -- Wedding / Birthday / Corporate / Reception
+);
+
+-- 18. bookings
+CREATE TABLE bookings (
+    id               SERIAL PRIMARY KEY,
+    booking_ref      VARCHAR(20) UNIQUE NOT NULL, -- EVZ-2026-0001
+    customer_id      INT REFERENCES users(id),
+    vendor_id        INT REFERENCES vendor_profiles(id),
+    event_type_id    INT REFERENCES event_types(id),
+    event_date       DATE NOT NULL,
+    event_time       TIME,
+    event_location   TEXT NOT NULL,
+    event_city_id    INT REFERENCES cities(id),
+    guests_count     INT,
+    special_requests TEXT,
+    status           VARCHAR(20) DEFAULT 'pending',
+    -- pending/confirmed/cancelled/completed/refunded
+    total_amount     DECIMAL(10,2) NOT NULL,
+    platform_fee     DECIMAL(10,2), -- 6% commission
+    vendor_amount    DECIMAL(10,2), -- 94% to vendor
+    cancellation_reason TEXT,
+    cancelled_by     VARCHAR(20), -- customer / vendor / admin
+    cancelled_at     TIMESTAMP,
+    confirmed_at     TIMESTAMP,
+    completed_at     TIMESTAMP,
+    created_at       TIMESTAMP DEFAULT NOW(),
+    updated_at       TIMESTAMP DEFAULT NOW()
+);
+
+-- 19. booking_services
+CREATE TABLE booking_services (
+    id         SERIAL PRIMARY KEY,
+    booking_id INT REFERENCES bookings(id) ON DELETE CASCADE,
+    service_id INT REFERENCES vendor_services(id),
+    quantity   INT DEFAULT 1,
+    unit_price DECIMAL(10,2) NOT NULL,
+    total      DECIMAL(10,2) NOT NULL
+);
+
+-- 20. booking_status_history
+CREATE TABLE booking_status_history (
+    id         SERIAL PRIMARY KEY,
+    booking_id INT REFERENCES bookings(id) ON DELETE CASCADE,
+    old_status VARCHAR(20),
+    new_status VARCHAR(20),
+    changed_by INT REFERENCES users(id),
+    reason     TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+
+
+
+
+
+
+
+-- 21. payments
+CREATE TABLE payments (
+    id                SERIAL PRIMARY KEY,
+    booking_id        INT REFERENCES bookings(id),
+    razorpay_order_id VARCHAR(100) UNIQUE,
+    razorpay_payment_id VARCHAR(100) UNIQUE,
+    razorpay_signature VARCHAR(300),
+    amount            DECIMAL(10,2) NOT NULL,
+    currency          VARCHAR(5) DEFAULT 'INR',
+    status            VARCHAR(20) DEFAULT 'pending',
+    -- pending/captured/failed/refunded
+    payment_method    VARCHAR(50), -- upi/card/netbanking
+    paid_at           TIMESTAMP,
+    created_at        TIMESTAMP DEFAULT NOW()
+);
+
+-- 22. refunds
+CREATE TABLE refunds (
+    id                  SERIAL PRIMARY KEY,
+    payment_id          INT REFERENCES payments(id),
+    razorpay_refund_id  VARCHAR(100) UNIQUE,
+    amount              DECIMAL(10,2) NOT NULL,
+    reason              TEXT,
+    status              VARCHAR(20) DEFAULT 'pending',
+    initiated_by        INT REFERENCES users(id),
+    processed_at        TIMESTAMP,
+    created_at          TIMESTAMP DEFAULT NOW()
+);
+
+-- 23. vendor_payouts
+CREATE TABLE vendor_payouts (
+    id              SERIAL PRIMARY KEY,
+    vendor_id       INT REFERENCES vendor_profiles(id),
+    booking_id      INT REFERENCES bookings(id),
+    amount          DECIMAL(10,2) NOT NULL,
+    status          VARCHAR(20) DEFAULT 'pending',
+    -- pending/processed/failed
+    payout_ref      VARCHAR(100),
+    processed_at    TIMESTAMP,
+    created_at      TIMESTAMP DEFAULT NOW()
+);
+
+
+
+
+
+
+
+-- 24. reviews
+CREATE TABLE reviews (
+    id               SERIAL PRIMARY KEY,
+    booking_id       INT REFERENCES bookings(id) UNIQUE,
+    customer_id      INT REFERENCES users(id),
+    vendor_id        INT REFERENCES vendor_profiles(id),
+    quality_rating   INT CHECK (quality_rating BETWEEN 1 AND 5),
+    price_rating     INT CHECK (price_rating BETWEEN 1 AND 5),
+    service_rating   INT CHECK (service_rating BETWEEN 1 AND 5),
+    overall_rating   DECIMAL(3,2),
+    title            VARCHAR(200),
+    body             TEXT,
+    photos           TEXT[], -- array of photo URLs
+    is_verified      BOOLEAN DEFAULT TRUE, -- only booking customers
+    vendor_reply     TEXT,
+    vendor_reply_at  TIMESTAMP,
+    created_at       TIMESTAMP DEFAULT NOW()
+);
+
+
+
+
+
+
+
+
+
+
+-- 25. notifications
+CREATE TABLE notifications (
+    id         SERIAL PRIMARY KEY,
+    user_id    INT REFERENCES users(id) ON DELETE CASCADE,
+    title      VARCHAR(200) NOT NULL,
+    message    TEXT NOT NULL,
+    type       VARCHAR(50), -- booking/payment/review/system
+    is_read    BOOLEAN DEFAULT FALSE,
+    link       VARCHAR(300),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 26. email_logs
+CREATE TABLE email_logs (
+    id         SERIAL PRIMARY KEY,
+    user_id    INT REFERENCES users(id),
+    to_email   VARCHAR(150) NOT NULL,
+    subject    VARCHAR(300) NOT NULL,
+    template   VARCHAR(100),
+    status     VARCHAR(20), -- sent/failed
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+
+
+
+
+
+
+
+-- 27. platform_settings
+CREATE TABLE platform_settings (
+    id          SERIAL PRIMARY KEY,
+    key         VARCHAR(100) UNIQUE NOT NULL,
+    value       TEXT NOT NULL,
+    description VARCHAR(300),
+    updated_at  TIMESTAMP DEFAULT NOW()
+    -- commission_rate = 6
+    -- min_booking_amount = 1000
+    -- max_advance_days = 365
+);s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

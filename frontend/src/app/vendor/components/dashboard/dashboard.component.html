@@ -1,0 +1,118 @@
+<app-navbar></app-navbar>
+<app-approval-banner></app-approval-banner>
+
+@if (loading) {
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+} @else {
+
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <div>
+        <h1>Welcome back, {{ profile?.business_name }} 👋</h1>
+        <p>Here's what's happening with your business</p>
+      </div>
+      @if (!profile?.is_approved) {
+        <div class="approval-badge pending">
+          <mat-icon>hourglass_empty</mat-icon>
+          Awaiting Admin Approval
+        </div>
+      } @else {
+        <div class="approval-badge approved">
+          <mat-icon>verified</mat-icon>
+          Approved & Live
+        </div>
+      }
+    </div>
+
+    @if (isProfileIncomplete) {
+      <div class="warning-banner">
+        <mat-icon>info</mat-icon>
+        <span>Your profile is incomplete. Add a description and address to attract more customers.</span>
+        <a routerLink="/vendor/profile">Complete Profile →</a>
+      </div>
+    }
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-icon">📋</span>
+        <span class="stat-number">{{ profile?.total_bookings || 0 }}</span>
+        <span class="stat-label">Total Bookings</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">⏳</span>
+        <span class="stat-number">{{ pendingCount }}</span>
+        <span class="stat-label">Pending Requests</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">⭐</span>
+        <span class="stat-number">{{ profile?.avg_rating || 0 }}</span>
+        <span class="stat-label">Average Rating</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">💬</span>
+        <span class="stat-number">{{ profile?.total_reviews || 0 }}</span>
+        <span class="stat-label">Total Reviews</span>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <!--<a routerLink="/vendor/bookings" class="action-card">
+        <span class="action-icon">📅</span>
+        <span>Manage Bookings</span>
+      </a>
+      <a routerLink="/vendor/services" class="action-card">
+        <span class="action-icon">🛠️</span>
+        <span>Manage Services</span>
+      </a>-->
+      <a routerLink="/vendor/profile" class="action-card">
+        <span class="action-icon">✏️</span>
+        <span>Edit Profile</span>
+      </a>
+      <a routerLink="/vendor/documents" class="action-card">
+        <span class="action-icon">📄</span>
+        <span>Business Documents</span>
+      </a>
+      <a routerLink="/vendor/photos" class="action-card">
+        <span class="action-icon">📷</span>
+        <span>Manage Photos</span>
+      </a>
+      <a routerLink="/vendor/reviews" class="action-card">
+        <span class="action-icon">⭐</span>
+        <span>Customer Reviews</span>
+      </a>
+      <a routerLink="/vendor/analytics" class="action-card">
+        <span class="action-icon">📊</span>
+        <span>View Analytics</span>
+      </a>
+    </div>
+
+    <div class="recent-section">
+      <div class="section-header">
+        <h3>Recent Booking Requests</h3>
+        <a routerLink="/vendor/bookings">View All →</a>
+      </div>
+
+      @if (recentBookings.length === 0) {
+        <p class="empty-text">No booking requests yet</p>
+      } @else {
+        <div class="recent-list">
+          @for (booking of recentBookings; track booking.id) {
+            <div class="recent-item">
+              <div class="recent-status" [style.background]="statusColor(booking.status) + '15'"
+                   [style.color]="statusColor(booking.status)">
+                {{ booking.status | titlecase }}
+              </div>
+              <div class="recent-info">
+                <span class="recent-ref">{{ booking.booking_ref }}</span>
+                <span class="recent-date">{{ booking.event_date | date:'mediumDate' }}</span>
+              </div>
+              <span class="recent-amount">₹{{ booking.total_amount | number }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}

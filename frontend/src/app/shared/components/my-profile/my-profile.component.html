@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+
+<div class="profile-container">
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (user) {
+    <div class="profile-card">
+      <div class="avatar-section">
+        @if (user.profile_photo) {
+          <img [src]="user.profile_photo" class="avatar-img" alt="Profile photo">
+        } @else {
+          <div class="avatar-placeholder">{{ initial }}</div>
+        }
+
+        <input type="file" id="avatarUpload" accept="image/*" (change)="onFileSelected($event)" hidden>
+        <label for="avatarUpload" class="upload-btn">
+          @if (uploading) {
+            <mat-spinner diameter="16"></mat-spinner>
+          } @else {
+            <mat-icon>photo_camera</mat-icon>
+          }
+        </label>
+      </div>
+
+      <h2>{{ user.name }}</h2>
+      <p class="role-tag">{{ user.role | titlecase }}</p>
+
+      <div class="info-rows">
+        <div class="info-row">
+          <mat-icon>email</mat-icon>
+          <span>{{ user.email }}</span>
+        </div>
+        <div class="info-row">
+          <mat-icon>phone</mat-icon>
+          <span>{{ user.phone }}</span>
+        </div>
+        <div class="info-row">
+          <mat-icon>{{ user.is_verified ? 'verified' : 'error_outline' }}</mat-icon>
+          <span>{{ user.is_verified ? 'Verified Account' : 'Not Verified' }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>

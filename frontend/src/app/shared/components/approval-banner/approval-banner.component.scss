@@ -1,0 +1,61 @@
+.approval-banner {
+  background: #fef3c7;
+  border-bottom: 2px solid #fde68a;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.banner-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.banner-icon {
+  color: #d97706;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.banner-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #92400e;
+}
+
+.banner-sub {
+  font-size: 0.8rem;
+  color: #a16207;
+  line-height: 1.4;
+}
+
+.dismiss-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #92400e;
+  padding: 4px;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(146, 64, 14, 0.1);
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 640px) {
+  .approval-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

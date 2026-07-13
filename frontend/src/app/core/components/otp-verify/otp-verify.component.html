@@ -1,0 +1,40 @@
+<div class="auth-container">
+  <mat-card class="auth-card">
+    <div class="auth-header">
+      <div class="logo-icon">📱</div>
+      <h1>Verify Your Phone</h1>
+      <p>We sent a 6-digit code to +91 {{ phone }}</p>
+    </div>
+
+    <form [formGroup]="otpForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Enter OTP</mat-label>
+        <input matInput formControlName="otp_code" maxlength="6" placeholder="123456">
+        @if (otpForm.get('otp_code')?.invalid && otpForm.get('otp_code')?.touched) {
+          <mat-error>Enter a valid 6-digit code</mat-error>
+        }
+      </mat-form-field>
+
+      @if (errorMessage) {
+        <div class="error-banner">{{ errorMessage }}</div>
+      }
+
+      @if (successMessage) {
+        <div class="success-banner">{{ successMessage }}</div>
+      }
+
+      <button mat-raised-button color="primary" type="submit"
+              class="full-width submit-btn" [disabled]="loading">
+        @if (loading) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          Verify OTP
+        }
+      </button>
+
+      <button mat-button type="button" class="full-width resend-btn" (click)="resendOtp()">
+        Didn't receive code? Resend OTP
+      </button>
+    </form>
+  </mat-card>
+</div>

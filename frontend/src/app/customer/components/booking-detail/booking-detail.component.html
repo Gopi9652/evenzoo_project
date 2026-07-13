@@ -1,0 +1,198 @@
+<app-navbar></app-navbar>
+
+@if (loading) {
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    
+  </div>
+} @else if (booking) {
+
+  <div class="detail-container">
+    <button mat-button class="back-btn" (click)="router.navigate(['/customer/bookings'])">
+      <mat-icon>arrow_back</mat-icon> Back to Bookings
+    </button>
+
+    <div class="detail-grid">
+      <div class="main-panel">
+        <div class="status-banner" [style.background]="statusColor(booking.status) + '12'"
+             [style.color]="statusColor(booking.status)">
+          <span class="status-dot" [style.background]="statusColor(booking.status)"></span>
+          {{ booking.status | titlecase }}
+        </div>
+        <button mat-stroked-button
+           (click)="router.navigate(['/chat/booking', booking.id], { queryParams: { receiverId: vendorUserId, name: vendorName } })">
+          💬 Message
+        </button>
+
+        <h1>{{ booking.booking_ref }}</h1>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon>event</mat-icon>
+            <div>
+              <span class="label">Event Date</span>
+              <span class="value">{{ booking.event_date | date:'fullDate' }}</span>
+
+            </div>
+          </div>
+
+          @if (booking.event_time) {
+            <div class="info-item">
+              <mat-icon>schedule</mat-icon>
+              <div>
+                <span class="label">Event Time</span>
+                <span class="value">{{ booking.event_time }}</span>
+              </div>
+            </div>
+          }
+
+          <div class="info-item">
+            <mat-icon>place</mat-icon>
+            <div>
+              <span class="label">Location</span>
+              <span class="value">{{ booking.event_location }}</span>
+            </div>
+          </div>
+
+          @if (booking.guests_count) {
+            <div class="info-item">
+              <mat-icon>groups</mat-icon>
+              <div>
+                <span class="label">Guests</span>
+                <span class="value">{{ booking.guests_count }}</span>
+              </div>
+            </div>
+          }
+        </div>
+
+        @if (booking.special_requests) {
+          <div class="special-requests">
+            <h4>Special Requests</h4>
+            <p>{{ booking.special_requests }}</p>
+          </div>
+        }
+
+        @if (booking.status === 'completed') {
+          <div class="review-section">
+            <h4>{{ existingReview ? 'Your Review' : 'Leave a Review' }}</h4>
+
+            @if (existingReview && !editingReview) {
+              <div class="review-display">
+                <div class="review-stars">
+                  @for (i of [1,2,3,4,5]; track i) {
+                    <span [class.filled]="i <= existingReview.overall_rating">★</span>
+                  }
+                  <span class="review-score">{{ existingReview.overall_rating }}</span>
+                </div>
+                <p class="review-title">{{ existingReview.title }}</p>
+                <p class="review-body">{{ existingReview.body }}</p>
+                @if (existingReview.vendor_reply) {
+                  <div class="vendor-reply">
+                    <strong>Vendor reply:</strong> {{ existingReview.vendor_reply }}
+                  </div>
+                }
+                <div class="review-actions">
+                  <button mat-button (click)="editingReview = true">Edit</button>
+                  <button mat-button color="warn" (click)="deleteMyReview()">Delete</button>
+                </div>
+              </div>
+            } @else {
+              <div class="review-form">
+                <div class="rating-row">
+                  <label>Quality</label>
+                  <select [(ngModel)]="reviewForm.quality_rating">
+                    @for (n of [1,2,3,4,5]; track n) { <option [value]="n">{{n}} star</option> }
+                  </select>
+                </div>
+                <div class="rating-row">
+                  <label>Price</label>
+                  <select [(ngModel)]="reviewForm.price_rating">
+                    @for (n of [1,2,3,4,5]; track n) { <option [value]="n">{{n}} star</option> }
+                  </select>
+                </div>
+                <div class="rating-row">
+                  <label>Service</label>
+                  <select [(ngModel)]="reviewForm.service_rating">
+                    @for (n of [1,2,3,4,5]; track n) { <option [value]="n">{{n}} star</option> }
+                  </select>
+                </div>
+                <input class="review-input" [(ngModel)]="reviewForm.title" placeholder="Review title">
+                <textarea class="review-textarea" [(ngModel)]="reviewForm.body" rows="3" placeholder="Share your experience..."></textarea>
+                <div class="review-actions">
+                  <button mat-raised-button color="primary" (click)="submitReview()">
+                    {{ existingReview ? 'Update Review' : 'Submit Review' }}
+                  </button>
+                  @if (editingReview) {
+                    <button mat-button (click)="editingReview = false">Cancel</button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <div class="amount-breakdown">
+          <h4>Payment Breakdown</h4>
+          <div class="breakdown-row">
+            <span>Total Amount</span>
+            <span>₹{{ booking.total_amount | number }}</span>
+          </div>
+          @if (booking.platform_fee) {
+            <div class="breakdown-row muted">
+              <span>Platform Fee</span>
+              <span>₹{{ booking.platform_fee | number }}</span>
+            </div>
+          }
+
+          @if (isPaid) {
+            <div class="payment-success">
+              <mat-icon>check_circle</mat-icon>
+              Payment Completed
+            </div>
+          }
+        </div>
+
+        @if (needsPayment) {
+          <button mat-raised-button color="primary" class="pay-btn"
+                  (click)="payNow()" [disabled]="payingNow">
+            @if (payingNow) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              💳 Pay ₹{{ booking.total_amount | number }} Now
+            }
+          </button>
+        }
+
+        @if (canCancel && !payingNow) {
+          <button mat-stroked-button color="warn" class="cancel-btn"
+                  (click)="cancelBooking()" [disabled]="cancelling">
+            {{ cancelling ? 'Cancelling...' : 'Cancel Booking' }}
+          </button>
+        }
+      </div>
+
+      <div class="timeline-panel">
+        <h3>Status Timeline</h3>
+        <div class="timeline">
+          @for (item of history; track item.id) {
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <p class="timeline-status">{{ item.new_status | titlecase }}</p>
+                @if (item.reason) {
+                  <p class="timeline-reason">{{ item.reason }}</p>
+                }
+                <p class="timeline-time">{{ item.created_at | date:'medium' }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+} @else {
+  <div class="error-container">
+    <p>Booking not found</p>
+  </div>
+}

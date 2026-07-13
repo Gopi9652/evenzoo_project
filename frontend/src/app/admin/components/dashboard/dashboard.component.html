@@ -1,0 +1,126 @@
+<app-navbar></app-navbar>
+
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>Admin Dashboard</h1>
+    <p>Platform-wide overview and controls</p>
+  </div>
+
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (stats) {
+
+    @if (stats.pending_vendor_approvals > 0) {
+      <div class="alert-banner">
+        <mat-icon>notification_important</mat-icon>
+        <span>{{ stats.pending_vendor_approvals }} vendor(s) waiting for approval</span>
+        <a routerLink="/admin/vendors">Review Now →</a>
+      </div>
+    }
+
+    <div class="stats-grid">
+      <div class="stat-card highlight">
+        <span class="stat-icon">💰</span>
+        <span class="stat-number">₹{{ stats.total_revenue | number }}</span>
+        <span class="stat-label">Total Revenue</span>
+      </div>
+      <div class="stat-card highlight">
+        <span class="stat-icon">🏦</span>
+        <span class="stat-number">₹{{ stats.total_platform_commission | number }}</span>
+        <span class="stat-label">Platform Commission</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">👥</span>
+        <span class="stat-number">{{ stats.total_users }}</span>
+        <span class="stat-label">Total Users</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🏪</span>
+        <span class="stat-number">{{ stats.total_approved_vendors }}</span>
+        <span class="stat-label">Active Vendors</span>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="booking-stats-card">
+        <h3>Booking Status Breakdown</h3>
+        <div class="booking-bars">
+          <div class="bar-row">
+            <span class="bar-label">Pending</span>
+            <div class="bar-track">
+              <div class="bar-fill pending" [style.width.%]="(stats.pending_bookings / stats.total_bookings) * 100"></div>
+            </div>
+            <span class="bar-count">{{ stats.pending_bookings }}</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Confirmed</span>
+            <div class="bar-track">
+              <div class="bar-fill confirmed" [style.width.%]="(stats.confirmed_bookings / stats.total_bookings) * 100"></div>
+            </div>
+            <span class="bar-count">{{ stats.confirmed_bookings }}</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Completed</span>
+            <div class="bar-track">
+              <div class="bar-fill completed" [style.width.%]="(stats.completed_bookings / stats.total_bookings) * 100"></div>
+            </div>
+            <span class="bar-count">{{ stats.completed_bookings }}</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Cancelled</span>
+            <div class="bar-track">
+              <div class="bar-fill cancelled" [style.width.%]="(stats.cancelled_bookings / stats.total_bookings) * 100"></div>
+            </div>
+            <span class="bar-count">{{ stats.cancelled_bookings }}</span>
+          </div>
+        </div>
+        <div class="success-rate">
+          <span>Completion Rate</span>
+          <span class="rate-value">{{ bookingSuccessRate }}%</span>
+        </div>
+      </div>
+
+      <div class="quick-actions-card">
+        <h3>Quick Actions</h3>
+        <a routerLink="/admin/vendors" class="action-item">
+          <mat-icon>how_to_reg</mat-icon>
+          <div>
+            <span class="action-title">Vendor Approvals</span>
+            <span class="action-sub">{{ stats.pending_vendor_approvals }} pending</span>
+          </div>
+        </a>
+        <a routerLink="/admin/bookings" class="action-item">
+          <mat-icon>event_note</mat-icon>
+          <div>
+            <span class="action-title">All Bookings</span>
+            <span class="action-sub">{{ stats.total_bookings }} total</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="platform-summary">
+      <h3>Platform Summary</h3>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="label">Customers</span>
+          <span class="value">{{ stats.total_customers }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Vendors (all)</span>
+          <span class="value">{{ stats.total_vendors }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Total Reviews</span>
+          <span class="value">{{ stats.total_reviews }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Platform Avg Rating</span>
+          <span class="value">{{ stats.avg_platform_rating || 'N/A' }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>

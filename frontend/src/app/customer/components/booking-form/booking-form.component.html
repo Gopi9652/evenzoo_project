@@ -1,0 +1,90 @@
+<h2 mat-dialog-title>Book {{ data.vendorName }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="bookingForm" class="booking-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Event Type</mat-label>
+      <mat-select formControlName="event_type_id">
+        @for (type of eventTypes; track type.id) {
+          <mat-option [value]="type.id">{{ type.name }}</mat-option>
+        }
+        <mat-option [value]="OTHER_VALUE">✏️ Other — let me specify</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    @if (isOtherSelected) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Please specify your event type</mat-label>
+        <input matInput formControlName="custom_event_type" placeholder="e.g. Baby Naming Ceremony">
+        @if (bookingForm.get('custom_event_type')?.invalid && bookingForm.get('custom_event_type')?.touched) {
+          <mat-error>Please enter at least 3 characters</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Event Date</mat-label>
+      <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="event_date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Event Time (optional)</mat-label>
+      <input matInput type="time" formControlName="event_time">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Event Location</mat-label>
+      <input matInput formControlName="event_location" placeholder="Venue address">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Number of Guests (optional)</mat-label>
+      <input matInput type="number" formControlName="guests_count">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Special Requests (optional)</mat-label>
+      <textarea matInput formControlName="special_requests" rows="2"></textarea>
+    </mat-form-field>
+
+    <div class="services-select">
+      <label>Select Services *</label>
+      @for (service of data.services; track service.id) {
+        <div class="service-checkbox">
+          <mat-checkbox
+            [checked]="isServiceSelected(service.id)"
+            (change)="toggleService(service.id, $event.checked)">
+            <span class="service-name">{{ service.name }}</span>
+            <span class="service-cost">₹{{ service.price | number }}</span>
+          </mat-checkbox>
+        </div>
+      }
+    </div>
+
+    @if (totalAmount > 0) {
+      <div class="total-row">
+        <span>Total Amount</span>
+        <span class="total-value">₹{{ totalAmount | number }}</span>
+      </div>
+    }
+
+    @if (errorMessage) {
+      <div class="error-banner">{{ errorMessage }}</div>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="submitting">
+    @if (submitting) {
+      <mat-spinner diameter="18"></mat-spinner>
+    } @else {
+      Submit Booking Request
+    }
+  </button>
+</mat-dialog-actions>

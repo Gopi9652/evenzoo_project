@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>All Bookings</h1>
+  <p>Platform-wide booking overview and dispute management</p>
+</div>
+
+<div class="overview-container">
+  <div class="filter-bar">
+    <mat-select [(ngModel)]="statusFilter" (selectionChange)="onFilterChange()" placeholder="Filter by status">
+      <mat-option value="">All Statuses</mat-option>
+      <mat-option value="pending">Pending</mat-option>
+      <mat-option value="confirmed">Confirmed</mat-option>
+      <mat-option value="completed">Completed</mat-option>
+      <mat-option value="cancelled">Cancelled</mat-option>
+    </mat-select>
+  </div>
+
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (bookings.length === 0) {
+    <p class="empty-text">No bookings found</p>
+  } @else {
+    <div class="booking-table">
+      <div class="table-header">
+        <span>Reference</span>
+        <span>Date</span>
+        <span>Amount</span>
+        <span>Status</span>
+        <span>Action</span>
+      </div>
+      @for (booking of bookings; track booking.id) {
+        <div class="table-row">
+          <span class="ref">{{ booking.booking_ref }}</span>
+          <span>{{ booking.event_date | date:'mediumDate' }}</span>
+          <span class="amount">₹{{ booking.total_amount | number }}</span>
+          <span class="status-tag" [style.background]="statusColor(booking.status) + '15'"
+                [style.color]="statusColor(booking.status)">
+            {{ booking.status | titlecase }}
+          </span>
+          <span>
+            @if (booking.status === 'pending' || booking.status === 'confirmed') {
+              <button mat-button color="warn" (click)="forceCancel(booking)">
+                Force Cancel
+              </button>
+            }
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,58 @@
+<div class="auth-container">
+  <mat-card class="auth-card">
+    <div class="auth-header">
+      <div class="logo-icon">🎪</div>
+      <h1>Evenzoo</h1>
+      <p>Welcome back! Login to continue</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" placeholder="you@example.com">
+        <mat-icon matSuffix>email</mat-icon>
+        @if (email?.invalid && email?.touched) {
+          <mat-error>
+            @if (email?.errors?.['required']) {
+              Email is required
+            } @else if (email?.errors?.['email']) {
+              Enter a valid email
+            }
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+        <mat-icon matSuffix (click)="hidePassword = !hidePassword" style="cursor: pointer">
+          {{ hidePassword ? 'visibility_off' : 'visibility' }}
+        </mat-icon>
+        @if (password?.invalid && password?.touched) {
+          <mat-error>Password must be at least 6 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="forgot-link">
+        <a routerLink="/forgot-password">Forgot password?</a>
+      </div>
+
+      @if (errorMessage) {
+        <div class="error-banner">{{ errorMessage }}</div>
+      }
+
+      <button mat-raised-button color="primary" type="submit"
+              class="full-width submit-btn" [disabled]="loading">
+        @if (loading) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          Login
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+    </div>
+  </mat-card>
+</div>

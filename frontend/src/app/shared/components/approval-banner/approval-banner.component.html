@@ -1,0 +1,19 @@
+@if (shouldShow) {
+  <div class="approval-banner">
+    <div class="banner-content">
+      <mat-icon class="banner-icon">hourglass_empty</mat-icon>
+      <div class="banner-text">
+        @if (rejectionReason) {
+          <span class="banner-title">Your profile needs changes</span>
+          <span class="banner-sub">{{ rejectionReason }} — please update your profile and it will be reviewed again.</span>
+        } @else {
+          <span class="banner-title">Your vendor profile is awaiting admin approval</span>
+          <span class="banner-sub">You can still set up your profile, services and photos — but you won't appear in customer search or receive bookings until approved.</span>
+        }
+      </div>
+    </div>
+    <button class="dismiss-btn" (click)="dismiss()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+}

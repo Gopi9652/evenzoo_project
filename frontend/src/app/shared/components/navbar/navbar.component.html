@@ -1,0 +1,84 @@
+<nav class="navbar">
+  <a routerLink="/customer/home" class="logo">
+    <span class="logo-icon">🎪</span>
+    <span class="logo-text">Evenzoo</span>
+  </a>
+
+  <div class="nav-links">
+    @if (authService.getRole() === 'customer') {
+      <a routerLink="/customer/home" class="nav-link">Browse</a>
+      <a routerLink="/customer/wishlist" class="nav-link">Saved</a>
+      <a routerLink="/customer/bookings" class="nav-link">My Bookings</a>
+      <a routerLink="/customer/reviews" class="nav-link">My Reviews</a>
+    }
+    @if (authService.getRole() === 'vendor') {
+      <a routerLink="/vendor/dashboard" class="nav-link">Dashboard</a>
+      <a routerLink="/vendor/bookings" class="nav-link">Bookings</a>
+      <a routerLink="/vendor/services" class="nav-link">Services</a>
+      <a routerLink="/vendor/reviews" class="nav-link">Reviews</a>
+      
+    }
+    @if (authService.getRole() === 'admin') {
+      <a routerLink="/admin/dashboard" class="nav-link">Dashboard</a>
+      <a routerLink="/admin/vendors" class="nav-link">Vendors</a>
+      <a routerLink="/admin/bookings" class="nav-link">Bookings</a>
+      <a routerLink="/admin/users" class="nav-link">Users</a>
+      <a routerLink="/admin/directory" class="nav-link">Directory</a>
+    }
+    <a routerLink="/profile" class="nav-link">Profile</a>
+    <a routerLink="/messages" class="nav-link">💬 Messages</a>
+
+  </div>
+
+  <!-- Notification Bell -->
+  <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="bell-btn">
+    <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeColor="warn" matBadgeSize="small">
+      notifications
+    </mat-icon>
+  </button>
+  <mat-menu #notifMenu="matMenu" class="notif-menu">
+    <div class="notif-header" (click)="$event.stopPropagation()">
+      <span>Notifications</span>
+      @if (unreadCount > 0) {
+        <button mat-button class="mark-all-btn" (click)="markAllRead()">Mark all read</button>
+      }
+    </div>
+    @if (notifications.length === 0) {
+      <div class="notif-empty">No notifications yet</div>
+    } @else {
+      @for (notif of notifications; track notif.id) {
+        <button mat-menu-item class="notif-item" [class.unread]="!notif.is_read">
+          <div class="notif-content">
+            <span class="notif-title">{{ notif.title }}</span>
+            <span class="notif-message">{{ notif.message }}</span>
+            <span class="notif-time">{{ notif.created_at | date:'short' }}</span>
+          </div>
+        </button>
+      }
+    }
+
+  </mat-menu>
+
+  <div class="nav-user">
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <div class="avatar">{{ userInitial }}</div>
+    </button>
+    <mat-menu #menu="matMenu">
+      <div class="menu-header">
+        <p class="menu-name">{{ userName }}</p>
+      </div>
+      <button mat-menu-item routerLink="/sessions">
+        <mat-icon>devices</mat-icon>
+        <span>Active Sessions</span>
+      </button>
+      <button mat-menu-item routerLink="/settings/change-password">
+        <mat-icon>lock</mat-icon>
+        <span>Change Password</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+</nav>

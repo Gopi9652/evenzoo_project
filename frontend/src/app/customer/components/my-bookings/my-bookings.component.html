@@ -1,0 +1,120 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>My Bookings</h1>
+  <p>Track all your event bookings in one place</p>
+</div>
+
+<div class="bookings-container">
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (allBookings.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">📅</span>
+      <h3>No bookings yet</h3>
+      <p>Browse vendors and book your first event service</p>
+    </div>
+  } @else {
+    <mat-tab-group class="bookings-tabs">
+      <mat-tab [label]="'Pending (' + pendingBookings.length + ')'">
+        <div class="booking-list">
+          @for (booking of pendingBookings; track booking.id) {
+            <div class="booking-card" (click)="viewBooking(booking.id)">
+              <div class="booking-status" [style.background]="statusColor(booking.status) + '15'"
+                   [style.color]="statusColor(booking.status)">
+                <mat-icon>{{ statusIcon(booking.status) }}</mat-icon>
+                {{ booking.status | titlecase }}
+              </div>
+              <h4>{{ booking.booking_ref }}</h4>
+              <p class="booking-meta">
+                <mat-icon>event</mat-icon> {{ booking.event_date | date:'mediumDate' }}
+              </p>
+              <p class="booking-meta">
+                <mat-icon>place</mat-icon> {{ booking.event_location }}
+              </p>
+              <div class="booking-footer">
+                <span class="amount">₹{{ booking.total_amount | number }}</span>
+                <span class="waiting-text">Waiting for vendor confirmation</span>
+              </div>
+            </div>
+          } @empty {
+            <p class="empty-tab">No pending bookings</p>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="'Confirmed (' + confirmedBookings.length + ')'">
+        <div class="booking-list">
+          @for (booking of confirmedBookings; track booking.id) {
+            <div class="booking-card" (click)="viewBooking(booking.id)">
+              <div class="booking-status" [style.background]="statusColor(booking.status) + '15'"
+                   [style.color]="statusColor(booking.status)">
+                <mat-icon>{{ statusIcon(booking.status) }}</mat-icon>
+                {{ booking.status | titlecase }}
+              </div>
+              <h4>{{ booking.booking_ref }}</h4>
+              <p class="booking-meta">
+                <mat-icon>event</mat-icon> {{ booking.event_date | date:'mediumDate' }}
+              </p>
+              <p class="booking-meta">
+                <mat-icon>place</mat-icon> {{ booking.event_location }}
+              </p>
+              <div class="booking-footer">
+                <span class="amount">₹{{ booking.total_amount | number }}</span>
+                <span class="pay-now">Payment Required →</span>
+              </div>
+            </div>
+          } @empty {
+            <p class="empty-tab">No confirmed bookings</p>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="'Completed (' + completedBookings.length + ')'">
+        <div class="booking-list">
+          @for (booking of completedBookings; track booking.id) {
+            <div class="booking-card" (click)="viewBooking(booking.id)">
+              <div class="booking-status" [style.background]="statusColor(booking.status) + '15'"
+                   [style.color]="statusColor(booking.status)">
+                <mat-icon>{{ statusIcon(booking.status) }}</mat-icon>
+                {{ booking.status | titlecase }}
+              </div>
+              <h4>{{ booking.booking_ref }}</h4>
+              <p class="booking-meta">
+                <mat-icon>event</mat-icon> {{ booking.event_date | date:'mediumDate' }}
+              </p>
+              <div class="booking-footer">
+                <span class="amount">₹{{ booking.total_amount | number }}</span>
+                <span class="review-text">Leave a review →</span>
+              </div>
+            </div>
+          } @empty {
+            <p class="empty-tab">No completed bookings</p>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="'Cancelled (' + cancelledBookings.length + ')'">
+        <div class="booking-list">
+          @for (booking of cancelledBookings; track booking.id) {
+            <div class="booking-card cancelled" (click)="viewBooking(booking.id)">
+              <div class="booking-status" [style.background]="statusColor(booking.status) + '15'"
+                   [style.color]="statusColor(booking.status)">
+                <mat-icon>{{ statusIcon(booking.status) }}</mat-icon>
+                {{ booking.status | titlecase }}
+              </div>
+              <h4>{{ booking.booking_ref }}</h4>
+              <p class="booking-meta">
+                <mat-icon>event</mat-icon> {{ booking.event_date | date:'mediumDate' }}
+              </p>
+            </div>
+          } @empty {
+            <p class="empty-tab">No cancelled bookings</p>
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>

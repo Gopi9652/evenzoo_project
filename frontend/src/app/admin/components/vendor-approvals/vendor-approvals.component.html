@@ -1,0 +1,72 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>Vendor Approvals</h1>
+  <p>Review and approve new vendor registrations</p>
+</div>
+
+<div class="approvals-container">
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else {
+    <mat-tab-group>
+      <mat-tab [label]="'Pending Review (' + pendingVendors.length + ')'">
+        <div class="vendor-list">
+          @for (vendor of pendingVendors; track vendor.id) {
+            <div class="vendor-row">
+              <div class="vendor-icon">🏪</div>
+              <div class="vendor-info">
+                <span class="name">{{ vendor.business_name }}</span>
+                <span class="desc">{{ vendor.description || 'No description provided' }}</span>
+                <span class="address">📍 {{ vendor.address || 'No address provided' }}</span>
+              </div>
+              <div class="vendor-actions">
+                <button mat-raised-button color="primary" [disabled]="processingId === vendor.id" (click)="approveVendor(vendor)">Approve</button>
+                <button mat-stroked-button color="warn" [disabled]="processingId === vendor.id" (click)="rejectVendor(vendor)">Reject</button>
+              </div>
+            </div>
+          } @empty {
+            <p class="empty-text">No vendors waiting for approval</p>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="'Approved (' + approvedVendors.length + ')'">
+        <div class="vendor-list">
+          @for (vendor of approvedVendors; track vendor.id) {
+            <div class="vendor-row">
+              <div class="vendor-icon">✅</div>
+              <div class="vendor-info">
+                <span class="name">{{ vendor.business_name }}</span>
+                <span class="desc">{{ vendor.total_bookings }} bookings · {{ vendor.avg_rating || 0 }}★ rating</span>
+              </div>
+            </div>
+          } @empty {
+            <p class="empty-text">No approved vendors yet</p>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="'⚠️ Possible Duplicates (' + duplicates.length + ')'">
+        <div class="vendor-list">
+          @for (dup of duplicates; track $index) {
+            <div class="duplicate-row">
+              <div class="dup-icon">⚠️</div>
+              <div class="dup-info">
+                <span class="dup-type">{{ dup.type === 'same_bank_account' ? 'Same Bank Account' : 'Similar Business Name' }}</span>
+                <span class="dup-detail">{{ dup.detail }}</span>
+                <div class="dup-vendors">
+                  <span class="dup-vendor-name">{{ vendorName(dup.vendor_1_id) }}</span>
+                  <span class="dup-vs">vs</span>
+                  <span class="dup-vendor-name">{{ vendorName(dup.vendor_2_id) }}</span>
+                </div>
+              </div>
+            </div>
+          } @empty {
+            <p class="empty-text">✅ No duplicate vendors detected</p>
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>

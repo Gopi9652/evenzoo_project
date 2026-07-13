@@ -1,0 +1,110 @@
+<app-navbar></app-navbar>
+<app-approval-banner></app-approval-banner>
+
+<div class="page-header">
+  <h1>Manage Bookings</h1>
+  <p>Accept, decline or complete your booking requests</p>
+</div>
+
+<div class="bookings-container">
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else {
+    <mat-tab-group>
+      <mat-tab [label]="'New Requests (' + pendingBookings.length + ')'">
+        <div class="booking-list">
+          @for (booking of pendingBookings; track booking.id) {
+            <div class="booking-row">
+              <div class="booking-info">
+                <span class="ref">{{ booking.booking_ref }}</span>
+                <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
+                <span class="detail">📍 {{ booking.event_location }}</span>
+                @if (booking.guests_count) {
+                  <span class="detail">👥 {{ booking.guests_count }} guests</span>
+                }
+                @if (booking.special_requests) {
+                  <span class="requests">"{{ booking.special_requests }}"</span>
+                }
+              </div>
+              <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
+              <div class="booking-actions">
+                <button mat-raised-button color="primary"
+                        [disabled]="processingId === booking.id"
+                        (click)="acceptBooking(booking)">
+                  Accept
+                </button>
+                <button mat-stroked-button color="warn"
+                        [disabled]="processingId === booking.id"
+                        (click)="rejectBooking(booking)">
+                  Decline
+                </button>
+              </div>
+            </div>
+          } @empty {
+           @if (isApproved !== false) {
+              <p class="empty-text">No new booking requests</p>
+            }
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="'Confirmed (' + confirmedBookings.length + ')'">
+        <div class="booking-list">
+          @for (booking of confirmedBookings; track booking.id) {
+            <div class="booking-row">
+              <div class="booking-info">
+                <span class="ref">{{ booking.booking_ref }}</span>
+                <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
+                <span class="detail">📍 {{ booking.event_location }}</span>
+              </div>
+              <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
+              <div class="booking-actions">
+                <button mat-raised-button color="primary"
+                        [disabled]="processingId === booking.id"
+                        (click)="markCompleted(booking)">
+                  Mark Completed
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <p class="empty-text">No confirmed bookings</p>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="'Completed (' + completedBookings.length + ')'">
+        <div class="booking-list">
+          @for (booking of completedBookings; track booking.id) {
+            <div class="booking-row">
+              <div class="booking-info">
+                <span class="ref">{{ booking.booking_ref }}</span>
+                <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
+              </div>
+              <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
+            </div>
+          } @empty {
+            <p class="empty-text">No completed bookings yet</p>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="'Declined (' + cancelledBookings.length + ')'">
+        <div class="booking-list">
+          @for (booking of cancelledBookings; track booking.id) {
+            <div class="booking-row cancelled">
+              <div class="booking-info">
+                <span class="ref">{{ booking.booking_ref }}</span>
+                <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
+              </div>
+              <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
+            </div>
+          } @empty {
+            <p class="empty-text">No declined bookings</p>
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>

@@ -1,0 +1,79 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>My Reviews</h1>
+  <p>Reviews you've left for vendors</p>
+</div>
+
+<div class="reviews-container">
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (reviews.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">⭐</span>
+      <h3>No reviews yet</h3>
+      <p>After your event is completed, you can leave a review from the booking page</p>
+    </div>
+  } @else {
+    <div class="reviews-list">
+      @for (review of reviews; track review.id) {
+        <div class="review-card">
+          @if (editingId === review.id) {
+            <div class="edit-form">
+              <div class="rating-row">
+                <label>Quality</label>
+                <select [(ngModel)]="editDrafts[review.id].quality_rating">
+                  @for (n of [1,2,3,4,5]; track n) { <option [value]="n">{{n}} star</option> }
+                </select>
+              </div>
+              <div class="rating-row">
+                <label>Price</label>
+                <select [(ngModel)]="editDrafts[review.id].price_rating">
+                  @for (n of [1,2,3,4,5]; track n) { <option [value]="n">{{n}} star</option> }
+                </select>
+              </div>
+              <div class="rating-row">
+                <label>Service</label>
+                <select [(ngModel)]="editDrafts[review.id].service_rating">
+                  @for (n of [1,2,3,4,5]; track n) { <option [value]="n">{{n}} star</option> }
+                </select>
+              </div>
+              <input class="edit-input" [(ngModel)]="editDrafts[review.id].title" placeholder="Title">
+              <textarea class="edit-textarea" [(ngModel)]="editDrafts[review.id].body" rows="3"></textarea>
+              <div class="edit-actions">
+                <button mat-raised-button color="primary" (click)="saveEdit(review)">Save</button>
+                <button mat-button (click)="cancelEdit()">Cancel</button>
+              </div>
+            </div>
+          } @else {
+            <div class="review-header">
+              <div class="stars">
+                @for (i of [1,2,3,4,5]; track i) {
+                  <span [class.filled]="i <= review.overall_rating">★</span>
+                }
+                <span class="score">{{ review.overall_rating }}</span>
+              </div>
+              <span class="date">{{ review.created_at | date:'mediumDate' }}</span>
+            </div>
+            <h4>{{ review.title }}</h4>
+            <p class="body">{{ review.body }}</p>
+
+            @if (review.vendor_reply) {
+              <div class="vendor-reply">
+                <strong>Vendor replied:</strong> {{ review.vendor_reply }}
+              </div>
+            }
+
+            <div class="review-footer">
+              <button mat-button (click)="viewBooking(review.booking_id)">View Booking</button>
+              <div class="review-actions">
+                <button mat-button (click)="startEdit(review)">Edit</button>
+                <button mat-button color="warn" (click)="deleteReview(review)">Delete</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

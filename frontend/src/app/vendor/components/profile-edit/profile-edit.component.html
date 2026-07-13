@@ -1,0 +1,142 @@
+<app-navbar></app-navbar>
+
+<div class="container py-4" style="max-width: 700px;">
+  <div class="mb-4">
+    <h1 class="fw-bold fs-3 mb-1">Edit Business Profile</h1>
+    <p class="text-secondary">Keep your information accurate to build customer trust</p>
+  </div>
+
+  @if (loading) {
+    <div class="d-flex justify-content-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+  } @else {
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-section">
+      <h3>Business Details</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Business Name</mat-label>
+        <input matInput formControlName="business_name">
+      </mat-form-field>
+
+      <div class="location-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>State</mat-label>
+          <mat-select [(ngModel)]="selectedStateId" [ngModelOptions]="{standalone: true}" (selectionChange)="onStateChange()">
+            @for (state of states; track state.id) {
+              <mat-option [value]="state.id">{{ state.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>City</mat-label>
+          <mat-select formControlName="city_id">
+            @for (city of cities; track city.id) {
+              <mat-option [value]="city.id">{{ city.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="4"
+                  placeholder="Tell customers about your services, experience, and specialties"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Business Address</mat-label>
+        <textarea matInput formControlName="address" rows="2"></textarea>
+      </mat-form-field>
+    </div>
+      <!-- ══ CATEGORY SELECTOR ══ -->
+      <div class="card mb-3 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-1">Your Categories</h5>
+          <p class="text-secondary small mb-3">
+            Select every category that matches your business. Customers filter by these on the homepage —
+            if none are selected, you won't appear in any category search.
+          </p>
+
+          <div class="row g-2">
+            @for (cat of allCategories; track cat.id) {
+              <div class="col-4 col-sm-3">
+                <button type="button"
+                  class="btn w-100 py-3 d-flex flex-column align-items-center gap-1"
+                  [class.btn-primary]="isSelected(cat.id)"
+                  [class.btn-outline-secondary]="!isSelected(cat.id)"
+                  [disabled]="savingCategory === cat.id"
+                  (click)="toggleCategory(cat.id)">
+                  <span class="fs-4">{{ cat.icon }}</span>
+                  <span class="small">{{ cat.name }}</span>
+                  @if (savingCategory === cat.id) {
+                    <span class="spinner-border spinner-border-sm mt-1"></span>
+                  }
+                </button>
+              </div>
+            }
+          </div>
+
+          @if (myCategoryIds.size === 0) {
+            <div class="alert alert-warning mt-3 mb-0 py-2 small">
+              ⚠️ No categories selected yet — pick at least one above.
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="card mb-3 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Business Verification (optional)</h5>
+          
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">GSTIN</label>
+            <input class="form-control" formControlName="gstin">
+          </div>
+
+          <div class="mb-0">
+            <label class="form-label fw-semibold small">PAN Number</label>
+            <input class="form-control" formControlName="pan_number">
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-1">Payout Details</h5>
+          <p class="text-secondary small mb-3">Required to receive payments from bookings</p>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Bank Account Number</label>
+            <input class="form-control" formControlName="bank_account">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">IFSC Code</label>
+            <input class="form-control" formControlName="bank_ifsc">
+          </div>
+
+          <div class="mb-0">
+            <label class="form-label fw-semibold small">Bank Name</label>
+            <input class="form-control" formControlName="bank_name">
+          </div>
+        </div>
+      </div>
+
+      @if (successMessage) {
+        <div class="alert alert-success">{{ successMessage }}</div>
+      }
+      @if (errorMessage) {
+        <div class="alert alert-danger">{{ errorMessage }}</div>
+      }
+
+      <button class="btn btn-primary w-100 py-2 fw-semibold" type="submit" [disabled]="saving">
+        {{ saving ? 'Saving...' : 'Save Changes' }}
+      </button>
+    </form>
+  }
+</div>

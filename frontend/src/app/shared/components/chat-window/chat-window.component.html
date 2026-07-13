@@ -1,0 +1,42 @@
+<app-navbar></app-navbar>
+
+<div class="chat-container">
+  <button mat-button class="back-btn" (click)="router.navigate(['/messages'])">
+    <mat-icon>arrow_back</mat-icon> Back to Messages
+  </button>
+
+  <div class="chat-box">
+    <div class="chat-header">
+      <div class="chat-header-avatar">{{ otherPartyName.charAt(0).toUpperCase() }}</div>
+      <span class="chat-header-name">{{ otherPartyName }}</span>
+    </div>
+
+    @if (loading) {
+      <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+    } @else {
+      <div class="messages-scroll">
+        @if (messages.length === 0) {
+          <p class="empty-chat">No messages yet. Say hello!</p>
+        }
+        @for (msg of messages; track msg.id) {
+          <div class="message-bubble" [class.mine]="isMine(msg)">
+            <span class="bubble-text">{{ msg.content }}</span>
+            <span class="bubble-time">{{ msg.created_at | date:'shortTime' }}</span>
+          </div>
+        }
+        <div #messagesEnd></div>
+      </div>
+
+      <div class="input-row">
+        <input
+          type="text"
+          placeholder="Type a message..."
+          [(ngModel)]="newMessage"
+          (keyup.enter)="send()">
+        <button mat-icon-button color="primary" (click)="send()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+</div>

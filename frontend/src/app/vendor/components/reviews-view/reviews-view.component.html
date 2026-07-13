@@ -1,0 +1,53 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>Customer Reviews</h1>
+  <p>{{ reviews.length }} reviews · {{ avgRating }}★ average rating</p>
+</div>
+
+<div class="reviews-container">
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (reviews.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">⭐</span>
+      <h3>No reviews yet</h3>
+      <p>Reviews will appear here after customers complete bookings with you</p>
+    </div>
+  } @else {
+    <div class="reviews-list">
+      @for (review of reviews; track review.id) {
+        <div class="review-card">
+          <div class="review-header">
+            <div class="stars">
+              @for (i of [1,2,3,4,5]; track i) {
+                <span [class.filled]="i <= review.overall_rating">★</span>
+              }
+              <span class="score">{{ review.overall_rating }}</span>
+            </div>
+            <span class="date">{{ review.created_at | date:'mediumDate' }}</span>
+          </div>
+          <h4>{{ review.title }}</h4>
+          <p class="body">{{ review.body }}</p>
+
+          <div class="rating-breakdown">
+            <span>Quality: {{ review.quality_rating }}★</span>
+            <span>Price: {{ review.price_rating }}★</span>
+            <span>Service: {{ review.service_rating }}★</span>
+          </div>
+
+          @if (review.vendor_reply) {
+            <div class="existing-reply">
+              <strong>Your reply:</strong> {{ review.vendor_reply }}
+            </div>
+          } @else {
+            <div class="reply-box">
+              <input [(ngModel)]="replyDrafts[review.id]" placeholder="Write a public reply...">
+              <button mat-button color="primary" (click)="submitReply(review)">Reply</button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
