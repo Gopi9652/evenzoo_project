@@ -1,0 +1,72 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>Customer Event Posts</h1>
+  <p>
+    @if (isFiltering) {
+      Showing posts from your selected location
+    } @else {
+      Showing posts from your own area first &mdash; filter below to see other locations
+    }
+  </p>
+</div>
+
+<div class="filter-bar">
+  <mat-form-field appearance="outline" class="filter-select">
+    <mat-label>State</mat-label>
+    <mat-select [(ngModel)]="filterStateId" (selectionChange)="onStateFilterChange()">
+      <mat-option [value]="null">Any State</mat-option>
+      @for (state of states; track state.id) {
+        <mat-option [value]="state.id">{{ state.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="filter-select">
+    <mat-label>City</mat-label>
+    <mat-select [(ngModel)]="filterCityId" (selectionChange)="onCityFilterChange()">
+      <mat-option [value]="null">Any City</mat-option>
+      @for (city of cities; track city.id) {
+        <mat-option [value]="city.id">{{ city.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (isFiltering) {
+    <button mat-stroked-button (click)="clearFilter()">Reset to My Area</button>
+  }
+</div>
+
+<div class="posts-container">
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (posts.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">📭</span>
+      <h3>No event posts found</h3>
+      <p>Try adjusting your location filter to see posts from other areas</p>
+    </div>
+  } @else {
+    <div class="posts-grid">
+      @for (post of posts; track post.id) {
+        <div class="post-card">
+          <h4>{{ post.title }}</h4>
+          <span class="posted-by">Posted by {{ post.customer_name }}</span>
+          <p class="post-desc">{{ post.description }}</p>
+          <div class="post-meta">
+            <span>📍 {{ post.event_location }}</span>
+            @if (post.budget_amount) {
+              <span>💰 ₹{{ post.budget_amount | number }}</span>
+            }
+            @if (post.event_date) {
+              <span>📅 {{ post.event_date | date:'mediumDate' }}</span>
+            }
+          </div>
+          <button mat-raised-button color="primary" class="message-btn" (click)="messageCustomer(post)">
+            💬 Message {{ post.customer_name }}
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

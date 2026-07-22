@@ -1,0 +1,48 @@
+.post-form-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+
+  h1 { font-size: 1.5rem; font-weight: 800; color: #1a1a2e; margin: 0 0 0.3rem; }
+  p { color: #64748b; font-size: 0.9rem; margin: 0; }
+}
+
+.post-form {
+  background: #fff;
+  border: 1.5px solid #f0e6d3;
+  border-radius: 16px;
+  padding: 1.75rem;
+}
+
+.full-width { width: 100%; margin-bottom: 0.3rem; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.error-banner {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 46px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .form-row { grid-template-columns: 1fr; }
+}

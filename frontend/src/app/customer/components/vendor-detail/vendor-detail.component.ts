@@ -11,7 +11,7 @@ import { ReviewService } from '../../../core/services/review.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { VendorProfile, VendorService as VendorServiceModel } from '../../../core/models/vendor.model';
 import { BookingFormComponent } from '../booking-form/booking-form.component';
-
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-vendor-detail',
   standalone: true,
@@ -30,6 +30,7 @@ export class VendorDetailComponent implements OnInit {
   reviewsLoading = true;
   loading = true;
   vendorId!: number;
+  paymentsEnabled = environment.paymentsEnabled;
 
   constructor(
     private route: ActivatedRoute,

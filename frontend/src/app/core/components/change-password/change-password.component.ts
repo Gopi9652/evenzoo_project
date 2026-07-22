@@ -35,6 +35,21 @@ export class ChangePasswordComponent {
   hideCurrent = true;
   hideNew = true;
 
+  get passwordStrength(): number {
+    const value: string = this.passwordForm.get('new_password')?.value || '';
+    if (!value) return 0;
+    let score = 0;
+    if (value.length >= 6) score++;
+    if (value.length >= 10) score++;
+    if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
+    if (/\d/.test(value) && /[^A-Za-z0-9]/.test(value)) score++;
+    return Math.min(score, 4);
+  }
+
+  get strengthLabel(): string {
+    return ['', 'Weak', 'Fair', 'Good', 'Strong'][this.passwordStrength];
+  }
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,

@@ -9,13 +9,13 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar.compon
 import { Booking } from '../../../core/models/booking.model';
 import { ApprovalBannerComponent } from '../../../shared/components/approval-banner/approval-banner.component';
 import { AuthService } from '../../../core/services/auth.service';
-
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-bookings-manage',
   standalone: true,
   imports: [
     CommonModule, MatTabsModule, MatButtonModule,
-    MatIconModule, MatProgressSpinnerModule, NavbarComponent, ApprovalBannerComponent
+    MatIconModule, MatProgressSpinnerModule, NavbarComponent, ApprovalBannerComponent,
   ],
   templateUrl: './bookings-manage.component.html',
   styleUrl: './bookings-manage.component.scss'
@@ -25,6 +25,7 @@ export class BookingsManageComponent implements OnInit {
   loading = true;
   processingId: number | null = null;
   isApproved: boolean | null = null;
+  paymentsEnabled = environment.paymentsEnabled;
 
   constructor(private bookingService: BookingService,  private authService: AuthService) {}
 

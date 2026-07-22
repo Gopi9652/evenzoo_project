@@ -1,0 +1,43 @@
+.cookie-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.85rem;
+
+  th {
+    background: #1a1a2e;
+    color: #fff;
+    text-align: left;
+    padding: 0.6rem 0.9rem;
+    font-weight: 700;
+  }
+
+  td {
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid #f0e6d3;
+    color: #475569;
+  }
+
+  tr:nth-child(even) { background: #fafafa; }
+
+  code {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.8rem;
+  }
+}
+
+.phase-banner {
+  background: #fff7ed;
+  border: 1.5px solid #fed7aa;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  font-size: 0.88rem;
+  color: #9a3412;
+  line-height: 1.6;
+
+  strong { color: #c2410c; }
+}

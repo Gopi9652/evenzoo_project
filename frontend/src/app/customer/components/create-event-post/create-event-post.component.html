@@ -1,0 +1,69 @@
+<app-navbar></app-navbar>
+
+<div class="post-form-container">
+  <div class="page-header">
+    <h1>{{ editMode ? 'Edit Your Event Post' : 'Post Your Event' }}</h1>
+    <p>Describe what you need — vendors in your area will reach out to you directly</p>
+  </div>
+
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()" class="post-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="e.g. Need a photographer for my wedding">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="4"
+                 placeholder="Describe your event, what services you need, and any specific requirements"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Event Location (venue/address)</mat-label>
+      <input matInput formControlName="event_location" placeholder="e.g. Hitex Convention Centre, Hyderabad">
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>State</mat-label>
+        <mat-select [(ngModel)]="selectedStateId" [ngModelOptions]="{standalone: true}" (selectionChange)="onStateChange()">
+          @for (state of states; track state.id) {
+            <mat-option [value]="state.id">{{ state.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <mat-select formControlName="city_id">
+          @for (city of cities; track city.id) {
+            <mat-option [value]="city.id">{{ city.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Budget (₹, optional)</mat-label>
+        <input matInput type="number" formControlName="budget_amount" placeholder="e.g. 40000">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Event Date (optional)</mat-label>
+        <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="event_date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    @if (errorMessage) {
+      <div class="error-banner">{{ errorMessage }}</div>
+    }
+
+    <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="submitting">
+      {{ submitting ? 'Saving...' : (editMode ? 'Update Post' : 'Post Your Event') }}
+    </button>
+  </form>
+</div>

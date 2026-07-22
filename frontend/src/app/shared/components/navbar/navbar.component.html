@@ -4,30 +4,41 @@
     <span class="logo-text">Evenzoo</span>
   </a>
 
-  <div class="nav-links">
+  <button
+    type="button"
+    class="hamburger"
+    [class.open]="menuOpen"
+    [attr.aria-label]="menuOpen ? 'Close menu' : 'Open menu'"
+    [attr.aria-expanded]="menuOpen"
+    (click)="menuOpen = !menuOpen"
+  >
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="nav-links" [class.open]="menuOpen">
     @if (authService.getRole() === 'customer') {
-      <a routerLink="/customer/home" class="nav-link">Browse</a>
-      <a routerLink="/customer/wishlist" class="nav-link">Saved</a>
-      <a routerLink="/customer/bookings" class="nav-link">My Bookings</a>
-      <a routerLink="/customer/reviews" class="nav-link">My Reviews</a>
+      <a routerLink="/customer/home" routerLinkActive="active" class="nav-link">Browse</a>
+      <a routerLink="/customer/wishlist" routerLinkActive="active" class="nav-link">Saved</a>
+      <a routerLink="/customer/my-posts" class="nav-link">My Event Posts</a>
+      <a routerLink="/customer/bookings" routerLinkActive="active" class="nav-link">My Bookings</a>
+      <a routerLink="/customer/reviews" routerLinkActive="active" class="nav-link">My Reviews</a>
     }
     @if (authService.getRole() === 'vendor') {
-      <a routerLink="/vendor/dashboard" class="nav-link">Dashboard</a>
-      <a routerLink="/vendor/bookings" class="nav-link">Bookings</a>
-      <a routerLink="/vendor/services" class="nav-link">Services</a>
-      <a routerLink="/vendor/reviews" class="nav-link">Reviews</a>
-      
+      <a routerLink="/vendor/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+      <a routerLink="/vendor/bookings" routerLinkActive="active" class="nav-link">Bookings</a>
+      <a routerLink="/vendor/event-posts" class="nav-link">Event Posts</a>
+      <a routerLink="/vendor/services" routerLinkActive="active" class="nav-link">Services</a>
+      <a routerLink="/vendor/reviews" routerLinkActive="active" class="nav-link">Reviews</a>
     }
     @if (authService.getRole() === 'admin') {
-      <a routerLink="/admin/dashboard" class="nav-link">Dashboard</a>
-      <a routerLink="/admin/vendors" class="nav-link">Vendors</a>
-      <a routerLink="/admin/bookings" class="nav-link">Bookings</a>
-      <a routerLink="/admin/users" class="nav-link">Users</a>
-      <a routerLink="/admin/directory" class="nav-link">Directory</a>
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+      <a routerLink="/admin/vendors" routerLinkActive="active" class="nav-link">Vendors</a>
+      <a routerLink="/admin/bookings" routerLinkActive="active" class="nav-link">Bookings</a>
+      <a routerLink="/admin/users" routerLinkActive="active" class="nav-link">Users</a>
+      <a routerLink="/admin/directory" routerLinkActive="active" class="nav-link">Directory</a>
     }
-    <a routerLink="/profile" class="nav-link">Profile</a>
-    <a routerLink="/messages" class="nav-link">💬 Messages</a>
-
+    <a routerLink="/profile" routerLinkActive="active" class="nav-link">Profile</a>
+    <a routerLink="/messages" routerLinkActive="active" class="nav-link">💬 Messages</a>
   </div>
 
   <!-- Notification Bell -->

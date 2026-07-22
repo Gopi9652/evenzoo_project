@@ -20,6 +20,7 @@ import { NotificationService } from '../../../core/services/notification.service
 export class NavbarComponent implements OnInit, OnDestroy {
   notifications: any[] = [];
   unreadCount = 0;
+  menuOpen = false;
   private wsSubscription?: Subscription;
 
   constructor(

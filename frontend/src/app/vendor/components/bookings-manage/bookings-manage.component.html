@@ -60,6 +60,9 @@
                 <span class="detail">📍 {{ booking.event_location }}</span>
               </div>
               <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
+              @if (!paymentsEnabled) {
+                <span class="phase-one-tag">Arrange payment directly</span>
+              }
               <div class="booking-actions">
                 <button mat-raised-button color="primary"
                         [disabled]="processingId === booking.id"
@@ -83,6 +86,9 @@
                 <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
               </div>
               <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
+              @if (!paymentsEnabled) {
+                <span class="phase-one-tag">Arrange payment directly</span>
+              }
             </div>
           } @empty {
             <p class="empty-text">No completed bookings yet</p>
@@ -99,6 +105,9 @@
                 <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
               </div>
               <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
+              @if (!paymentsEnabled) {
+                <span class="phase-one-tag">Arrange payment directly</span>
+              }
             </div>
           } @empty {
             <p class="empty-text">No declined bookings</p>

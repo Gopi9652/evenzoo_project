@@ -54,6 +54,15 @@
           <mat-error>Password must be at least 6 characters</mat-error>
         }
       </mat-form-field>
+      <div class="terms-checkbox">
+      <mat-checkbox formControlName="agreeToTerms">
+        I agree to the <a routerLink="/terms-of-service" target="_blank">Terms of Service</a>
+        and <a routerLink="/privacy-policy" target="_blank">Privacy Policy</a>
+      </mat-checkbox>
+      @if (registerForm.get('agreeToTerms')?.invalid && registerForm.get('agreeToTerms')?.touched) {
+      <div class="checkbox-error">You must agree to continue</div>
+        }
+      </div>
 
       @if (errorMessage) {
         <div class="error-banner">{{ errorMessage }}</div>

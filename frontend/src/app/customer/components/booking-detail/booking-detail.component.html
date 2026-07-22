@@ -132,15 +132,16 @@
         }
 
         <div class="amount-breakdown">
-          <h4>Payment Breakdown</h4>
+          <h4>Estimated Amount</h4>
           <div class="breakdown-row">
             <span>Total Amount</span>
             <span>₹{{ booking.total_amount | number }}</span>
           </div>
-          @if (booking.platform_fee) {
-            <div class="breakdown-row muted">
-              <span>Platform Fee</span>
-              <span>₹{{ booking.platform_fee | number }}</span>
+
+          @if (!paymentsEnabled) {
+            <div class="phase-one-notice">
+              💬 Evenzoo does not process payments during this early phase. Please arrange payment
+              directly with your vendor via chat or their listed contact details.
             </div>
           }
 
@@ -151,6 +152,17 @@
             </div>
           }
         </div>
+
+        @if (needsPayment) {
+          <button mat-raised-button color="primary" class="pay-btn"
+                  (click)="payNow()" [disabled]="payingNow">
+            @if (payingNow) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              💳 Pay ₹{{ booking.total_amount | number }} Now
+            }
+          </button>
+        }
 
         @if (needsPayment) {
           <button mat-raised-button color="primary" class="pay-btn"

@@ -1,0 +1,40 @@
+<div class="splash">
+  <!-- Falling confetti -->
+  @for (c of confetti; track $index) {
+    <span
+      class="confetti"
+      [style.left.%]="c.left"
+      [style.background]="c.bg"
+      [style.animationDelay.s]="c.delay"
+      [style.animationDuration.s]="c.duration"
+      [style.width.px]="c.size"
+      [style.height.px]="c.size"
+      [style.border-radius]="c.round ? '50%' : '2px'"
+    ></span>
+  }
+
+  <!-- Floating balloons -->
+  <div class="balloons" aria-hidden="true">
+    <span class="balloon b1">🎈</span>
+    <span class="balloon b2">🎈</span>
+    <span class="balloon b3">🎈</span>
+    <span class="balloon b4">🎈</span>
+  </div>
+
+  <!-- Center stage -->
+  <div class="stage">
+    <div class="logo">🎉 Evenzoo</div>
+    <div class="tagline">Making every celebration unforgettable</div>
+
+    <div class="dancers" aria-hidden="true">
+      @for (p of people; track $index) {
+        <span class="dancer" [style.animationDelay.s]="$index * 0.12">{{ p }}</span>
+      }
+    </div>
+
+    <div class="progress" role="progressbar" aria-label="Loading">
+      <div class="progress-fill"></div>
+    </div>
+    <div class="hint">Welcome to the party…</div>
+  </div>
+</div>

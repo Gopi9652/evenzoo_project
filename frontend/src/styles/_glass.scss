@@ -1,0 +1,58 @@
+// ============================================================
+//  EvenZoo — Glass Design System (light glass theme)
+//  Frosted white cards on a soft, light gradient backdrop.
+//  Text is dark for maximum readability (all ages / a11y).
+//  Helpers: .glass .glass-card .glass-panel  |  mixin: glass()
+// ============================================================
+
+:root {
+  // Brand
+  --ez-orange: #e8650a;
+  --ez-amber: #f5a623;
+  --ez-ink: #1a1a2e;          // primary text (always dark)
+
+  // Frosted glass surfaces (light, readable)
+  --ez-glass: rgba(255, 255, 255, 0.55);
+  --ez-glass-strong: rgba(255, 255, 255, 0.72);
+  --ez-glass-border: rgba(255, 255, 255, 0.85);
+  --ez-glass-border-soft: rgba(26, 26, 46, 0.10);
+  --ez-glass-blur: 18px;
+  --ez-glass-shadow: 0 10px 34px rgba(26, 26, 46, 0.12);
+  --ez-glass-shadow-lg: 0 26px 64px rgba(26, 26, 46, 0.18);
+
+  // Text
+  --ez-text: #1a1a2e;
+  --ez-text-muted: #5b6478;
+  --ez-text-dim: #8b93a8;
+
+  // Brand tints
+  --ez-tint-orange: rgba(232, 101, 10, 0.12);
+  --ez-tint-amber: rgba(245, 166, 35, 0.18);
+
+  // Radii
+  --ez-radius-sm: 10px;
+  --ez-radius: 16px;
+  --ez-radius-lg: 22px;
+  --ez-radius-pill: 999px;
+
+  // Gradients
+  --ez-gradient-brand: linear-gradient(135deg, #f5a623 0%, #e8650a 100%);
+
+  // Soft, light & attractive backdrop
+  --ez-bg:
+    radial-gradient(1200px 600px at 12% 16%, rgba(245, 166, 35, 0.22), transparent 60%),
+    radial-gradient(1000px 700px at 88% 10%, rgba(124, 58, 237, 0.16), transparent 55%),
+    radial-gradient(900px 900px at 72% 92%, rgba(59, 130, 246, 0.14), transparent 60%),
+    radial-gradient(800px 600px at 18% 96%, rgba(236, 72, 153, 0.12), transparent 60%),
+    linear-gradient(135deg, #eef2f8 0%, #f4eef9 50%, #eaf3f7 100%);
+  --ez-blob-1: radial-gradient(circle, rgba(245, 166, 35, 0.5), transparent 70%);
+  --ez-blob-2: radial-gradient(circle, rgba(124, 58, 237, 0.42), transparent 70%);
+}
+
+@mixin glass($blur: var(--ez-glass-blur), $bg: var(--ez-glass)) {
+  background: $bg;
+  backdrop-filter: blur($blur) saturate(165%);
+  -webkit-backdrop-filter: blur($blur) saturate(165%);
+  border: 1px solid var(--ez-glass-border);
+  box-shadow: var(--ez-glass-shadow);
+}

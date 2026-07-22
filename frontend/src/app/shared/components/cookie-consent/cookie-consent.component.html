@@ -1,0 +1,16 @@
+@if (showBanner) {
+  <div class="cookie-banner">
+    <div class="cookie-content">
+      <span class="cookie-icon">🍪</span>
+      <p>
+        We use essential cookies and local storage to keep you logged in and remember your preferences.
+        We don't use tracking or advertising cookies. Read our
+        <a routerLink="/cookie-policy">Cookie Policy</a> to learn more.
+      </p>
+    </div>
+    <div class="cookie-actions">
+      <button class="btn-decline" (click)="decline()">Essential Only</button>
+      <button class="btn-accept" (click)="accept()">Accept</button>
+    </div>
+  </div>
+}

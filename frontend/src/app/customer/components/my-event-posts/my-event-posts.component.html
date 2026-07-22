@@ -1,0 +1,45 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <div>
+    <h1>My Event Posts</h1>
+    <p>Manage the events you've posted for vendors to see</p>
+  </div>
+  <a routerLink="/customer/post/create" mat-raised-button color="primary" class="new-post-btn">
+    + Post New Event
+  </a>
+</div>
+
+<div class="posts-container">
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (posts.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">📝</span>
+      <h3>No event posts yet</h3>
+      <p>Post your event and let vendors in your area reach out to you</p>
+    </div>
+  } @else {
+    <div class="posts-grid">
+      @for (post of posts; track post.id) {
+        <div class="post-card">
+          <h4>{{ post.title }}</h4>
+          <p class="post-desc">{{ post.description }}</p>
+          <div class="post-meta">
+            <span>📍 {{ post.event_location }}</span>
+            @if (post.budget_amount) {
+              <span>💰 ₹{{ post.budget_amount | number }}</span>
+            }
+            @if (post.event_date) {
+              <span>📅 {{ post.event_date | date:'mediumDate' }}</span>
+            }
+          </div>
+          <div class="post-actions">
+            <button mat-button (click)="editPost(post.id)">Edit</button>
+            <button mat-button color="warn" (click)="deletePost(post.id)">Delete</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

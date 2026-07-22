@@ -5,6 +5,9 @@ from app.models import *
 from app.routers import auth, vendor, booking, payment, review, notification, admin,location, wishlist
 from app.routers import websocket as ws_router
 from app.routers import message
+from app.routers import event_post
+
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -35,6 +38,7 @@ app.include_router(admin.router,        prefix="/api/admin")
 app.include_router(location.router,        prefix="/api/location")
 app.include_router(wishlist.router, prefix="/api/wishlist")
 app.include_router(message.router, prefix="/api/messages")
+app.include_router(event_post.router, prefix="/api/event-posts")
 
 @app.get("/")
 def root():

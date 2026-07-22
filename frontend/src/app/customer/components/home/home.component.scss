@@ -1,7 +1,12 @@
 .hero-section {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  position: relative;
+  background:
+    radial-gradient(700px 420px at 88% -10%, rgba(232, 101, 10, 0.28), transparent 60%),
+    radial-gradient(700px 520px at 8% 110%, rgba(124, 58, 237, 0.30), transparent 60%),
+    linear-gradient(135deg, #262a44 0%, #322c52 100%);
   padding: 3.5rem 2rem;
   text-align: center;
+  color: #fff;
 }
 
 .hero-content {
@@ -17,7 +22,7 @@
   }
 
   p {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.72);
     font-size: 1rem;
     margin: 0 0 2rem;
   }

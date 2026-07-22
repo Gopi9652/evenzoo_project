@@ -13,6 +13,8 @@ import { RazorpayOptions, RazorpayResponse } from '../../../core/models/razorpay
 import { ReviewService } from '../../../core/services/review.service';
 import { VendorService } from '../../../core/services/vendor.service';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'app-booking-detail',
   standalone: true,
@@ -41,6 +43,7 @@ export class BookingDetailComponent implements OnInit {
   };
   vendorUserId: number | null = null;
   vendorName = '';
+  paymentsEnabled = environment.paymentsEnabled;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,7 +61,10 @@ export class BookingDetailComponent implements OnInit {
   }
 
 
-
+get needsPayment(): boolean {
+  if (!environment.paymentsEnabled) return false;
+  return this.booking?.status === 'confirmed' && this.paymentStatus !== 'captured';
+}
 // Inside loadBooking(), after getting the booking, fetch vendor info:
 loadBooking(bookingId: number) {
   this.loading = true;
@@ -185,10 +191,6 @@ loadVendorInfo(vendorId: number) {
 
   get canCancel(): boolean {
     return this.booking?.status === 'pending' || this.booking?.status === 'confirmed';
-  }
-
-  get needsPayment(): boolean {
-    return this.booking?.status === 'confirmed' && this.paymentStatus !== 'captured';
   }
 
   get isPaid(): boolean {

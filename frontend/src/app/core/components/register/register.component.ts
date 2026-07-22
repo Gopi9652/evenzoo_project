@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/auth.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,7 @@ import { AuthService } from '../../services/auth.service';
     CommonModule, ReactiveFormsModule, RouterLink,
     MatFormFieldModule, MatInputModule, MatButtonModule,
     MatCardModule, MatIconModule, MatButtonToggleModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule, MatCheckboxModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
@@ -39,7 +40,8 @@ export class RegisterComponent {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['customer', Validators.required]
+      role: ['customer', Validators.required],
+      agreeToTerms: [false, Validators.requiredTrue]
     });
   }
 
@@ -48,9 +50,12 @@ export class RegisterComponent {
       this.registerForm.markAllAsTouched();
       return;
     }
+    
 
     this.loading = true;
     this.errorMessage = '';
+    const { agreeToTerms, ...registerPayload } = this.registerForm.value;
+    
 
     this.authService.register(this.registerForm.value).subscribe({
       next: () => {

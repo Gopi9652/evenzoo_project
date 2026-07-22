@@ -1,6 +1,10 @@
 <a [routerLink]="['/customer/vendor', vendor.id]" class="vendor-card">
   <div class="card-image">
-    <span class="placeholder-icon">🏪</span>
+    @if (vendor.cover_photo_url) {
+      <img [src]="vendor.cover_photo_url" alt="{{ vendor.business_name }}" class="card-photo">
+    } @else {
+      <span class="placeholder-icon">🏪</span>
+    }
     @if (vendor.is_approved) {
       <span class="verified-badge">✓ Verified</span>
     }

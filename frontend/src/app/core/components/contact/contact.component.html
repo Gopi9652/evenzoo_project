@@ -1,0 +1,42 @@
+<div class="contact-page">
+  <div class="contact-hero">
+    <h1>Get in Touch</h1>
+    <p>Found a bug, have a suggestion, or want to become a vendor? We'd love to hear from you.</p>
+  </div>
+
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Your Name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Your Email</mat-label>
+      <input matInput type="email" formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Topic</mat-label>
+      <mat-select formControlName="topic">
+        <mat-option value="feedback">General Feedback</mat-option>
+        <mat-option value="bug">Report a Bug</mat-option>
+        <mat-option value="vendor">Become a Vendor</mat-option>
+        <mat-option value="partnership">Partnership Inquiry</mat-option>
+        <mat-option value="other">Other</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Message</mat-label>
+      <textarea matInput formControlName="message" rows="5" placeholder="Tell us what's on your mind..."></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" class="submit-btn">
+      Send Message
+    </button>
+
+    <p class="fallback-note">
+      This will open your email app with a pre-filled message to <strong>support&#64;evenzoo.in</strong>
+    </p>
+  </form>
+</div>

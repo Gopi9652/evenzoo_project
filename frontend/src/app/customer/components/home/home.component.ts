@@ -11,6 +11,7 @@ import { LocationService, State, City } from '../../../core/services/location.se
 import { VendorCardComponent } from '../vendor-card/vendor-card.component';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { VendorProfile, Category } from '../../../core/models/vendor.model';
+import { FooterComponent } from '../../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ import { VendorProfile, Category } from '../../../core/models/vendor.model';
   imports: [
     CommonModule, FormsModule, MatChipsModule, MatIconModule,
     MatSelectModule, MatFormFieldModule, MatProgressSpinnerModule,
-    VendorCardComponent, NavbarComponent
+    VendorCardComponent, NavbarComponent, FooterComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

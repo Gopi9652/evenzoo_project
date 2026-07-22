@@ -6,14 +6,15 @@
   </div>
 } @else if (vendor) {
 
-  <div class="detail-hero">
-    <div class="hero-inner">
+  <div class="detail-hero" [style.background]="vendor.cover_photo_url ? 'none' : 'linear-gradient(135deg, #2c1810, #4a2c1a)'">
+    @if (vendor.cover_photo_url) {
+      <img [src]="vendor.cover_photo_url" class="hero-photo" alt="{{ vendor.business_name }}">
+    } @else {
       <span class="hero-icon">🏪</span>
-
-      @if (vendor.is_approved) {
-        <span class="verified-tag">✓ Verified Vendor</span>
-      }
-    </div>
+    }
+    @if (vendor.is_approved) {
+      <span class="verified-tag">✓ Verified Vendor</span>
+    }
   </div>
 
   <div class="detail-container">
@@ -314,7 +315,11 @@
         </button>
 
         <p class="disclaimer">
-          You won't be charged until the vendor confirms
+          @if (paymentsEnabled) {
+            You won't be charged until the vendor confirms
+          } @else {
+            Payment is arranged directly with the vendor once confirmed
+          }
         </p>
 
       </div>

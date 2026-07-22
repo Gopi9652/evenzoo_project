@@ -23,6 +23,7 @@ import { MyWishlistComponent } from './customer/components/my-wishlist/my-wishli
 
 import { ChangePasswordComponent } from './core/components/change-password/change-password.component';
 import { ReviewsViewComponent } from './vendor/components/reviews-view/reviews-view.component';
+import { SplashComponent } from './core/components/splash/splash.component';
 
 
 import { MyReviewsComponent } from './customer/components/my-reviews/my-reviews.component';
@@ -40,12 +41,18 @@ import { ChatWindowComponent } from './shared/components/chat-window/chat-window
 import { AnalyticsComponent } from './vendor/components/analytics/analytics.component';
 
 
-
-
+import { PrivacyPolicyComponent } from './core/components/privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from './core/components/terms-of-service/terms-of-service.component';
+import { RefundPolicyComponent } from './core/components/refund-policy/refund-policy.component';
+import { CookiePolicyComponent } from './core/components/cookie-policy/cookie-policy.component';
+import { ContactComponent } from './core/components/contact/contact.component';
+import { CreateEventPostComponent } from './customer/components/create-event-post/create-event-post.component';
+import { MyEventPostsComponent } from './customer/components/my-event-posts/my-event-posts.component';
+import { EventPostsFeedComponent } from './vendor/components/event-posts-feed/event-posts-feed.component';
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', component: SplashComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'verify-otp', component: OtpVerifyComponent },
@@ -59,6 +66,11 @@ export const routes: Routes = [
   { path: 'messages', component: ConversationsListComponent, canActivate: [authGuard] },
   { path: 'chat/booking/:bookingId', component: ChatWindowComponent, canActivate: [authGuard] },
   { path: 'chat/user/:userId', component: ChatWindowComponent, canActivate: [authGuard] },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
+  { path: 'terms-of-service', component: TermsOfServiceComponent },
+  { path: 'refund-policy', component: RefundPolicyComponent },
+  { path: 'cookie-policy', component: CookiePolicyComponent },
+  { path: 'contact', component: ContactComponent },
 
 
   // Customer routes
@@ -68,6 +80,9 @@ export const routes: Routes = [
   { path: 'customer/booking/:id', component: BookingDetailComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/wishlist', component: MyWishlistComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/reviews', component: MyReviewsComponent, canActivate: [authGuard, roleGuard(['customer'])] },
+  { path: 'customer/post/create', component: CreateEventPostComponent, canActivate: [authGuard, roleGuard(['customer'])] },
+  { path: 'customer/my-posts', component: MyEventPostsComponent, canActivate: [authGuard, roleGuard(['customer'])] },
+
 
   // Vendor routes
   { path: 'vendor/dashboard', component: VendorDashboardComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
@@ -77,6 +92,7 @@ export const routes: Routes = [
   { path: 'vendor/reviews', component: ReviewsViewComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
   { path: 'vendor/documents', component: DocumentsManageComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
   { path: 'vendor/analytics', component: AnalyticsComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
+  { path: 'vendor/event-posts', component: EventPostsFeedComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
 
   // Admin routes
   { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [authGuard, roleGuard(['admin'])] },
