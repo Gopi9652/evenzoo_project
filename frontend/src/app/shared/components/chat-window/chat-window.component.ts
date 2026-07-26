@@ -38,21 +38,24 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
     private ws: WebsocketService
   ) {}
 
-  ngOnInit() {
-    this.currentUserId = Number(localStorage.getItem('user_id'));
+ngOnInit() {
+    console.log('Chat window loaded. WS connected?', this.ws.isConnected());
 
-    // Route can be either /chat/booking/:bookingId?receiverId=X&name=Y
-    // or /chat/user/:userId?name=Y
-    const bookingIdParam = this.route.snapshot.paramMap.get('bookingId');
-    const userIdParam = this.route.snapshot.paramMap.get('userId');
+  this.currentUserId = Number(localStorage.getItem('user_id'));
 
-    this.route.queryParams.subscribe(params => {
-      this.otherPartyName = params['name'] || 'Chat';
+  // Subscribe to param changes instead of reading snapshot once —
+  // this re-runs every time the route changes, even if Angular reuses the component instance
+  this.route.paramMap.subscribe(params => {
+    const bookingIdParam = params.get('bookingId');
+    const userIdParam = params.get('userId');
+
+    this.route.queryParams.subscribe(queryParams => {
+      this.otherPartyName = queryParams['name'] || 'Chat';
 
       if (bookingIdParam) {
         this.mode = 'booking';
         this.bookingId = Number(bookingIdParam);
-        this.receiverId = Number(params['receiverId']);
+        this.receiverId = Number(queryParams['receiverId']);
         this.loadBookingConversation();
       } else if (userIdParam) {
         this.mode = 'user';
@@ -60,21 +63,23 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
         this.loadDirectConversation();
       }
     });
+  });
 
-    this.wsSubscription = this.ws.onMessage().subscribe((msg) => {
-      if (msg.type !== 'chat_message') return;
+  this.wsSubscription = this.ws.onMessage().subscribe((msg) => {
 
-      const isRelevant = this.mode === 'booking'
-        ? msg.data.booking_id === this.bookingId
-        : (!msg.data.booking_id &&
-          ((msg.data.sender_id === this.receiverId && msg.data.receiver_id === this.currentUserId) ||
-            (msg.data.sender_id === this.currentUserId && msg.data.receiver_id === this.receiverId)));
+    if (msg.type !== 'chat_message') return;
 
-      if (isRelevant) {
-        this.messages = [...this.messages, msg.data];  // new array reference instead of .push()
-      }
-    });
-  }
+    const isRelevant = this.mode === 'booking'
+      ? msg.data.booking_id === this.bookingId
+      : (!msg.data.booking_id &&
+         ((msg.data.sender_id === this.receiverId && msg.data.receiver_id === this.currentUserId) ||
+          (msg.data.sender_id === this.currentUserId && msg.data.receiver_id === this.receiverId)));
+
+    if (isRelevant) {
+      this.messages = [...this.messages, msg.data];
+    }
+  });
+}
 
   ngOnDestroy() {
     this.wsSubscription?.unsubscribe();

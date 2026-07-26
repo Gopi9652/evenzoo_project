@@ -30,6 +30,7 @@ export class ConversationsListComponent implements OnInit, OnDestroy {
     this.loadConversations();
 
     this.wsSubscription = this.ws.onMessage().subscribe((msg) => {
+      console.log("#########################", msg)
       if (msg.type === 'chat_message') {
         // Simplest reliable fix: just reload the summary list from the server
         this.loadConversations();

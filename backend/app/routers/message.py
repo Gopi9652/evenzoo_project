@@ -12,12 +12,12 @@ router = APIRouter(tags=["Messages"])
 
 
 @router.post("", response_model=MessageResponse)
-def send_message(
+async def send_message(
     data: MessageCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    return message_service.send_message(db, current_user.id, data)
+    return await message_service.send_message(db, current_user.id, data)
 
 
 @router.get("/conversations", response_model=List[ConversationSummary])

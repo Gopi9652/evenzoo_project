@@ -2,8 +2,11 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class WebsocketService implements OnDestroy {
+
   private socket: WebSocket | null = null;
   private messageSubject = new Subject<any>();
   private reconnectTimeout: any;
@@ -11,51 +14,106 @@ export class WebsocketService implements OnDestroy {
   constructor(private zone: NgZone) {}
 
   connect(): void {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
 
-    // Avoid opening a duplicate connection if one is already open/connecting
-    if (this.socket && (this.socket.readyState === WebSocket.OPEN || this.socket.readyState === WebSocket.CONNECTING)) {
+    const token = localStorage.getItem('access_token');
+
+    if (!token) {
+      console.log('❌ No access token found');
       return;
     }
 
-    const wsUrl = environment.apiUrl.replace('http', 'ws').replace('/api', '');
-    this.socket = new WebSocket(`${wsUrl}/ws?token=${token}`);
+    if (
+      this.socket &&
+      (
+        this.socket.readyState === WebSocket.OPEN ||
+        this.socket.readyState === WebSocket.CONNECTING
+      )
+    ) {
+      console.log('⚠️ WebSocket already connected or connecting');
+      return;
+    }
+
+    const wsUrl = environment.apiUrl
+      .replace('http', 'ws')
+      .replace('/api', '');
+
+    const fullUrl = `${wsUrl}/ws?token=${token}`;
+
+    console.log('🔌 Connecting to:', fullUrl);
+
+    this.socket = new WebSocket(fullUrl);
+
+    this.socket.onopen = () => {
+      console.log('✅ WebSocket connected successfully');
+
+      this.zone.run(() => {
+        // Update UI if needed
+      });
+    };
 
     this.socket.onmessage = (event) => {
+
       const data = JSON.parse(event.data);
-      // Force this back into Angular's zone so change detection actually runs
+
+      console.log('📩 WebSocket message received:', data);
+
       this.zone.run(() => {
         this.messageSubject.next(data);
       });
     };
 
-    this.socket.onclose = () => {
+    this.socket.onerror = (error) => {
+
+      console.error('❌ WebSocket error:', error);
+
       this.zone.run(() => {
-        this.reconnectTimeout = setTimeout(() => {
-          if (localStorage.getItem('access_token')) {
-            this.connect();
-          }
-        }, 3000);
+        this.socket?.close();
       });
     };
 
-    this.socket.onerror = () => {
-      this.socket?.close();
+    this.socket.onclose = (event) => {
+
+      console.log(
+        '🔴 WebSocket closed',
+        'Code:',
+        event.code,
+        'Reason:',
+        event.reason
+      );
+
+      this.zone.run(() => {
+
+        this.reconnectTimeout = setTimeout(() => {
+
+          if (localStorage.getItem('access_token')) {
+            console.log('🔄 Attempting WebSocket reconnect...');
+            this.connect();
+          }
+
+        }, 3000);
+
+      });
     };
   }
 
   disconnect(): void {
+
     clearTimeout(this.reconnectTimeout);
+
     this.socket?.close();
+
     this.socket = null;
+  }
+
+  isConnected(): boolean {
+    return this.socket?.readyState === WebSocket.OPEN;
   }
 
   onMessage(): Observable<any> {
     return this.messageSubject.asObservable();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.disconnect();
   }
 }
