@@ -33,7 +33,6 @@ class VendorService_:
             )
         return vendor
 
-
     def get_profile_by_id(self, db: Session, vendor_id: int):
         vendor = db.query(VendorProfile).filter(
             VendorProfile.id == vendor_id
@@ -44,19 +43,6 @@ class VendorService_:
                 status_code=404,
                 detail="Vendor not found"
             )
-
-        cover = db.query(VendorPhoto).filter(
-            VendorPhoto.vendor_id == vendor.id,
-            VendorPhoto.is_cover == True
-        ).first()
-
-        if not cover:
-            cover = db.query(VendorPhoto).filter(
-                VendorPhoto.vendor_id == vendor.id
-            ).order_by(VendorPhoto.sort_order.asc()).first()
-
-        vendor.cover_photo_url = cover.photo_url if cover else None
-
         return vendor
 
 
@@ -103,25 +89,8 @@ class VendorService_:
             query = query.filter(VendorProfile.id.in_(vendor_ids))
 
         query = query.order_by(VendorProfile.rank_score.desc())
-        vendors = query.offset(skip).limit(limit).all()
 
-        # Attach each vendor's cover photo URL (or first photo if no cover explicitly set)
-        for vendor in vendors:
-            cover = db.query(VendorPhoto).filter(
-                VendorPhoto.vendor_id == vendor.id,
-                VendorPhoto.is_cover == True
-            ).first()
-
-            if not cover:
-                # Fall back to the first uploaded photo if no cover was ever explicitly chosen
-                cover = db.query(VendorPhoto).filter(
-                    VendorPhoto.vendor_id == vendor.id
-                ).order_by(VendorPhoto.sort_order.asc()).first()
-
-            vendor.cover_photo_url = cover.photo_url if cover else None
-
-        return vendors
-
+        return query.offset(skip).limit(limit).all()
     # ── ADD SERVICE ──
     def add_service(
         self, db: Session,

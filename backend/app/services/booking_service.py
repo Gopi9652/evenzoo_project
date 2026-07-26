@@ -15,7 +15,7 @@ from app.schemas.booking import BookingCreate, BookingStatusUpdate
 from app.utils.booking_ref import generate_booking_ref
 from app.config import settings
 from app.services.notification_service import notification_service
-
+from app.utils.vendor_scoring import calculate_rank_score
 class BookingService_:
 
     # ── CREATE BOOKING ──
@@ -153,6 +153,9 @@ class BookingService_:
 
         # Update vendor booking count
         vendor.total_bookings += 1
+
+        # Keep rank_score fresh even when no new review has come in
+        vendor.rank_score = calculate_rank_score(avg, vendor.total_bookings)
         # Notify vendor of new booking
         notification_service.create(
             db,

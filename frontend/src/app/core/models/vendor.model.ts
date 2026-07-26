@@ -9,7 +9,7 @@ export interface VendorProfile {
   avg_rating?: number;
   total_reviews: number;
   total_bookings: number;
-  cover_photo_url?:string;
+  profile_photo_url?: string;
 }
 
 export interface VendorService {

@@ -7,7 +7,7 @@ from app.models.booking import Booking
 from app.models.vendor import VendorProfile
 from app.schemas.review import ReviewCreate, ReviewReplyCreate
 from app.services.notification_service import notification_service
-
+from app.utils.vendor_scoring import calculate_rank_score
 
 class ReviewService_:
 
@@ -156,10 +156,7 @@ class ReviewService_:
         vendor.total_reviews = len(reviews)
 
         # Update rank score — simple formula combining rating + bookings
-        vendor.rank_score = round(
-            (avg * 20) + (vendor.total_bookings * 0.5),
-            2
-        )
+        vendor.rank_score = calculate_rank_score(avg, vendor.total_bookings)
 
     def update_review(
         self, db: Session,

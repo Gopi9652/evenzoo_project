@@ -173,36 +173,36 @@ class MessageService_:
         for msg in direct_messages:
             other_id = msg.receiver_id if msg.sender_id == user_id else msg.sender_id
             if other_id not in direct_partners:
-                direct_partners[other_id] = msg  # first one found is the most recent (already ordered desc)
+                direct_partners[other_id] = msg
 
-        for other_id, last_msg in direct_partners.items():
-            other_user = db.query(User).filter(User.id == other_id).first()
-            if not other_user:
-                continue
+            for other_id, last_msg in direct_partners.items():
+                other_user = db.query(User).filter(User.id == other_id).first()
+                if not other_user:
+                    continue
 
-            other_vendor = db.query(VendorProfile).filter(VendorProfile.user_id == other_id).first()
-            display_name = other_vendor.business_name if other_vendor else other_user.name
+                other_vendor = db.query(VendorProfile).filter(VendorProfile.user_id == other_id).first()
+                display_name = other_vendor.business_name if other_vendor else other_user.name
 
-            unread = db.query(Message).filter(
-                Message.booking_id.is_(None),
-                Message.sender_id == other_id,
-                Message.receiver_id == user_id,
-                Message.is_read == False
-            ).count()
+                unread = db.query(Message).filter(
+                    Message.booking_id.is_(None),
+                    Message.sender_id == other_id,
+                    Message.receiver_id == user_id,
+                    Message.is_read == False
+                ).count()
 
-            key = f"user_{other_id}"
-            results.append({
-                "conversation_key": key,
-                "booking_id": None,
-                "booking_ref": None,
-                "other_user_id": other_id,
-                "other_user_name": display_name,
-                "last_message": last_msg.content,
-                "last_message_at": last_msg.created_at,
-                "unread_count": unread
-            })
+                key = f"user_{other_id}"
+                results.append({
+                    "conversation_key": key,
+                    "booking_id": None,
+                    "booking_ref": None,
+                    "other_user_id": other_id,
+                    "other_user_name": display_name,
+                    "last_message": last_msg.content,
+                    "last_message_at": last_msg.created_at,
+                    "unread_count": unread
+                })
 
-        results.sort(key=lambda x: x["last_message_at"], reverse=True)
+            results.sort(key=lambda x: x["last_message_at"], reverse=True)
         return results
 
 

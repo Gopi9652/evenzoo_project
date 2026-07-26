@@ -50,6 +50,8 @@ import { CreateEventPostComponent } from './customer/components/create-event-pos
 import { MyEventPostsComponent } from './customer/components/my-event-posts/my-event-posts.component';
 import { EventPostsFeedComponent } from './vendor/components/event-posts-feed/event-posts-feed.component';
 
+import { AvailabilityManageComponent } from './vendor/components/availability-manage/availability-manage.component';
+import { WorkingHoursManageComponent } from './vendor/components/working-hours-manage/working-hours-manage.component';
 
 export const routes: Routes = [
   { path: '', component: SplashComponent },
@@ -93,6 +95,8 @@ export const routes: Routes = [
   { path: 'vendor/documents', component: DocumentsManageComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
   { path: 'vendor/analytics', component: AnalyticsComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
   { path: 'vendor/event-posts', component: EventPostsFeedComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
+  { path: 'vendor/availability', component: AvailabilityManageComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
+  { path: 'vendor/working-hours', component: WorkingHoursManageComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
 
   // Admin routes
   { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [authGuard, roleGuard(['admin'])] },

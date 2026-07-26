@@ -89,6 +89,7 @@ class StatusHistoryResponse(BaseModel):
     id:         int
     old_status: Optional[str] = None
     new_status: Optional[str] = None
+    changed_by: Optional[int] = None
     reason:     Optional[str] = None
     created_at: datetime
 

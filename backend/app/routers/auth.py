@@ -109,17 +109,40 @@ def change_password(
 
 
 
+from app.models.vendor import VendorProfile
+
 @router.post("/me/avatar")
 async def upload_avatar(
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    photo_url = upload_image(file.file, folder="evenzoo/avatars")
-    current_user.profile_photo = photo_url
+    photo_url = upload_image(
+        file.file,
+        folder="evenzoo/avatars"
+    )
+
+    if current_user.role == "vendor":
+        vendor_profile = db.query(VendorProfile).filter(
+            VendorProfile.user_id == current_user.id
+        ).first()
+
+        if not vendor_profile:
+            raise HTTPException(
+                status_code=404,
+                detail="Vendor profile not found"
+            )
+
+        vendor_profile.profile_photo_url = photo_url
+
+    else:
+        current_user.profile_photo = photo_url
+
     db.commit()
-    db.refresh(current_user)
-    return {"profile_photo": photo_url}
+
+    return {
+        "profile_photo": photo_url
+    }
 
 
 

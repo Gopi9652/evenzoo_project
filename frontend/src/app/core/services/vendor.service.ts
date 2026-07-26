@@ -71,10 +71,6 @@ listVendors(
   deletePhoto(photoId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/me/photos/${photoId}`);
   }
-
-  setAvailability(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/me/availability`, data);
-  }
   assignCategory(categoryId: number): Observable<any> {
   return this.http.post(`${this.apiUrl}/me/categories/${categoryId}`, {});
   }
@@ -96,4 +92,18 @@ listVendors(
   getMyAnalytics(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/me/analytics`);
   }
+  getMyAvailability(vendorId: number): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/${vendorId}/availability`);
+}
+
+setAvailability(data: { date: string; is_available: boolean; reason?: string }): Observable<any> {
+  return this.http.post(`${this.apiUrl}/me/availability`, data);
+}
+getWorkingHours(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/me/working-hours`);
+}
+
+setWorkingHours(data: { day_of_week: number; open_time?: string; close_time?: string; is_off_day: boolean }): Observable<any> {
+  return this.http.post(`${this.apiUrl}/me/working-hours`, data);
+}
 }

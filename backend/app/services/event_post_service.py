@@ -60,7 +60,6 @@ class EventPostService_:
 
         return [self._attach_customer_name(db, p) for p in posts]
 
-
     def get_post_by_id(self, db: Session, post_id: int):
         post = db.query(EventPost).filter(
             EventPost.id == post_id,
@@ -110,7 +109,15 @@ class EventPostService_:
         query = query.order_by(EventPost.created_at.desc())
         posts = query.offset(skip).limit(limit).all()
 
-        return [self._attach_customer_name(db, p) for p in posts]
+        # Batch-fetch all customer names in one query instead of one-per-post
+        customer_ids = [p.customer_id for p in posts]
+        customers = db.query(User).filter(User.id.in_(customer_ids)).all()
+        customer_map = {c.id: c.name for c in customers}
+
+        for post in posts:
+            post.customer_name = customer_map.get(post.customer_id, "Customer")
+
+        return posts
 
 
     def _attach_customer_name(self, db: Session, post: EventPost):

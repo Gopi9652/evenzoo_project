@@ -1,0 +1,187 @@
+/* Page */
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+/* Header */
+.page-header {
+  padding: 40px 6% 28px;
+  background: linear-gradient(135deg, #ffffff, #f4f7ff);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.page-header p {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+/* Main container */
+.availability-container {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* Cards */
+.block-form,
+.blocked-list {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+}
+
+.block-form h3,
+.blocked-list h3 {
+  margin: 0 0 24px;
+  font-size: 20px;
+  font-weight: 650;
+  color: #1f2937;
+}
+
+/* Form layout */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Calendar */
+mat-calendar {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 8px;
+}
+
+/* Reason input */
+.form-row input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.form-row input[type="text"]:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.12);
+}
+
+/* Button */
+.form-row button {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Blocked dates */
+.blocked-list {
+  min-height: 300px;
+}
+
+.blocked-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #eef0f3;
+}
+
+.blocked-row:last-child {
+  border-bottom: none;
+}
+
+.blocked-row mat-icon {
+  color: #dc2626;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.blocked-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.blocked-date {
+  font-weight: 600;
+  color: #374151;
+}
+
+.blocked-reason {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.blocked-row button {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* Empty state */
+.empty-text {
+  text-align: center;
+  color: #9ca3af;
+  padding: 60px 20px;
+  line-height: 1.6;
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 220px;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+  .availability-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-header {
+    padding: 28px 20px 22px;
+  }
+
+  .page-header h1 {
+    font-size: 26px;
+  }
+
+  .availability-container {
+    margin: 20px auto;
+    padding: 0 14px;
+  }
+
+  .block-form,
+  .blocked-list {
+    padding: 20px;
+    border-radius: 14px;
+  }
+}

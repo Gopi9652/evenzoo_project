@@ -1,0 +1,42 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>Working Hours</h1>
+  <p>Set the hours you're typically available for bookings each day</p>
+</div>
+
+<div class="hours-container">
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else {
+    <div class="hours-card">
+      @for (day of days; track day.day_of_week) {
+        <div class="day-row">
+          <span class="day-label">{{ day.label }}</span>
+
+          <mat-slide-toggle [(ngModel)]="day.is_off_day" (change)="saveDay(day)">
+            Closed
+          </mat-slide-toggle>
+
+          @if (!day.is_off_day) {
+            <div class="time-inputs">
+              <input type="time" [(ngModel)]="day.open_time" (change)="saveDay(day)">
+              <span>to</span>
+              <input type="time" [(ngModel)]="day.close_time" (change)="saveDay(day)">
+            </div>
+          } @else {
+            <span class="closed-text">Not taking bookings</span>
+          }
+
+          @if (day.saving) {
+            <mat-spinner diameter="16"></mat-spinner>
+          }
+        </div>
+      }
+    </div>
+
+    <button mat-raised-button color="primary" class="save-all-btn" (click)="saveAll()">
+      Save All Days
+    </button>
+  }
+</div>

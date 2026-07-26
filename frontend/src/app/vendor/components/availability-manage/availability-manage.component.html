@@ -1,0 +1,52 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>Manage Availability</h1>
+  <p>Block dates you're already booked elsewhere or unavailable</p>
+</div>
+
+<div class="availability-container">
+
+  <div class="block-form">
+    <h3>Block a Date</h3>
+    <div class="form-row">
+    <mat-calendar
+        [minDate]="minDate"
+        [(selected)]="selectedDate">
+    </mat-calendar>
+
+     <input
+    type="text"
+    [(ngModel)]="reason"
+    placeholder="e.g. Already booked">
+
+      <button mat-raised-button color="primary" (click)="blockDate()" [disabled]="!selectedDate || saving">
+        {{ saving ? 'Saving...' : 'Block Date' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="blocked-list">
+    <h3>Currently Blocked Dates</h3>
+
+    @if (loading) {
+      <div class="loading-container"><mat-spinner diameter="36"></mat-spinner></div>
+    } @else if (blockedDates.length === 0) {
+      <p class="empty-text">No dates blocked — you're available every day by default</p>
+    } @else {
+      @for (d of blockedDates; track d.id) {
+        <div class="blocked-row">
+          <mat-icon>event_busy</mat-icon>
+          <div class="blocked-info">
+            <span class="blocked-date">{{ d.date | date:'fullDate' }}</span>
+            @if (d.reason) {
+              <span class="blocked-reason">{{ d.reason }}</span>
+            }
+          </div>
+          <button mat-button (click)="unblockDate(d.date)">Unblock</button>
+        </div>
+      }
+    }
+  </div>
+
+</div>

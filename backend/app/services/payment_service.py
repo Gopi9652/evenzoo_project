@@ -233,9 +233,17 @@ class PaymentService_:
                 detail="Access denied"
             )
 
+        # Prefer a captured payment if one exists, otherwise fall back to
+        # the most recent attempt regardless of status
         payment = db.query(Payment).filter(
-            Payment.booking_id == booking_id
-        ).first()
+            Payment.booking_id == booking_id,
+            Payment.status == "captured"
+        ).order_by(Payment.created_at.desc()).first()
+
+        if not payment:
+            payment = db.query(Payment).filter(
+                Payment.booking_id == booking_id
+            ).order_by(Payment.created_at.desc()).first()
 
         if not payment:
             raise HTTPException(
@@ -244,7 +252,6 @@ class PaymentService_:
             )
 
         return payment
-
 
     # ── INITIATE REFUND ──
     def initiate_refund(
@@ -257,15 +264,12 @@ class PaymentService_:
         ).first()
 
         if not booking:
-            raise HTTPException(
-                status_code=404,
-                detail="Booking not found"
-            )
+            raise HTTPException(status_code=404, detail="Booking not found")
 
         payment = db.query(Payment).filter(
             Payment.booking_id == booking.id,
             Payment.status     == "captured"
-        ).first()
+        ).order_by(Payment.created_at.desc()).first()
 
         if not payment:
             raise HTTPException(
@@ -274,7 +278,16 @@ class PaymentService_:
             )
 
         refund_amount = data.amount if data.amount else payment.amount
-        amount_paise  = int(float(refund_amount) * 100)
+
+        if float(refund_amount) > float(payment.amount):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Refund amount cannot exceed the original payment of ₹{payment.amount}"
+            )
+
+        amount_paise = int(float(refund_amount) * 100)
+        # ...rest stays the same
+        
 
         # Create refund on Razorpay
         try:

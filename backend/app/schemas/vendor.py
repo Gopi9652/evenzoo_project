@@ -56,7 +56,7 @@ class VendorProfileResponse(BaseModel):
     avg_rating:       Optional[Decimal] = None
     total_reviews:    int
     total_bookings:   int
-    cover_photo_url:  Optional[str] = None 
+    profile_photo_url: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -164,7 +164,7 @@ class VendorListResponse(BaseModel):
     total_reviews: int
     city_id:       Optional[int]    = None
     is_approved:   bool
-    cover_photo_url: Optional[str]  = None
+    profile_photo_url: Optional[str] = None
 
     class Config:
         from_attributes = True

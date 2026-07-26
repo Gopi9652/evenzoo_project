@@ -4,7 +4,7 @@ from sqlalchemy import (Column, Integer, String, Boolean,
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
-
+from sqlalchemy import UniqueConstraint
 
 class VendorProfile(Base):
     __tablename__ = "vendor_profiles"
@@ -15,6 +15,7 @@ class VendorProfile(Base):
     description      = Column(Text)
     city_id          = Column(Integer, ForeignKey("cities.id"))
     address          = Column(Text)
+    profile_photo_url = Column(String(500), nullable=True)
     gstin            = Column(String(20))
     pan_number       = Column(String(20))
     bank_account     = Column(String(30))
@@ -104,6 +105,8 @@ class VendorDocument(Base):
     vendor = relationship("VendorProfile", back_populates="documents")
 
 
+
+
 class VendorAvailability(Base):
     __tablename__ = "vendor_availability"
 
@@ -115,6 +118,10 @@ class VendorAvailability(Base):
 
     vendor = relationship("VendorProfile", back_populates="availability")
 
+    __table_args__ = (
+        UniqueConstraint('vendor_id', 'date', name='uq_vendor_availability_date'),
+    )
+
 
 class VendorWorkingHours(Base):
     __tablename__ = "vendor_working_hours"
@@ -125,3 +132,7 @@ class VendorWorkingHours(Base):
     open_time   = Column(Time)
     close_time  = Column(Time)
     is_off_day  = Column(Boolean, default=False)
+
+    __table_args__ = (
+        UniqueConstraint('vendor_id', 'day_of_week', name='uq_vendor_working_hours_day'),
+    )

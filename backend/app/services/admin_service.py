@@ -178,10 +178,7 @@ class AdminService_:
         ).first()
 
         if not booking:
-            raise HTTPException(
-                status_code=404,
-                detail="Booking not found"
-            )
+            raise HTTPException(status_code=404, detail="Booking not found")
 
         if booking.status in ["completed", "cancelled"]:
             raise HTTPException(
@@ -194,7 +191,16 @@ class AdminService_:
         booking.cancellation_reason = reason
         booking.cancelled_by        = "admin"
 
-        # Notify both parties
+        # Reverse any pending vendor payout tied to this booking
+        from app.models.payment import VendorPayout
+        payout = db.query(VendorPayout).filter(
+            VendorPayout.booking_id == booking.id,
+            VendorPayout.status == "pending"
+        ).first()
+
+        if payout:
+            payout.status = "cancelled"
+
         vendor = db.query(VendorProfile).filter(
             VendorProfile.id == booking.vendor_id
         ).first()
@@ -208,15 +214,13 @@ class AdminService_:
         notification_service.create(
             db, user_id=vendor.user_id,
             title="Booking Cancelled by Admin",
-            message=f"Booking {booking.booking_ref} was cancelled. Reason: {reason}",
+            message=f"Booking {booking.booking_ref} was cancelled. Reason: {reason}. Any pending payout for this booking has been cancelled.",
             type="system"
         )
 
         db.commit()
         db.refresh(booking)
         return booking
-
-
     # ── PLATFORM SETTINGS ──
     def get_setting(self, db: Session, key: str):
         setting = db.query(PlatformSetting).filter(

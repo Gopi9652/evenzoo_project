@@ -1,0 +1,66 @@
+.page-header {
+  padding: 2rem 2rem 0;
+  max-width: 700px;
+  margin: 0 auto;
+  h1 { font-size: 1.6rem; font-weight: 800; color: #1a1a2e; margin: 0 0 0.3rem; }
+  p { color: #64748b; font-size: 0.9rem; margin: 0; }
+}
+
+.hours-container { max-width: 700px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+.loading-container { display: flex; justify-content: center; padding: 4rem 0; }
+
+.hours-card {
+  background: #fff;
+  border: 1.5px solid #f0e6d3;
+  border-radius: 14px;
+  padding: 0.5rem 1.5rem;
+}
+
+.day-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f0e6d3;
+  flex-wrap: wrap;
+
+  &:last-child { border-bottom: none; }
+}
+
+.day-label {
+  width: 100px;
+  font-weight: 700;
+  color: #1a1a2e;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input[type="time"] {
+    border: 1.5px solid #f0e6d3;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    font-family: inherit;
+  }
+
+  span { color: #94a3b8; font-size: 0.82rem; }
+}
+
+.closed-text {
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+.save-all-btn {
+  width: 100%;
+  height: 46px;
+  margin-top: 1.25rem;
+  font-weight: 700;
+}

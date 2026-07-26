@@ -6,9 +6,9 @@
   </div>
 } @else if (vendor) {
 
-  <div class="detail-hero" [style.background]="vendor.cover_photo_url ? 'none' : 'linear-gradient(135deg, #2c1810, #4a2c1a)'">
-    @if (vendor.cover_photo_url) {
-      <img [src]="vendor.cover_photo_url" class="hero-photo" alt="{{ vendor.business_name }}">
+  <div class="detail-hero" [style.background]="vendor.profile_photo_url ? 'none' : 'linear-gradient(135deg, #2c1810, #4a2c1a)'">
+    @if (vendor.profile_photo_url) {
+      <img [src]="vendor. profile_photo_url" class="hero-photo" alt="{{ vendor.business_name }}">
     } @else {
       <span class="hero-icon">🏪</span>
     }
