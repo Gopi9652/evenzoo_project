@@ -14,6 +14,15 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
+      <mat-label>What type of vendor do you need?</mat-label>
+      <mat-select formControlName="category_id">
+        @for (cat of categories; track cat.id) {
+          <mat-option [value]="cat.id">{{ cat.icon }} {{ cat.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>Description</mat-label>
       <textarea matInput formControlName="description" rows="4"
                  placeholder="Describe your event, what services you need, and any specific requirements"></textarea>

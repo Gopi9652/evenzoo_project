@@ -11,7 +11,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { EventPostService } from '../../../core/services/event-post.service';
 import { LocationService, State, City } from '../../../core/services/location.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
-
+import { VendorService } from '../../../core/services/vendor.service';
+import { Category } from '../../../core/models/vendor.model';
 @Component({
   selector: 'app-create-event-post',
   standalone: true,
@@ -27,6 +28,7 @@ export class CreateEventPostComponent implements OnInit {
   postForm: FormGroup;
   states: State[] = [];
   cities: City[] = [];
+  categories: Category[] = [];
   selectedStateId: number | null = null;
   submitting = false;
   errorMessage = '';
@@ -39,13 +41,15 @@ export class CreateEventPostComponent implements OnInit {
     private eventPostService: EventPostService,
     private locationService: LocationService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private vendorService: VendorService,
   ) {
     this.postForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(20)]],
       event_location: ['', Validators.required],
       city_id: [''],
+      category_id: [''], 
       budget_amount: [''],
       event_date: ['']
     });
@@ -54,6 +58,10 @@ export class CreateEventPostComponent implements OnInit {
   ngOnInit() {
     this.locationService.getStates().subscribe({
       next: (data) => this.states = data
+    });
+
+    this.vendorService.getCategories().subscribe({    // ← new
+      next: (data) => this.categories = data
     });
 
     // Support editing an existing post via query param, e.g. /customer/post/create?edit=5

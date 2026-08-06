@@ -6,7 +6,9 @@ from app.models.event_post import EventPost
 from app.models.user import User
 from app.models.location import City
 from app.schemas.event_post import EventPostCreate, EventPostUpdate
+from app.services.notification_service import notification_service
 
+from app.models.vendor import VendorProfile, VendorCategoryMap, VendorCategory
 
 class EventPostService_:
 
@@ -18,9 +20,53 @@ class EventPostService_:
         db.add(post)
         db.commit()
         db.refresh(post)
+        self._notify_nearby_vendors(db, post)
         return self._attach_customer_name(db, post)
 
 
+    def _notify_nearby_vendors(self, db: Session, post: EventPost):
+        """
+        Sends a notification to approved vendors located in the same city
+        (falling back to same state) as the new event post. If the post
+        specifies a category, notifications are further narrowed to only
+        vendors who offer that category of service — this prevents
+        notification spam to irrelevant vendors as the platform scales.
+        """
+        if not post.city_id and not post.state_id:
+            return
+
+        query = db.query(VendorProfile).filter(
+            VendorProfile.is_approved == True
+        )
+
+        if post.city_id:
+            query = query.filter(VendorProfile.city_id == post.city_id)
+        elif post.state_id:
+            city_ids_in_state = db.query(City.id).filter(
+                City.state_id == post.state_id
+            ).subquery()
+            query = query.filter(VendorProfile.city_id.in_(city_ids_in_state))
+
+        if post.category_id:
+            vendor_ids_in_category = db.query(VendorCategoryMap.vendor_id).filter(
+                VendorCategoryMap.category_id == post.category_id
+            ).subquery()
+            query = query.filter(VendorProfile.id.in_(vendor_ids_in_category))
+
+        nearby_vendors = query.all()
+
+        customer = db.query(User).filter(User.id == post.customer_id).first()
+        customer_name = customer.name if customer else "A customer"
+
+        for vendor in nearby_vendors:
+            notification_service.create(
+                db,
+                user_id=vendor.user_id,
+                title="New Event Posted Near You 📍",
+                message=f'{customer_name} posted "{post.title}" in your area. Tap to view and message them.',
+                type="event_post",
+                link=f"/vendor/event-posts?highlight={post.id}"
+            )
     def update_post(self, db: Session, customer_id: int, post_id: int, data: EventPostUpdate):
         post = db.query(EventPost).filter(
             EventPost.id == post_id,
@@ -123,6 +169,15 @@ class EventPostService_:
     def _attach_customer_name(self, db: Session, post: EventPost):
         customer = db.query(User).filter(User.id == post.customer_id).first()
         post.customer_name = customer.name if customer else "Customer"
+
+        if post.category_id:
+            category = db.query(VendorCategory).filter(
+                VendorCategory.id == post.category_id
+            ).first()
+            post.category_name = category.name if category else None
+        else:
+            post.category_name = None
+
         return post
 
 

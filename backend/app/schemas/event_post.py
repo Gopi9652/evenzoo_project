@@ -12,6 +12,7 @@ class EventPostCreate(BaseModel):
     city_id:        Optional[int]      = None
     budget_amount:  Optional[Decimal]  = None
     event_date:     Optional[datetime] = None
+    category_id:    Optional[int]      = None 
 
 
 class EventPostUpdate(BaseModel):
@@ -23,6 +24,7 @@ class EventPostUpdate(BaseModel):
     budget_amount:  Optional[Decimal]   = None
     event_date:     Optional[datetime]  = None
     is_active:      Optional[bool]      = None
+    category_id:    Optional[int]      = None 
 
 
 class EventPostResponse(BaseModel):
@@ -38,6 +40,8 @@ class EventPostResponse(BaseModel):
     event_date:     Optional[datetime] = None
     is_active:      bool
     created_at:     datetime
+    category_id:    Optional[int]      = None  
+    category_name:  Optional[str]      = None
 
     class Config:
         from_attributes = True

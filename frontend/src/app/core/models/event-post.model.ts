@@ -7,6 +7,8 @@ export interface EventPost {
   event_location: string;
   state_id?: number;
   city_id?: number;
+  category_id?: number;
+  category_name?: string;
   budget_amount?: number;
   event_date?: string;
   is_active: boolean;
@@ -19,6 +21,7 @@ export interface EventPostCreateRequest {
   event_location: string;
   state_id?: number;
   city_id?: number;
+  category_id?: number;
   budget_amount?: number;
   event_date?: string;
 }

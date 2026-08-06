@@ -10,6 +10,7 @@ export interface VendorProfile {
   total_reviews: number;
   total_bookings: number;
   profile_photo_url?: string;
+  whatsapp_number?: string; 
 }
 
 export interface VendorService {

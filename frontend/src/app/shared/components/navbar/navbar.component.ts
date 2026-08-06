@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { NotificationService } from '../../../core/services/notification.service';
-
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -78,5 +77,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.router.navigate(['/login']);
       }
     });
+  }
+  handleNotificationClick(notif: any) {
+    if (notif.link) {
+      this.router.navigateByUrl(notif.link);
+    }
+    if (!notif.is_read) {
+      this.notificationService.markRead(notif.id).subscribe({
+        next: () => {
+          notif.is_read = true;
+          this.unreadCount = Math.max(0, this.unreadCount - 1);
+        }
+      });
+    }
   }
 }

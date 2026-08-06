@@ -49,8 +49,13 @@
   } @else {
     <div class="posts-grid">
       @for (post of posts; track post.id) {
-        <div class="post-card">
-          <h4>{{ post.title }}</h4>
+        <div class="post-card" [class.highlighted]="post.id === highlightPostId">
+          <div class="post-card-header">
+            <h4>{{ post.title }}</h4>
+            @if (post.category_name) {
+              <span class="category-badge">{{ post.category_name }}</span>
+            }
+          </div>
           <span class="posted-by">Posted by {{ post.customer_name }}</span>
           <p class="post-desc">{{ post.description }}</p>
           <div class="post-meta">

@@ -31,7 +31,8 @@ class VendorProfile(Base):
     created_at       = Column(DateTime, default=datetime.utcnow)
     updated_at       = Column(DateTime, default=datetime.utcnow,
                               onupdate=datetime.utcnow)
-
+    
+    show_whatsapp = Column(Boolean, default=False)
     user         = relationship("User", back_populates="vendor_profile")
     services     = relationship("VendorService", back_populates="vendor")
     photos       = relationship("VendorPhoto", back_populates="vendor")

@@ -43,6 +43,24 @@ class VendorService_:
                 status_code=404,
                 detail="Vendor not found"
             )
+
+        cover = db.query(VendorPhoto).filter(
+            VendorPhoto.vendor_id == vendor.id,
+            VendorPhoto.is_cover == True
+        ).first()
+
+        if not cover:
+            cover = db.query(VendorPhoto).filter(
+                VendorPhoto.vendor_id == vendor.id
+            ).order_by(VendorPhoto.sort_order.asc()).first()
+
+        vendor.cover_photo_url = cover.photo_url if cover else None
+
+        # Attach phone number from the linked User account for WhatsApp deep-linking
+        user = db.query(User).filter(User.id == vendor.user_id).first()
+        #vendor.whatsapp_number = user.phone if user else None
+        vendor.whatsapp_number = user.phone if (user and vendor.show_whatsapp) else None
+
         return vendor
 
 

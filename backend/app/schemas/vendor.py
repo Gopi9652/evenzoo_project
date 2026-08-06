@@ -57,6 +57,7 @@ class VendorProfileResponse(BaseModel):
     total_reviews:    int
     total_bookings:   int
     profile_photo_url: Optional[str] = None
+    whatsapp_number:  Optional[str] = True 
 
     class Config:
         from_attributes = True

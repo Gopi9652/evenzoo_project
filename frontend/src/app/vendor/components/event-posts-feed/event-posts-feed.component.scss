@@ -74,3 +74,33 @@
 }
 
 .message-btn { width: 100%; }
+.post-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 0.2rem;
+
+  h4 { margin: 0; }
+}
+
+.category-badge {
+  background: rgba(232, 101, 10, 0.1);
+  color: #e8650a;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.post-card.highlighted {
+  border-color: #e8650a;
+  box-shadow: 0 0 0 3px rgba(232, 101, 10, 0.15);
+  animation: pulse-highlight 2s ease-in-out 1;
+}
+
+@keyframes pulse-highlight {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(232, 101, 10, 0.15); }
+  50% { box-shadow: 0 0 0 6px rgba(232, 101, 10, 0.25); }
+}

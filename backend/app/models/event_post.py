@@ -19,5 +19,6 @@ class EventPost(Base):
     is_active      = Column(Boolean, default=True)
     created_at     = Column(DateTime, default=datetime.utcnow)
     updated_at     = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    category_id    = Column(Integer, ForeignKey("vendor_categories.id"), nullable=True)
 
     customer = relationship("User", foreign_keys=[customer_id])

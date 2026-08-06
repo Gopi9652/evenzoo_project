@@ -10,7 +10,7 @@ import { EventPostService } from '../../../core/services/event-post.service';
 import { LocationService, State, City } from '../../../core/services/location.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { EventPost } from '../../../core/models/event-post.model';
-
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-event-posts-feed',
   standalone: true,
@@ -27,16 +27,21 @@ export class EventPostsFeedComponent implements OnInit {
   cities: City[] = [];
   filterStateId: number | null = null;
   filterCityId: number | null = null;
+  highlightPostId: number | null = null;
   loading = true;
   isFiltering = false;   // tracks whether vendor has actively chosen to look outside their own area
 
   constructor(
     private eventPostService: EventPostService,
     private locationService: LocationService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.highlightPostId = params['highlight'] ? Number(params['highlight']) : null;
+    });
     this.locationService.getStates().subscribe({ next: (data) => this.states = data });
     this.locationService.getCities().subscribe({ next: (data) => this.cities = data });
     this.loadFeed();

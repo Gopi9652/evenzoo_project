@@ -114,4 +114,19 @@ export class VendorDetailComponent implements OnInit {
       }
     });
   }
+  get whatsappLink(): string {
+    if (!this.vendor?.whatsapp_number) return '';
+
+    // Format: strip any non-digit characters, ensure country code prefix
+    let phone = this.vendor.whatsapp_number.replace(/\D/g, '');
+    if (phone.length === 10) {
+      phone = '91' + phone;   // assume Indian number if no country code present
+    }
+
+    const message = encodeURIComponent(
+      `Hi ${this.vendor.business_name}, I found your profile on Evenzoo and I'm interested in your services.`
+    );
+
+    return `https://wa.me/${phone}?text=${message}`;
+  }
 }
