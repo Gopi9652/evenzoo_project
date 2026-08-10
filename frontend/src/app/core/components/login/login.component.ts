@@ -38,26 +38,30 @@ export class LoginComponent {
     });
   }
 
-  onSubmit() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
+onSubmit() {
+  if (this.loginForm.invalid) {
+    this.loginForm.markAllAsTouched();
+    return;
+  }
 
-    this.loading = true;
-    this.errorMessage = '';
+  this.loading = true;
+  this.errorMessage = '';
 
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (response) => {
-        this.loading = false;
-        this.redirectByRole(response.role);
-      },
-      error: (err) => {
-        this.loading = false;
+  this.authService.login(this.loginForm.value).subscribe({
+    next: (response) => {
+      this.loading = false;
+      this.redirectByRole(response.role);
+    },
+    error: (err) => {
+      this.loading = false;
+      if (err.status === 429) {
+        this.errorMessage = 'Too many login attempts. Please wait a minute and try again.';
+      } else {
         this.errorMessage = err.error?.detail || 'Login failed. Please try again.';
       }
-    });
-  }
+    }
+  });
+}
 
   redirectByRole(role: string) {
     if (role === 'vendor') {

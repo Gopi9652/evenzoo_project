@@ -1,14 +1,6 @@
+<app-intro-splash (finished)="onIntroFinished()"></app-intro-splash>
 
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
-<router-outlet></router-outlet>
-<app-cookie-consent></app-cookie-consent>
-
+@if (introFinished) {
+  <router-outlet></router-outlet>
+  <app-cookie-consent></app-cookie-consent>
+}

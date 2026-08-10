@@ -91,4 +91,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
       });
     }
   }
+  notifIcon(type: string): string {
+  const icons: Record<string, string> = {
+    booking: 'event_available',
+    review: 'star_rate',
+    event_post: 'campaign',
+    system: 'notifications',
+    message: 'chat_bubble'
+  };
+  return icons[type] || 'notifications';
+}
 }

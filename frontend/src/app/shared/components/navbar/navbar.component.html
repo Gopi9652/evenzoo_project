@@ -1,95 +1,157 @@
 <nav class="navbar">
-  <a routerLink="/customer/home" class="logo">
-    <span class="logo-icon">🎪</span>
-    <span class="logo-text">Evenzoo</span>
-  </a>
+  <div class="left-section">
+    <button class="hamburger" [class.open]="menuOpen" (click)="menuOpen = !menuOpen">
+      <span></span><span></span><span></span>
+    </button>
 
-  <button
-    type="button"
-    class="hamburger"
-    [class.open]="menuOpen"
-    [attr.aria-label]="menuOpen ? 'Close menu' : 'Open menu'"
-    [attr.aria-expanded]="menuOpen"
-    (click)="menuOpen = !menuOpen"
-  >
-    <span></span><span></span><span></span>
-  </button>
-
-  <div class="nav-links" [class.open]="menuOpen">
-    @if (authService.getRole() === 'customer') {
-      <a routerLink="/customer/home" routerLinkActive="active" class="nav-link">Browse</a>
-      <a routerLink="/customer/wishlist" routerLinkActive="active" class="nav-link">Saved</a>
-      <a routerLink="/customer/my-posts" class="nav-link">My Event Posts</a>
-      <a routerLink="/customer/bookings" routerLinkActive="active" class="nav-link">My Bookings</a>
-      <a routerLink="/customer/reviews" routerLinkActive="active" class="nav-link">My Reviews</a>
-    }
-    @if (authService.getRole() === 'vendor') {
-      <a routerLink="/vendor/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
-      <a routerLink="/vendor/bookings" routerLinkActive="active" class="nav-link">Bookings</a>
-      <a routerLink="/vendor/event-posts" class="nav-link">Event Posts</a>
-      <a routerLink="/vendor/services" routerLinkActive="active" class="nav-link">Services</a>
-      <a routerLink="/vendor/reviews" routerLinkActive="active" class="nav-link">Reviews</a>
-    }
-    @if (authService.getRole() === 'admin') {
-      <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
-      <a routerLink="/admin/vendors" routerLinkActive="active" class="nav-link">Vendors</a>
-      <a routerLink="/admin/bookings" routerLinkActive="active" class="nav-link">Bookings</a>
-      <a routerLink="/admin/users" routerLinkActive="active" class="nav-link">Users</a>
-      <a routerLink="/admin/directory" routerLinkActive="active" class="nav-link">Directory</a>
-    }
-    <a routerLink="/profile" routerLinkActive="active" class="nav-link">Profile</a>
-    <a routerLink="/messages" routerLinkActive="active" class="nav-link">💬 Messages</a>
+    <a routerLink="/" class="brand">
+      <div class="brand-mark">
+        <img
+          src="https://res.cloudinary.com/elm5helo/image/upload/v1786033804/evenzoo_logo-removebg-preview_txcijg.png"
+          class="brand-mark-img">
+      </div>
+      <div class="brand-text">
+        <span class="name">Even<span>zoo</span></span>
+        <span class="tag">Event Marketplace</span>
+      </div>
+    </a>
   </div>
 
-  <!-- Notification Bell -->
-  <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="bell-btn">
-    <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeColor="warn" matBadgeSize="small">
-      notifications
-    </mat-icon>
-  </button>
-  <mat-menu #notifMenu="matMenu" class="notif-menu">
-    <div class="notif-header" (click)="$event.stopPropagation()">
-      <span>Notifications</span>
-      @if (unreadCount > 0) {
-        <button mat-button class="mark-all-btn" (click)="markAllRead()">Mark all read</button>
-      }
-    </div>
-    @if (notifications.length === 0) {
-      <div class="notif-empty">No notifications yet</div>
-    } @else {
-      @for (notif of notifications; track notif.id) {
-        <button mat-menu-item class="notif-item" [class.unread]="!notif.is_read">
-          <div class="notif-content">
-            <span class="notif-title">{{ notif.title }}</span>
-            <span class="notif-message">{{ notif.message }}</span>
-            <span class="notif-time">{{ notif.created_at | date:'short' }}</span>
-          </div>
-        </button>
-      }
-    }
+  <div class="right-section">
+    <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="icon-btn">
+      <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeColor="warn" matBadgeSize="small">
+        notifications
+      </mat-icon>
+    </button>
 
-  </mat-menu>
+    <mat-menu #notifMenu="matMenu" class="notif-panel-menu">
+      <div class="notif-topbar"></div>
+      <div class="notif-head" (click)="$event.stopPropagation()">
+        <span>Notifications</span>
+        @if (unreadCount > 0) {
+          <button mat-button (click)="markAllRead()">Mark all read</button>
+        }
+      </div>
 
-  <div class="nav-user">
-    <button mat-icon-button [matMenuTriggerFor]="menu">
+      @if (notifications.length === 0) {
+        <div class="notif-empty">No notifications yet</div>
+      } @else {
+        @for (notif of notifications; track notif.id) {
+          <button mat-menu-item class="notif-item" [class.unread]="!notif.is_read" (click)="handleNotificationClick(notif)">
+            <div class="notif-dot">
+              <mat-icon>{{ notifIcon(notif.type) }}</mat-icon>
+            </div>
+            <div class="notif-body">
+              <strong>{{ notif.title }}</strong>
+              <p>{{ notif.message }}</p>
+            </div>
+          </button>
+        }
+      }
+    </mat-menu>
+
+    <button mat-icon-button [matMenuTriggerFor]="accountMenu" class="avatar-btn">
       <div class="avatar">{{ userInitial }}</div>
     </button>
-    <mat-menu #menu="matMenu">
+    <mat-menu #accountMenu="matMenu">
       <div class="menu-header">
         <p class="menu-name">{{ userName }}</p>
       </div>
-      <button mat-menu-item routerLink="/sessions">
-        <mat-icon>devices</mat-icon>
-        <span>Active Sessions</span>
-      </button>
       <button mat-menu-item routerLink="/settings/change-password">
         <mat-icon>lock</mat-icon>
         <span>Change Password</span>
       </button>
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        <span>Logout</span>
+      <button mat-menu-item routerLink="/sessions">
+        <mat-icon>devices</mat-icon>
+        <span>Active Sessions</span>
       </button>
     </mat-menu>
   </div>
 </nav>
+
+@if (menuOpen) {
+  <div class="overlay" (click)="menuOpen = false"></div>
+}
+
+<div class="sidebar" [class.open]="menuOpen">
+  <div class="sidebar-head">
+    <div class="avatar">{{ userInitial }}</div>
+    <div class="who">
+      <div class="nm">{{ userName }}</div>
+      <div class="rl">{{ authService.getRole() }}</div>
+    </div>
+  </div>
+
+  <div class="sidebar-nav">
+    @if (authService.getRole() === 'customer') {
+      <div class="nav-label">Main</div>
+      <a routerLink="/customer/home" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>travel_explore</mat-icon></span>Browse
+      </a>
+      <a routerLink="/customer/wishlist" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>favorite</mat-icon></span>Saved
+      </a>
+      <a routerLink="/customer/my-posts" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>campaign</mat-icon></span>My Event Posts
+      </a>
+      <a routerLink="/customer/bookings" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>event_available</mat-icon></span>Bookings
+      </a>
+      <a routerLink="/customer/reviews" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>reviews</mat-icon></span>Reviews
+      </a>
+    }
+
+    @if (authService.getRole() === 'vendor') {
+      <div class="nav-label">Main</div>
+      <a routerLink="/vendor/dashboard" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>dashboard</mat-icon></span>Dashboard
+      </a>
+      <a routerLink="/vendor/bookings" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>calendar_month</mat-icon></span>Bookings
+      </a>
+      <a routerLink="/vendor/event-posts" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>campaign</mat-icon></span>Event Posts
+      </a>
+      <a routerLink="/vendor/services" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>room_service</mat-icon></span>Services
+      </a>
+      <a routerLink="/vendor/reviews" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>star_rate</mat-icon></span>Reviews
+      </a>
+    }
+
+    @if (authService.getRole() === 'admin') {
+      <div class="nav-label">Main</div>
+      <a routerLink="/admin/dashboard" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>dashboard</mat-icon></span>Dashboard
+      </a>
+      <a routerLink="/admin/vendors" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>storefront</mat-icon></span>Vendors
+      </a>
+      <a routerLink="/admin/bookings" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>event</mat-icon></span>Bookings
+      </a>
+      <a routerLink="/admin/users" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>group</mat-icon></span>Users
+      </a>
+      <a routerLink="/admin/directory" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>folder</mat-icon></span>Directory
+      </a>
+    }
+
+    <div class="nav-label">Account</div>
+    <a routerLink="/profile" routerLinkActive="active" (click)="menuOpen=false">
+      <span class="ic"><mat-icon>person</mat-icon></span>Profile
+    </a>
+    <a routerLink="/messages" routerLinkActive="active" (click)="menuOpen=false">
+      <span class="ic"><mat-icon>chat_bubble</mat-icon></span>Messages
+    </a>
+  </div>
+
+  <div class="sidebar-foot">
+    <a (click)="logout(); menuOpen=false">
+      <span class="ic"><mat-icon>logout</mat-icon></span>Logout
+    </a>
+  </div>
+</div>

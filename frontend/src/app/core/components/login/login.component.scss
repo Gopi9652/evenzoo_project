@@ -3,7 +3,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: linear-gradient(
+  135deg,
+  #050505 0%,
+  #1B102B 45%,
+  #0B0B0F 100%
+  );
   padding: 1rem;
 }
 
@@ -12,6 +17,7 @@
   max-width: 420px;
   padding: 2.5rem 2rem;
   border-radius: 16px;
+  
 }
 
 .auth-header {

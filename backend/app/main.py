@@ -6,8 +6,9 @@ from app.routers import auth, vendor, booking, payment, review, notification, ad
 from app.routers import websocket as ws_router
 from app.routers import message
 from app.routers import event_post
-
-
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from app.utils.rate_limiter import limiter
 
 Base.metadata.create_all(bind=engine)
 
@@ -17,9 +18,14 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# ── Rate Limiting Setup ──
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],
+    allow_origins=["http://localhost:4200",
+                    "http://10.239.249.79:4200"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

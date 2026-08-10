@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
+from fastapi import Request
 from sqlalchemy.orm import Session
-
+from app.utils.rate_limiter import limiter
 from app.database import get_db
 from app.schemas.auth import (
     RegisterRequest, RegisterResponse,
@@ -18,20 +19,24 @@ from app.utils.cloudinary_client import upload_image
 from typing import List
 from app.schemas.auth import SessionResponse    
 
+
+
 router = APIRouter(tags=["Auth"])
 
 
 @router.post("/register", response_model=RegisterResponse)
+@limiter.limit("5/hour")
 def register(
+    request: Request,
     data: RegisterRequest,
     db: Session = Depends(get_db)
 ):
     return auth_service.register(db, data)
 
 
-from fastapi import Request
 
 @router.post("/login", response_model=LoginResponse)
+@limiter.limit("10/minute")
 def login(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
     user_agent = request.headers.get("user-agent")
     ip_address = request.client.host if request.client else None
@@ -39,7 +44,9 @@ def login(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
 
 
 @router.post("/send-otp")
+@limiter.limit("5/hour")
 def send_otp(
+    request: Request,
     data: SendOTPRequest,
     db: Session = Depends(get_db)
 ):
@@ -47,7 +54,9 @@ def send_otp(
 
 
 @router.post("/verify-otp", response_model=OTPResponse)
+@limiter.limit("10/hour")
 def verify_otp(
+    request: Request,
     data: VerifyOTPRequest,
     db: Session = Depends(get_db)
 ):
@@ -73,7 +82,9 @@ def logout(
 
 
 @router.post("/forgot-password")
+@limiter.limit("5/hour")
 def forgot_password(
+    request: Request,
     data: ForgotPasswordRequest,
     db: Session = Depends(get_db)
 ):
@@ -81,7 +92,9 @@ def forgot_password(
 
 
 @router.post("/reset-password")
+@limiter.limit("10/hour")
 def reset_password(
+    request: Request,
     data: ResetPasswordRequest,
     db: Session = Depends(get_db)
 ):
