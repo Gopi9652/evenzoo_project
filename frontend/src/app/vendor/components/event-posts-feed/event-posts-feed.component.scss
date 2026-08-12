@@ -1,106 +1,516 @@
-.page-header {
-  padding: 2rem 2rem 0;
-  max-width: 1000px;
-  margin: 0 auto;
+/* ================================
+   PAGE
+================================ */
 
-  h1 { font-size: 1.6rem; font-weight: 800; color: #1a1a2e; margin: 0 0 0.3rem; }
-  p { color: #64748b; font-size: 0.9rem; margin: 0; }
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #1f2937;
 }
+
+.page-header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 24px;
+  text-align: center;
+}
+
+.page-header h1 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.page-header p {
+  margin: 10px 0 0;
+  color: #6b7280;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
+/* ================================
+   FILTER BAR
+================================ */
 
 .filter-bar {
-  max-width: 1000px;
-  margin: 1.25rem auto 0;
-  padding: 0 2rem;
+  max-width: 1200px;
+  margin: 0 auto 28px;
+  padding: 20px 24px;
+
   display: flex;
-  gap: 0.75rem;
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
 }
 
-.filter-select { min-width: 160px; }
-
-.posts-container { max-width: 1000px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
-
-.loading-container { display: flex; justify-content: center; padding: 4rem 0; }
-
-.empty-state {
-  text-align: center;
-  padding: 4rem 0;
-  .empty-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
-  h3 { color: #1a1a2e; margin: 0 0 0.5rem; }
-  p { color: #64748b; font-size: 0.9rem; }
+.filter-select {
+  width: 240px;
 }
+
+
+/* ================================
+   ANGULAR MATERIAL FORM FIELD
+================================ */
+
+::ng-deep .filter-bar .mat-mdc-form-field {
+  --mdc-outlined-text-field-container-color: #ffffff;
+}
+
+::ng-deep .filter-bar .mat-mdc-text-field-wrapper {
+  background: #ffffff !important;
+  border-radius: 8px;
+}
+
+::ng-deep .filter-bar .mdc-text-field--outlined {
+  --mdc-outlined-text-field-outline-color: #d1d5db;
+  --mdc-outlined-text-field-hover-outline-color: #8b5cf6;
+  --mdc-outlined-text-field-focus-outline-color: #7c3aed;
+}
+
+::ng-deep .filter-bar .mat-mdc-form-field .mdc-floating-label {
+  color: #4b5563 !important;
+}
+
+::ng-deep .filter-bar .mat-mdc-form-field.mat-focused
+  .mdc-floating-label {
+  color: #7c3aed !important;
+}
+
+::ng-deep .filter-bar input,
+::ng-deep .filter-bar .mat-mdc-select-value {
+  color: #1f2937 !important;
+}
+
+::ng-deep .filter-bar .mat-mdc-select-placeholder {
+  color: #6b7280 !important;
+}
+
+::ng-deep .filter-bar .mat-mdc-select-arrow {
+  color: #4b5563 !important;
+}
+
+
+/* ================================
+   SELECT DROPDOWN
+================================ */
+
+::ng-deep .cdk-overlay-container {
+  z-index: 9999;
+}
+
+::ng-deep .mat-mdc-select-panel {
+  background: #ffffff !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15) !important;
+}
+
+::ng-deep .mat-mdc-option {
+  background: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+::ng-deep .mat-mdc-option:hover {
+  background: #f5f3ff !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item--selected {
+  background: #ede9fe !important;
+}
+
+::ng-deep .mat-mdc-option .mdc-list-item__primary-text {
+  color: #1f2937 !important;
+}
+
+
+/* ================================
+   RESET BUTTON
+================================ */
+
+.filter-bar button {
+  min-height: 48px;
+  padding: 0 20px;
+
+  color: #7c3aed !important;
+  border-color: #c4b5fd !important;
+
+  background: #ffffff;
+  border-radius: 8px;
+
+  font-weight: 600;
+}
+
+.filter-bar button:hover {
+  background: #f5f3ff;
+}
+
+
+/* ================================
+   POSTS CONTAINER
+================================ */
+
+.posts-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 50px;
+}
+
+
+/* ================================
+   POSTS GRID
+================================ */
 
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
 }
+
+
+/* ================================
+   POST CARD
+================================ */
 
 .post-card {
-  background: #fff;
-  border: 1.5px solid #f0e6d3;
-  border-radius: 14px;
-  padding: 1.25rem;
+  position: relative;
 
-  h4 { margin: 0 0 0.2rem; font-size: 1rem; color: #1a1a2e; }
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  padding: 24px;
+
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.06);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
+
+.post-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.10);
+
+  border-color: #d8b4fe;
+}
+
+
+/* ================================
+   HIGHLIGHTED POST
+================================ */
+
+.post-card.highlighted {
+  border: 2px solid #8b5cf6;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.16);
+}
+
+
+/* ================================
+   CARD HEADER
+================================ */
+
+.post-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+
+  margin-bottom: 8px;
+}
+
+.post-card h4 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+
+/* ================================
+   CATEGORY
+================================ */
+
+.category-badge {
+  flex-shrink: 0;
+
+  padding: 6px 11px;
+
+  background: #f3e8ff;
+  color: #7e22ce;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* ================================
+   POSTED BY
+================================ */
 
 .posted-by {
   display: block;
-  font-size: 0.75rem;
-  color: #9e7a63;
-  margin-bottom: 0.6rem;
+
+  margin-bottom: 15px;
+
+  color: #7c3aed;
+
+  font-size: 13px;
+  font-weight: 600;
 }
 
+
+/* ================================
+   DESCRIPTION
+================================ */
+
 .post-desc {
-  font-size: 0.85rem;
-  color: #64748b;
-  line-height: 1.5;
-  margin: 0 0 0.9rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  margin: 0 0 18px;
+
+  color: #4b5563;
+
+  font-size: 14px;
+  line-height: 1.7;
+
+  word-break: break-word;
 }
+
+
+/* ================================
+   META INFORMATION
+================================ */
 
 .post-meta {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  font-size: 0.78rem;
-  color: #9e7a63;
-  margin-bottom: 1rem;
+  flex-direction: column;
+  gap: 9px;
+
+  padding: 15px;
+
+  background: #f8fafc;
+
+  border: 1px solid #eef0f4;
+  border-radius: 10px;
+
+  margin-bottom: 18px;
 }
 
-.message-btn { width: 100%; }
-.post-card-header {
+.post-meta span {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 0.2rem;
+  align-items: center;
+  gap: 7px;
 
-  h4 { margin: 0; }
+  color: #374151;
+
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-.category-badge {
-  background: rgba(232, 101, 10, 0.1);
-  color: #e8650a;
-  font-size: 0.68rem;
+
+/* ================================
+   MESSAGE BUTTON
+================================ */
+
+.message-btn {
+  width: 100%;
+
+  min-height: 44px;
+
+  border-radius: 9px !important;
+
+  font-weight: 600;
+
+  background: #7c3aed !important;
+  color: #ffffff !important;
+
+  box-shadow: none !important;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.message-btn:hover {
+  background: #6d28d9 !important;
+  transform: translateY(-1px);
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-state {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 40px 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+}
+
+.empty-icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 70px;
+  height: 70px;
+
+  margin-bottom: 18px;
+
+  background: #f3e8ff;
+
+  border-radius: 50%;
+
+  font-size: 32px;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px;
+
+  color: #1f2937;
+
+  font-size: 20px;
   font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 100px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.post-card.highlighted {
-  border-color: #e8650a;
-  box-shadow: 0 0 0 3px rgba(232, 101, 10, 0.15);
-  animation: pulse-highlight 2s ease-in-out 1;
 }
 
-@keyframes pulse-highlight {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(232, 101, 10, 0.15); }
-  50% { box-shadow: 0 0 0 6px rgba(232, 101, 10, 0.25); }
+.empty-state p {
+  max-width: 500px;
+
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* ================================
+   LOADING
+================================ */
+
+.loading-container {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 15px;
+
+  color: #6b7280;
+}
+
+::ng-deep .loading-container .mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #7c3aed;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-bar {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .page-header {
+    padding: 30px 18px 20px;
+  }
+
+  .page-header h1 {
+    font-size: 27px;
+  }
+
+  .posts-container {
+    padding: 0 18px 40px;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+
+    margin-left: 18px;
+    margin-right: 18px;
+
+    padding: 18px;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .filter-bar button {
+    width: 100%;
+  }
+
+  .post-card {
+    padding: 20px;
+  }
+
+  .post-card-header {
+    flex-direction: column;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+  }
+
+  .post-card h4 {
+    font-size: 18px;
+  }
+
 }

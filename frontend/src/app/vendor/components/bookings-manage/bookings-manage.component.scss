@@ -1,136 +1,498 @@
-.page-header {
-  padding: 2rem 2rem 0;
-  max-width: 1000px;
-  margin: 0 auto;
+/* ================================
+   MANAGE BOOKINGS - EVENZOO LIGHT UI
+   ================================ */
 
-  h1 {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: #1a1a2e;
-    margin: 0 0 0.3rem;
-  }
-
-  p {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin: 0;
-  }
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #1f2937;
 }
+
+/* ================================
+   PAGE HEADER
+   ================================ */
+
+.page-header {
+  width: min(1200px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 110px 0 30px;
+  text-align: center;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1f2937;
+  letter-spacing: -0.5px;
+}
+
+.page-header p {
+  margin: 10px 0 0;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+
+/* ================================
+   MAIN CONTAINER
+   ================================ */
 
 .bookings-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 1.5rem 2rem 3rem;
+  width: min(1200px, calc(100% - 40px));
+  margin: 0 auto 60px;
 }
+
+
+/* ================================
+   LOADING
+   ================================ */
 
 .loading-container {
+  min-height: 300px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 4rem 0;
+  gap: 15px;
 }
+
+.loading-container p {
+  margin: 0;
+  color: #6b7280;
+}
+
+
+/* ================================
+   ANGULAR MATERIAL TABS
+   ================================ */
+
+::ng-deep .mat-mdc-tab-group {
+  background: transparent;
+}
+
+::ng-deep .mat-mdc-tab-header {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+::ng-deep .mat-mdc-tab {
+  min-width: 150px;
+}
+
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  color: #6b7280 !important;
+  font-weight: 600;
+}
+
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #7c3aed !important;
+}
+
+::ng-deep .mat-mdc-tab-indicator__content--underline {
+  border-color: #7c3aed !important;
+  border-width: 3px !important;
+}
+
+::ng-deep .mat-mdc-tab-body-wrapper {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+}
+
+
+/* ================================
+   BOOKING LIST
+   ================================ */
 
 .booking-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-  padding-top: 1.5rem;
+  padding: 22px;
+  min-height: 180px;
 }
 
-.empty-text {
-  color: #94a3b8;
-  font-size: 0.88rem;
-  text-align: center;
-  padding: 3rem 0;
-}
+
+/* ================================
+   BOOKING ROW
+   ================================ */
 
 .booking-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 1.5rem;
-  background: #fff;
-  border: 1.5px solid #f0e6d3;
-  border-radius: 14px;
-  padding: 1.25rem;
-  flex-wrap: wrap;
+  gap: 24px;
 
-  &.cancelled {
-    opacity: 0.65;
-  }
+  padding: 20px;
+  margin-bottom: 14px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
+
+.booking-row:last-child {
+  margin-bottom: 0;
+}
+
+.booking-row:hover {
+  transform: translateY(-2px);
+  border-color: #ddd6fe;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.08);
+}
+
+
+/* ================================
+   BOOKING INFO
+   ================================ */
 
 .booking-info {
-  flex: 1;
-  min-width: 220px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-
-  .ref {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #1a1a2e;
-    font-family: monospace;
-    margin-bottom: 0.2rem;
-  }
-
-  .detail {
-    font-size: 0.8rem;
-    color: #64748b;
-  }
-
-  .requests {
-    font-size: 0.78rem;
-    color: #9a6800;
-    font-style: italic;
-    margin-top: 0.3rem;
-  }
+  gap: 7px;
 }
 
+.ref {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.detail {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 14px;
+  color: #6b7280;
+
+  line-height: 1.5;
+}
+
+.requests {
+  margin-top: 5px;
+  padding: 9px 12px;
+
+  color: #6b7280;
+  background: #f9fafb;
+
+  border-left: 3px solid #a78bfa;
+  border-radius: 6px;
+
+  font-size: 13px;
+  font-style: italic;
+
+  word-break: break-word;
+}
+
+
+/* ================================
+   AMOUNT
+   ================================ */
+
 .booking-amount {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #e8650a;
+  min-width: 120px;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #7c3aed;
+  text-align: right;
+
   white-space: nowrap;
 }
 
+
+/* ================================
+   BOOKING ACTIONS
+   ================================ */
+
 .booking-actions {
   display: flex;
-  gap: 0.6rem;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+
+  min-width: 190px;
 }
 
-@media (max-width: 640px) {
+.booking-actions button {
+  min-height: 40px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+
+/* ================================
+   PRIMARY BUTTON
+   ================================ */
+
+::ng-deep .booking-actions .mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-container-color: #7c3aed;
+  --mdc-protected-button-label-text-color: #ffffff;
+
+  background: #7c3aed !important;
+  color: #ffffff !important;
+}
+
+::ng-deep .booking-actions .mat-mdc-raised-button.mat-primary:hover {
+  background: #6d28d9 !important;
+}
+
+
+/* ================================
+   DECLINE BUTTON
+   ================================ */
+
+::ng-deep .booking-actions .mat-mdc-outlined-button.mat-warn {
+  --mdc-outlined-button-label-text-color: #dc2626;
+  --mdc-outlined-button-outline-color: #fecaca;
+
+  color: #dc2626 !important;
+  border-color: #fecaca !important;
+}
+
+::ng-deep .booking-actions .mat-mdc-outlined-button.mat-warn:hover {
+  background: #fef2f2 !important;
+}
+
+
+/* ================================
+   PHASE ONE PAYMENT TAG
+   ================================ */
+
+.phase-one-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 11px;
+
+  background: #fff7ed;
+  color: #c2410c;
+
+  border: 1px solid #fed7aa;
+  border-radius: 7px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* ================================
+   CANCELLED ROW
+   ================================ */
+
+.booking-row.cancelled {
+  background: #fafafa;
+  border-color: #e5e7eb;
+}
+
+.booking-row.cancelled .ref {
+  color: #6b7280;
+}
+
+.booking-row.cancelled .booking-amount {
+  color: #9ca3af;
+}
+
+
+/* ================================
+   EMPTY STATE
+   ================================ */
+
+.empty-text {
+  min-height: 180px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  padding: 30px;
+
+  color: #6b7280;
+  text-align: center;
+
+  font-size: 15px;
+}
+
+
+/* ================================
+   MATERIAL SPINNER
+   ================================ */
+
+::ng-deep .loading-container .mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #7c3aed;
+}
+
+
+/* ================================
+   APPROVAL BANNER SPACING
+   ================================ */
+
+app-approval-banner {
+  display: block;
+}
+
+
+/* ================================
+   RESPONSIVE - TABLET
+   ================================ */
+
+@media (max-width: 900px) {
+
+  .page-header {
+    padding-top: 100px;
+  }
+
   .booking-row {
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+  }
+
+  .booking-info {
+    grid-column: 1 / 2;
+  }
+
+  .booking-amount {
+    grid-column: 2 / 3;
+    grid-row: 1;
+  }
+
+  .booking-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    min-width: auto;
+  }
+
+  .phase-one-tag {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+
+/* ================================
+   RESPONSIVE - MOBILE
+   ================================ */
+
+@media (max-width: 600px) {
+
+  .page-header {
+    width: calc(100% - 28px);
+    padding: 95px 0 25px;
+  }
+
+  .page-header h1 {
+    font-size: 27px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .bookings-container {
+    width: calc(100% - 28px);
+    margin-bottom: 35px;
+  }
+
+  ::ng-deep .mat-mdc-tab {
+    min-width: auto;
+    flex: 1;
+  }
+
+  ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+    font-size: 12px;
+  }
+
+  .booking-list {
+    padding: 12px;
+  }
+
+  .booking-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .booking-info {
+    width: 100%;
+  }
+
+  .booking-amount {
+    width: 100%;
+    min-width: 0;
+
+    text-align: left;
+    font-size: 17px;
+  }
+
+  .booking-actions {
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
     flex-direction: column;
     align-items: stretch;
   }
 
-  .booking-actions {
-    justify-content: stretch;
+  .booking-actions button {
+    width: 100%;
+  }
 
-    button {
-      flex: 1;
-    }
+  .phase-one-tag {
+    width: fit-content;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .empty-text {
+    min-height: 150px;
+    font-size: 14px;
   }
 }
 
-.approval-empty-state {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 3rem 1rem;
-  color: #94a3b8;
 
-  mat-icon {
-    font-size: 2.5rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    color: #d97706;
-    margin-bottom: 0.75rem;
+/* ================================
+   VERY SMALL SCREENS
+   ================================ */
+
+@media (max-width: 380px) {
+
+  .page-header h1 {
+    font-size: 24px;
   }
 
-  p {
-    font-size: 0.9rem;
-    max-width: 320px;
-    margin: 0 auto;
-    line-height: 1.5;
+  .booking-row {
+    padding: 14px;
+  }
+
+  .ref {
+    font-size: 15px;
+  }
+
+  .detail {
+    font-size: 13px;
+  }
+
+  .booking-amount {
+    font-size: 16px;
   }
 }

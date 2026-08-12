@@ -1,69 +1,651 @@
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
-  flex-wrap: wrap;
-  gap: 1rem;
 
-  h1 { font-size: 1.6rem; font-weight: 800; color: #1a1a2e; margin: 0 0 0.3rem; }
-  p { color: #64748b; font-size: 0.9rem; margin: 0; }
+/* =========================================================
+   EVENZOO - MY EVENT POSTS
+   Premium Dark UI / High Contrast
+   ========================================================= */
+
+:host {
+  display: block;
+
+  --page-bg: #08090d;
+  --surface: #15161d;
+  --surface-2: #1b1c24;
+  --surface-3: #22232c;
+
+  --border: #2d2e39;
+  --border-hover: #444552;
+
+  --white: #ffffff;
+  --text: #f4f4f7;
+  --text-secondary: #c4c4cf;
+  --text-muted: #9999a8;
+
+  --purple: #8a2be2;
+  --purple-light: #b56dff;
+  --purple-soft: #251538;
+
+  --gold: #d4af37;
+  --gold-light: #f0d875;
+
+  --danger: #ff5c6c;
+  --danger-soft: #35161c;
+
+  color: var(--text);
 }
 
-.new-post-btn { text-decoration: none; }
 
-.posts-container { max-width: 1000px; margin: 0 auto; padding: 0 2rem 3rem; }
+/* =========================================================
+   PAGE BACKGROUND
+   ========================================================= */
 
-.loading-container { display: flex; justify-content: center; padding: 4rem 0; }
+:host {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(138, 43, 226, 0.12),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 15%,
+      rgba(212, 175, 55, 0.05),
+      transparent 25%
+    ),
+    var(--page-bg);
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 42px 32px 30px;
+}
+
+.post-form-container {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 42px 32px 30px;
+}
+.page-header::after {
+  content: "";
+
+  position: absolute;
+
+  left: 32px;
+  right: 32px;
+  bottom: 0;
+
+  height: 1px;
+
+  background: var(--border);
+}
+
+
+/* =========================================================
+   HEADER TEXT
+   ========================================================= */
+
+.page-header h1 {
+  margin: 0;
+
+  color: var(--white);
+
+  font-size: clamp(28px, 4vw, 40px);
+
+  line-height: 1.15;
+
+  font-weight: 800;
+
+  letter-spacing: -0.6px;
+}
+
+
+.page-header p {
+  margin: 9px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   NEW POST BUTTON
+   ========================================================= */
+
+.new-post-btn {
+  min-height: 46px;
+
+  display: inline-flex !important;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 20px !important;
+
+  border-radius: 11px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8a2be2,
+      #6920b3
+    ) !important;
+
+  color: #ffffff !important;
+
+  font-size: 13px !important;
+
+  font-weight: 700 !important;
+
+  box-shadow:
+    0 10px 25px rgba(138, 43, 226, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.new-post-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 30px rgba(138, 43, 226, 0.35);
+}
+
+
+/* =========================================================
+   POSTS CONTAINER
+   ========================================================= */
+
+.posts-container {
+  width: 100%;
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 35px 32px 80px;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-container {
+  min-height: 350px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+}
+
+
+.loading-container mat-spinner {
+  --mdc-circular-progress-active-indicator-color:
+    #b56dff;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
 
 .empty-state {
+  min-height: 390px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
+
   text-align: center;
-  padding: 4rem 0;
-  .empty-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
-  h3 { color: #1a1a2e; margin: 0 0 0.5rem; }
-  p { color: #64748b; font-size: 0.9rem; }
+
+  border-radius: 22px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(138, 43, 226, 0.08),
+      transparent 60%
+    ),
+    var(--surface);
+
+  border: 1px solid var(--border);
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.25);
 }
+
+
+.empty-icon {
+  width: 82px;
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 20px;
+
+  border-radius: 24px;
+
+  background: var(--purple-soft);
+
+  border:
+    1px solid rgba(181, 109, 255, 0.25);
+
+  font-size: 38px;
+}
+
+
+.empty-state h3 {
+  margin: 0 0 8px;
+
+  color: var(--white);
+
+  font-size: 21px;
+
+  font-weight: 750;
+}
+
+
+.empty-state p {
+  max-width: 430px;
+
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   POSTS GRID
+   ========================================================= */
 
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
 }
+
+
+/* =========================================================
+   POST CARD
+   ========================================================= */
 
 .post-card {
-  background: #fff;
-  border: 1.5px solid #f0e6d3;
-  border-radius: 14px;
-  padding: 1.25rem;
+  position: relative;
 
-  h4 { margin: 0 0 0.5rem; font-size: 1rem; color: #1a1a2e; }
+  display: flex;
+
+  flex-direction: column;
+
+  min-height: 280px;
+
+  padding: 22px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #181920,
+      #13141a
+    );
+
+  border: 1px solid var(--border);
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.25);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
+
+
+.post-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--purple),
+      var(--purple-light),
+      var(--gold)
+    );
+
+  opacity: 0.85;
+}
+
+
+.post-card:hover {
+  transform: translateY(-5px);
+
+  border-color:
+    rgba(181, 109, 255, 0.35);
+
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.4);
+}
+
+
+/* =========================================================
+   POST TITLE
+   ========================================================= */
+
+.post-card h4 {
+  margin: 4px 0 12px;
+
+  color: var(--white);
+
+  font-size: 18px;
+
+  font-weight: 750;
+
+  line-height: 1.35;
+
+  letter-spacing: -0.2px;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
 
 .post-desc {
-  font-size: 0.85rem;
-  color: #64748b;
-  line-height: 1.5;
-  margin: 0 0 0.9rem;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+
   overflow: hidden;
+
+  min-height: 60px;
+
+  margin: 0 0 20px;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+
+  line-height: 1.65;
 }
+
+
+/* =========================================================
+   META SECTION
+   ========================================================= */
 
 .post-meta {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  font-size: 0.78rem;
-  color: #9e7a63;
-  margin-bottom: 0.9rem;
+
+  flex-direction: column;
+
+  gap: 9px;
+
+  padding: 15px;
+
+  margin-top: auto;
+
+  border-radius: 13px;
+
+  background: var(--surface-2);
+
+  border: 1px solid var(--border);
 }
+
+
+.post-meta span {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+
+.post-meta span:first-child {
+  color: #d5b5ff;
+}
+
+
+/* =========================================================
+   META ICON STYLE
+   ========================================================= */
+
+.post-meta span::first-letter {
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
 
 .post-actions {
   display: flex;
-  gap: 0.5rem;
-  border-top: 1px solid #f0e6d3;
-  padding-top: 0.75rem;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  margin-top: 17px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid var(--border);
+}
+
+
+.post-actions button {
+  min-height: 36px;
+
+  padding: 0 15px !important;
+
+  border-radius: 9px !important;
+
+  font-size: 11px !important;
+
+  font-weight: 700 !important;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+
+/* EDIT */
+
+.post-actions button:first-child {
+  color: #d0a4ff !important;
+
+  background: var(--purple-soft);
+}
+
+
+.post-actions button:first-child:hover {
+  background: #332047;
+}
+
+
+/* DELETE */
+
+.post-actions button:last-child {
+  color: #ff7d8a !important;
+
+  background: var(--danger-soft);
+}
+
+
+.post-actions button:last-child:hover {
+  background: #481c24;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .posts-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    padding:
+      30px 20px 25px;
+  }
+
+
+  .page-header::after {
+    left: 20px;
+    right: 20px;
+  }
+
+
+  .new-post-btn {
+    width: 100%;
+  }
+
+
+  .posts-container {
+    padding:
+      25px 15px 60px;
+  }
+
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+
+  .post-card {
+    min-height: 0;
+
+    padding: 19px;
+  }
+
+
+  .empty-state {
+    min-height: 330px;
+
+    padding: 30px 20px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .page-header h1 {
+    font-size: 27px;
+  }
+
+
+  .page-header p {
+    font-size: 12px;
+  }
+
+
+  .post-card h4 {
+    font-size: 16px;
+  }
+
+
+  .post-actions {
+    justify-content: stretch;
+  }
+
+
+  .post-actions button {
+    flex: 1;
+  }
+
 }

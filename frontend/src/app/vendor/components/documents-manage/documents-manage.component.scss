@@ -1,62 +1,529 @@
-.page-header {
-  padding: 2rem 2rem 0;
-  max-width: 800px;
-  margin: 0 auto;
-  h1 { font-size: 1.6rem; font-weight: 800; color: #1a1a2e; margin: 0 0 0.3rem; }
-  p { color: #64748b; font-size: 0.9rem; margin: 0; }
+/* ================================
+   PAGE
+================================ */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #1f2937;
 }
 
-.docs-container { max-width: 800px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* ================================
+   PAGE HEADER
+================================ */
+
+.page-header {
+  padding: 32px 40px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.3px;
+}
+
+.page-header p {
+  margin: 7px 0 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+
+/* ================================
+   MAIN CONTAINER
+================================ */
+
+.docs-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 40px 60px;
+}
+
+
+/* ================================
+   UPLOAD SECTION
+================================ */
 
 .upload-section {
   display: flex;
-  gap: 0.75rem;
   align-items: center;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
+  gap: 14px;
+
+  padding: 22px;
+  margin-bottom: 28px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
 }
+
+
+/* ================================
+   DOCUMENT TYPE SELECT
+================================ */
 
 .type-select {
-  background: #fff; border: 1.5px solid #f0e6d3; border-radius: 8px;
-  padding: 0.5rem 1rem; min-width: 180px;
+  width: 280px;
+  min-height: 48px;
+
+  padding: 0 14px;
+
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  color: #1f2937;
+  font-size: 14px;
 }
+
+
+/* Angular Material select text */
+
+.type-select .mat-mdc-select-value {
+  color: #1f2937 !important;
+}
+
+.type-select .mat-mdc-select-placeholder {
+  color: #6b7280 !important;
+}
+
+.type-select .mat-mdc-select-arrow {
+  color: #4b5563 !important;
+}
+
+
+/* ================================
+   UPLOAD BUTTON
+================================ */
 
 .upload-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #e8650a; color: #fff; padding: 10px 20px;
-  border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
 
-  &:hover { background: #d15a08; }
+  min-height: 48px;
+  padding: 0 20px;
+
+  border-radius: 9px;
+
+  background: #6d28d9;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.loading-container { display: flex; justify-content: center; padding: 3rem 0; }
-
-.empty-state {
-  text-align: center; padding: 4rem 0;
-  .empty-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
-  h3 { color: #1a1a2e; margin: 0 0 0.5rem; }
-  p { color: #64748b; font-size: 0.9rem; }
+.upload-btn:hover {
+  background: #5b21b6;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(109, 40, 217, 0.2);
 }
 
-.docs-list { display: flex; flex-direction: column; gap: 0.8rem; }
-
-.doc-card {
-  display: flex; align-items: center; gap: 1rem;
-  background: #fff; border: 1.5px solid #f0e6d3; border-radius: 12px;
-  padding: 1rem 1.25rem;
+.upload-btn mat-icon {
+  color: #ffffff;
 }
 
-.doc-icon { font-size: 1.5rem; }
+.upload-btn mat-spinner {
+  --mdc-circular-progress-active-indicator-color: #ffffff;
+}
 
-.doc-info {
-  flex: 1;
+
+/* ================================
+   DOCUMENT LIST
+================================ */
+
+.docs-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 12px;
+}
 
-  .doc-type { font-weight: 700; font-size: 0.9rem; color: #1a1a2e; }
-  .doc-status {
-    font-size: 0.75rem; color: #f5a623; font-weight: 600;
-    &.verified { color: #16a34a; }
+
+/* ================================
+   DOCUMENT CARD
+================================ */
+
+.doc-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  min-height: 78px;
+  padding: 16px 18px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.doc-card:hover {
+  transform: translateY(-2px);
+
+  border-color: #d8b4fe;
+
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+
+/* ================================
+   DOCUMENT ICON
+================================ */
+
+.doc-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  background: #f3e8ff;
+
+  font-size: 22px;
+}
+
+
+/* ================================
+   DOCUMENT INFO
+================================ */
+
+.doc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  flex: 1;
+  min-width: 0;
+}
+
+.doc-type {
+  font-size: 15px;
+  font-weight: 600;
+
+  color: #1f2937;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ================================
+   DOCUMENT STATUS
+================================ */
+
+.doc-status {
+  width: fit-content;
+
+  padding: 4px 9px;
+
+  border-radius: 20px;
+
+  background: #fff7ed;
+  color: #c2410c;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.doc-status.verified {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+
+/* ================================
+   VIEW BUTTON
+================================ */
+
+.doc-card a[mat-button] {
+  color: #6d28d9 !important;
+
+  font-weight: 600;
+
+  min-width: 60px;
+}
+
+.doc-card a[mat-button]:hover {
+  background: #f5f3ff;
+}
+
+
+/* ================================
+   DELETE BUTTON
+================================ */
+
+.doc-card button[mat-icon-button] {
+  color: #6b7280;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.doc-card button[mat-icon-button]:hover {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.doc-card button mat-icon {
+  font-size: 21px;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 280px;
+
+  padding: 40px;
+
+  background: #ffffff;
+
+  border: 1px dashed #d1d5db;
+  border-radius: 14px;
+
+  text-align: center;
+}
+
+.empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 65px;
+  height: 65px;
+
+  margin-bottom: 14px;
+
+  border-radius: 50%;
+
+  background: #f3e8ff;
+
+  font-size: 30px;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px;
+
+  color: #1f2937;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.empty-state p {
+  max-width: 500px;
+
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* ================================
+   LOADING
+================================ */
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 250px;
+
+  color: #6b7280;
+}
+
+.loading-container mat-spinner {
+  --mdc-circular-progress-active-indicator-color: #6d28d9;
+}
+
+
+/* ================================
+   ANGULAR MATERIAL - GLOBAL FIXES
+================================ */
+
+/*
+   These are especially useful because
+   your previous problem was text blending
+   into the background.
+*/
+
+:host ::ng-deep .mat-mdc-form-field {
+  color: #1f2937;
+}
+
+:host ::ng-deep .mat-mdc-form-field .mdc-text-field {
+  background: #ffffff !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field .mdc-floating-label {
+  color: #6b7280 !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-floating-label {
+  color: #6d28d9 !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field input,
+:host ::ng-deep .mat-mdc-form-field textarea {
+  color: #1f2937 !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field input::placeholder,
+:host ::ng-deep .mat-mdc-form-field textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+:host ::ng-deep .mat-mdc-select-value {
+  color: #1f2937 !important;
+}
+
+:host ::ng-deep .mat-mdc-select-arrow {
+  color: #4b5563 !important;
+}
+
+
+/* ================================
+   MATERIAL SELECT PANEL
+================================ */
+
+:host ::ng-deep .mat-mdc-select-panel {
+  background: #ffffff !important;
+}
+
+:host ::ng-deep .mat-mdc-option {
+  color: #1f2937 !important;
+  background: #ffffff !important;
+}
+
+:host ::ng-deep .mat-mdc-option:hover {
+  background: #f5f3ff !important;
+}
+
+:host ::ng-deep .mat-mdc-option.mdc-list-item--selected {
+  background: #ede9fe !important;
+}
+
+:host ::ng-deep .mat-mdc-option .mdc-list-item__primary-text {
+  color: #1f2937 !important;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+
+  .page-header {
+    padding: 25px 20px 20px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .docs-container {
+    padding: 20px 16px 40px;
+  }
+
+  .upload-section {
+    flex-direction: column;
+    align-items: stretch;
+
+    padding: 18px;
+  }
+
+  .type-select {
+    width: 100%;
+  }
+
+  .upload-btn {
+    width: 100%;
+  }
+
+  .doc-card {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .doc-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 19px;
+  }
+
+  .doc-type {
+    font-size: 14px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .page-header h1 {
+    font-size: 22px;
+  }
+
+  .page-header p {
+    font-size: 13px;
+  }
+
+  .doc-card {
+    flex-wrap: wrap;
+  }
+
+  .doc-info {
+    width: calc(100% - 60px);
+  }
+
+  .doc-card a[mat-button] {
+    margin-left: 60px;
+  }
+
+  .doc-card button[mat-icon-button] {
+    margin-left: auto;
   }
 }

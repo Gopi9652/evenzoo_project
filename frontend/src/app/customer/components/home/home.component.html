@@ -1,100 +1,347 @@
+
 <app-navbar></app-navbar>
 
-<div class="hero-section">
+<!-- =====================================================
+     HERO SECTION
+===================================================== -->
+
+<section class="hero-section">
+
+  <div class="hero-overlay"></div>
+
   <div class="hero-content">
-    <h1>Find the Perfect Vendor<br>for Your Event</h1>
-    <p>Browse verified photographers, caterers, decorators and more</p>
+
+    <div class="hero-badge">
+      <mat-icon>verified</mat-icon>
+      Verified Event Vendors
+    </div>
+
+    <h1>
+      Find the Perfect Vendor
+      <br>
+      <span>for Your Event</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Browse verified photographers, caterers, decorators
+      and more for your special day.
+    </p>
+
+
+    <!-- SEARCH -->
 
     <div class="search-row">
+
       <div class="search-bar">
+
         <mat-icon>search</mat-icon>
+
         <input
           type="text"
           placeholder="Search vendors by name or service..."
           [(ngModel)]="searchTerm">
+
+        @if (searchTerm) {
+
+          <button
+            type="button"
+            class="search-clear"
+            (click)="searchTerm = ''">
+
+            <mat-icon>close</mat-icon>
+
+          </button>
+
+        }
+
       </div>
+
     </div>
+
+
+    <!-- LOCATION FILTERS -->
 
     <div class="location-filter-row">
-      <mat-form-field appearance="outline" class="location-select">
+
+      <mat-form-field
+        appearance="outline"
+        class="location-select">
+
         <mat-label>State</mat-label>
-        <mat-select [(ngModel)]="selectedStateId" (selectionChange)="onStateChange()">
-          <mat-option [value]="null">All States</mat-option>
+
+        <mat-select
+          [(ngModel)]="selectedStateId"
+          (selectionChange)="onStateChange()">
+
+          <mat-option [value]="null">
+            All States
+          </mat-option>
+
           @for (state of states; track state.id) {
-            <mat-option [value]="state.id">{{ state.name }}</mat-option>
+
+            <mat-option [value]="state.id">
+              {{ state.name }}
+            </mat-option>
+
           }
+
         </mat-select>
+
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="location-select">
+
+      <mat-form-field
+        appearance="outline"
+        class="location-select">
+
         <mat-label>City</mat-label>
-        <mat-select [(ngModel)]="selectedCityId" (selectionChange)="onCityChange()">
-          <mat-option [value]="null">All Cities</mat-option>
+
+        <mat-select
+          [(ngModel)]="selectedCityId"
+          (selectionChange)="onCityChange()">
+
+          <mat-option [value]="null">
+            All Cities
+          </mat-option>
+
           @for (city of cities; track city.id) {
-            <mat-option [value]="city.id">{{ city.name }}</mat-option>
+
+            <mat-option [value]="city.id">
+              {{ city.name }}
+            </mat-option>
+
           }
+
         </mat-select>
+
       </mat-form-field>
+
 
       @if (selectedStateId || selectedCityId) {
-        <button class="clear-filters-btn" (click)="clearLocationFilters()">
-          <mat-icon>close</mat-icon> Clear location
+
+        <button
+          type="button"
+          class="clear-filters-btn"
+          (click)="clearLocationFilters()">
+
+          <mat-icon>close</mat-icon>
+
+          Clear location
+
         </button>
+
       }
+
     </div>
+
   </div>
-</div>
 
-<div class="categories-section">
-  <mat-chip-listbox aria-label="Category selection">
-    <mat-chip-option
-      [selected]="selectedCategoryId === null"
-      (click)="selectCategory(null)">
-      All Categories
-    </mat-chip-option>
-    @for (cat of categories; track cat.id) {
-      <mat-chip-option
-        [selected]="selectedCategoryId === cat.id"
-        (click)="selectCategory(cat.id)">
-        {{ cat.icon }} {{ cat.name }}
-      </mat-chip-option>
-    }
-  </mat-chip-listbox>
-</div>
+</section>
 
-<div class="results-section">
-  @if (loading) {
-    <div class="loading-container">
-      <mat-spinner diameter="40"></mat-spinner>
-      <p>Loading vendors...</p>
-    </div>
-  } @else if (filteredVendors.length === 0) {
-    <div class="empty-state">
-      <span class="empty-icon">🔍</span>
-      <h3>No vendors found</h3>
-      <p>Try adjusting your search, state, city or category filter</p>
-    </div>
-  } @else {
-    <div class="results-header">
-      <p>{{ filteredVendors.length }} vendors found</p>
-    </div>
-    <div class="vendor-grid">
-      @for (vendor of filteredVendors; track vendor.id) {
-        <app-vendor-card [vendor]="vendor"></app-vendor-card>
-      }
-    </div>
 
-    @if (hasMore && !loading) {
-      <div class="load-more-wrap">
-        <button mat-stroked-button (click)="loadMore()" [disabled]="loadingMore" class="btn btn-primary p-3 fw-normal">
-          @if (loadingMore) {
-            <mat-spinner diameter="18"></mat-spinner>
-          } @else {
-            Load More Vendors
-          }
-        </button>
+<!-- =====================================================
+     CATEGORY SECTION
+===================================================== -->
+
+<section class="categories-section">
+
+  <div class="categories-inner">
+
+    <div class="section-label">
+
+      <span class="section-label-icon">
+        <mat-icon>category</mat-icon>
+      </span>
+
+      <div>
+        <h3>Browse by Category</h3>
+        <p>Find the right vendor for your event</p>
       </div>
+
+    </div>
+
+
+    <mat-chip-listbox
+      aria-label="Category selection"
+      class="category-chips">
+
+      <mat-chip-option
+        [selected]="selectedCategoryId === null"
+        (click)="selectCategory(null)">
+
+        <mat-icon>apps</mat-icon>
+        All Categories
+
+      </mat-chip-option>
+
+
+      @for (cat of categories; track cat.id) {
+
+        <mat-chip-option
+          [selected]="selectedCategoryId === cat.id"
+          (click)="selectCategory(cat.id)">
+
+          {{ cat.icon }}
+          {{ cat.name }}
+
+        </mat-chip-option>
+
+      }
+
+    </mat-chip-listbox>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     RESULTS
+===================================================== -->
+
+<section class="results-section">
+
+  <div class="results-container">
+
+
+    @if (loading) {
+
+      <!-- LOADING -->
+
+      <div class="loading-container">
+
+        <div class="loading-spinner">
+
+          <mat-spinner diameter="42"></mat-spinner>
+
+        </div>
+
+        <h3>Finding vendors</h3>
+
+        <p>
+          Searching for the best vendors for you...
+        </p>
+
+      </div>
+
+
+    } @else if (filteredVendors.length === 0) {
+
+      <!-- EMPTY -->
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+
+          <mat-icon>search_off</mat-icon>
+
+        </div>
+
+        <h3>No vendors found</h3>
+
+        <p>
+          We couldn't find vendors matching your current
+          search and filters.
+        </p>
+
+        <button
+          mat-stroked-button
+          class="reset-btn"
+          (click)="searchTerm = ''; selectedCategoryId = null; clearLocationFilters()">
+
+          <mat-icon>refresh</mat-icon>
+
+          Reset Filters
+
+        </button>
+
+      </div>
+
+
+    } @else {
+
+      <!-- RESULTS HEADER -->
+
+      <div class="results-header">
+
+        <div>
+
+          <h2>
+            Available Vendors
+          </h2>
+
+          <p>
+            {{ filteredVendors.length }}
+            vendor{{ filteredVendors.length !== 1 ? 's' : '' }}
+            found
+          </p>
+
+        </div>
+
+
+        <div class="results-count">
+
+          <mat-icon>storefront</mat-icon>
+
+          {{ filteredVendors.length }}
+
+        </div>
+
+      </div>
+
+
+      <!-- VENDOR GRID -->
+
+      <div class="vendor-grid">
+
+        @for (vendor of filteredVendors; track vendor.id) {
+
+          <app-vendor-card
+            [vendor]="vendor">
+          </app-vendor-card>
+
+        }
+
+      </div>
+
+
+      <!-- LOAD MORE -->
+
+      @if (hasMore && !loading) {
+
+        <div class="load-more-wrap">
+
+          <button
+            mat-stroked-button
+            class="load-more-btn"
+            (click)="loadMore()"
+            [disabled]="loadingMore">
+
+            @if (loadingMore) {
+
+              <mat-spinner diameter="18"></mat-spinner>
+
+              <span>Loading...</span>
+
+            } @else {
+
+              <mat-icon>expand_more</mat-icon>
+
+              <span>Load More Vendors</span>
+
+            }
+
+          </button>
+
+        </div>
+
+      }
+
     }
-  }
-</div>
+
+  </div>
+
+</section>
+
+
 <app-footer></app-footer>

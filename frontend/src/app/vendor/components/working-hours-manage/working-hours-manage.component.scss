@@ -1,66 +1,422 @@
-.page-header {
-  padding: 2rem 2rem 0;
-  max-width: 700px;
-  margin: 0 auto;
-  h1 { font-size: 1.6rem; font-weight: 800; color: #1a1a2e; margin: 0 0 0.3rem; }
-  p { color: #64748b; font-size: 0.9rem; margin: 0; }
+/* =========================================================
+   EVENZOO - WORKING HOURS
+   Light Modern Dashboard Style
+   ========================================================= */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f7f8fc;
+  color: #1f2937;
 }
 
-.hours-container { max-width: 700px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+/* =========================
+   PAGE HEADER
+   ========================= */
 
-.loading-container { display: flex; justify-content: center; padding: 4rem 0; }
+.page-header {
+  width: min(1100px, calc(100% - 40px));
+  margin: 0 auto;
+
+  padding: 42px 0 28px;
+}
+
+.page-header h1 {
+  margin: 0 0 7px;
+
+  color: #172033;
+
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  letter-spacing: -0.4px;
+}
+
+.page-header p {
+  margin: 0;
+
+  color: #667085;
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* =========================
+   MAIN CONTAINER
+   ========================= */
+
+.hours-container {
+  width: min(1100px, calc(100% - 40px));
+  margin: 0 auto 60px;
+}
+
+/* =========================
+   HOURS CARD
+   ========================= */
 
 .hours-card {
-  background: #fff;
-  border: 1.5px solid #f0e6d3;
-  border-radius: 14px;
-  padding: 0.5rem 1.5rem;
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e8eaf0;
+  border-radius: 16px;
+
+  box-shadow:
+    0 2px 8px rgba(16, 24, 40, 0.035),
+    0 8px 24px rgba(16, 24, 40, 0.025);
 }
+
+/* =========================
+   DAY ROW
+   ========================= */
 
 .day-row {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid #f0e6d3;
-  flex-wrap: wrap;
+  min-height: 78px;
 
-  &:last-child { border-bottom: none; }
+  padding: 16px 22px;
+
+  display: grid;
+
+  grid-template-columns: 150px 125px 1fr 30px;
+
+  align-items: center;
+
+  gap: 18px;
+
+  border-bottom: 1px solid #eef0f4;
+
+  transition: background 0.2s ease;
 }
+
+.day-row:last-child {
+  border-bottom: none;
+}
+
+.day-row:hover {
+  background: #fafaff;
+}
+
+/* =========================
+   DAY NAME
+   ========================= */
 
 .day-label {
-  width: 100px;
-  font-weight: 700;
-  color: #1a1a2e;
-  font-size: 0.9rem;
-  flex-shrink: 0;
+  color: #172033;
+
+  font-size: 15px;
+  font-weight: 650;
 }
+
+/* =========================
+   SLIDE TOGGLE
+   ========================= */
+
+.day-row mat-slide-toggle {
+  color: #667085;
+  font-size: 13px;
+}
+
+/* =========================
+   TIME INPUTS
+   ========================= */
 
 .time-inputs {
   display: flex;
   align-items: center;
-  gap: 8px;
 
-  input[type="time"] {
-    border: 1.5px solid #f0e6d3;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-size: 0.85rem;
-    font-family: inherit;
-  }
-
-  span { color: #94a3b8; font-size: 0.82rem; }
+  gap: 12px;
 }
+
+.time-inputs span {
+  color: #98a2b3;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* =========================
+   TIME INPUT
+   ========================= */
+
+.time-inputs input[type="time"] {
+  width: 135px;
+  height: 42px;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid #d9dce5;
+  border-radius: 9px;
+
+  color: #1f2937;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.time-inputs input[type="time"]:hover {
+  border-color: #b9b2f5;
+}
+
+.time-inputs input[type="time"]:focus {
+  border-color: #6d4aff;
+
+  box-shadow:
+    0 0 0 3px rgba(109, 74, 255, 0.10);
+}
+
+/* Time picker icon */
+
+.time-inputs input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.65;
+}
+
+/* =========================
+   CLOSED TEXT
+   ========================= */
 
 .closed-text {
-  color: #94a3b8;
-  font-size: 0.82rem;
-  font-style: italic;
+  display: inline-flex;
+  align-items: center;
+
+  width: fit-content;
+
+  padding: 7px 11px;
+
+  background: #f8f9fb;
+
+  border: 1px solid #eceef2;
+  border-radius: 7px;
+
+  color: #98a2b3;
+
+  font-size: 13px;
+  font-weight: 500;
 }
 
+/* =========================
+   SAVING SPINNER
+   ========================= */
+
+.day-row > mat-spinner {
+  justify-self: center;
+}
+
+/* =========================
+   SAVE ALL BUTTON
+   ========================= */
+
 .save-all-btn {
-  width: 100%;
-  height: 46px;
-  margin-top: 1.25rem;
-  font-weight: 700;
+  min-height: 44px;
+
+  margin-top: 22px;
+
+  padding: 0 24px;
+
+  border-radius: 9px !important;
+
+  background: #6d4aff !important;
+  color: #ffffff !important;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  box-shadow:
+    0 4px 12px rgba(109, 74, 255, 0.16);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.save-all-btn:hover {
+  background: #5b3ce6 !important;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 18px rgba(109, 74, 255, 0.22);
+}
+
+/* =========================
+   LOADING
+   ========================= */
+
+.loading-container {
+  min-height: 280px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e8eaf0;
+  border-radius: 16px;
+
+  box-shadow:
+    0 2px 8px rgba(16, 24, 40, 0.035);
+}
+
+/* =========================================================
+   ANGULAR MATERIAL SLIDE TOGGLE
+   ========================================================= */
+
+/* Track */
+
+::ng-deep
+.hours-card
+.mat-mdc-slide-toggle
+.mdc-switch__track {
+  background: #dfe2e8 !important;
+}
+
+/* Checked track */
+
+::ng-deep
+.hours-card
+.mat-mdc-slide-toggle
+.mdc-switch--selected
+.mdc-switch__track {
+  background: #c9bfff !important;
+}
+
+/* Checked handle */
+
+::ng-deep
+.hours-card
+.mat-mdc-slide-toggle
+.mdc-switch--selected
+.mdc-switch__handle {
+  background: #6d4aff !important;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 800px) {
+
+  .day-row {
+    grid-template-columns: 130px 120px 1fr 25px;
+
+    gap: 12px;
+
+    padding: 15px 18px;
+  }
+
+  .time-inputs input[type="time"] {
+    width: 115px;
+  }
+
+}
+
+/* =========================
+   TABLET / MOBILE
+   ========================= */
+
+@media (max-width: 650px) {
+
+  .page-header {
+    width: calc(100% - 28px);
+
+    padding: 28px 0 22px;
+  }
+
+  .page-header h1 {
+    font-size: 26px;
+  }
+
+  .hours-container {
+    width: calc(100% - 28px);
+  }
+
+  .day-row {
+    min-height: auto;
+
+    padding: 18px;
+
+    display: grid;
+
+    grid-template-columns: 1fr auto;
+
+    gap: 14px;
+  }
+
+  .day-label {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .day-row mat-slide-toggle {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .time-inputs {
+    grid-column: 1 / -1;
+    grid-row: 2;
+
+    width: 100%;
+  }
+
+  .time-inputs input[type="time"] {
+    flex: 1;
+
+    width: auto;
+  }
+
+  .closed-text {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .day-row > mat-spinner {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .save-all-btn {
+    width: 100%;
+  }
+
+}
+
+/* =========================
+   SMALL MOBILE
+   ========================= */
+
+@media (max-width: 400px) {
+
+  .page-header h1 {
+    font-size: 23px;
+  }
+
+  .day-row {
+    padding: 16px;
+  }
+
+  .time-inputs {
+    gap: 8px;
+  }
+
+  .time-inputs input[type="time"] {
+    min-width: 0;
+  }
+
 }

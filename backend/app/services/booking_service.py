@@ -155,7 +155,7 @@ class BookingService_:
         vendor.total_bookings += 1
 
         # Keep rank_score fresh even when no new review has come in
-        vendor.rank_score = calculate_rank_score(avg, vendor.total_bookings)
+        #vendor.rank_score = calculate_rank_score(avg, vendor.total_bookings)
         # Notify vendor of new booking
         notification_service.create(
             db,

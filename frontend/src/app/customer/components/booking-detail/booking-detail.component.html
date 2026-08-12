@@ -1,210 +1,785 @@
+
 <app-navbar></app-navbar>
 
-@if (loading) {
-  <div class="loading-container">
-    <mat-spinner diameter="40"></mat-spinner>
-    
-  </div>
-} @else if (booking) {
+<!-- =====================================================
+     LOADING
+     ===================================================== -->
 
-  <div class="detail-container">
-    <button mat-button class="back-btn" (click)="router.navigate(['/customer/bookings'])">
-      <mat-icon>arrow_back</mat-icon> Back to Bookings
+@if (loading) {
+
+  <div class="loading-container">
+
+    <mat-spinner diameter="40"></mat-spinner>
+
+    <p>Loading booking details...</p>
+
+  </div>
+
+}
+
+<!-- =====================================================
+     BOOKING DETAILS
+     ===================================================== -->
+
+@else if (booking) {
+
+  <div class="booking-page">
+
+    <!-- BACK BUTTON -->
+
+    <button
+      mat-button
+      class="back-btn"
+      (click)="router.navigate(['/customer/bookings'])">
+
+      <mat-icon>arrow_back</mat-icon>
+
+      Back to Bookings
+
     </button>
 
-    <div class="detail-grid">
-      <div class="main-panel">
-        <div class="status-banner" [style.background]="statusColor(booking.status) + '12'"
-             [style.color]="statusColor(booking.status)">
-          <span class="status-dot" [style.background]="statusColor(booking.status)"></span>
-          {{ booking.status | titlecase }}
-        </div>
-        <button mat-stroked-button
-           (click)="router.navigate(['/chat/booking', booking.id], { queryParams: { receiverId: vendorUserId, name: vendorName } })">
-          💬 Message
-        </button>
 
-        <h1>{{ booking.booking_ref }}</h1>
+    <!-- =================================================
+         MAIN GRID
+         ================================================= -->
+
+    <div class="detail-grid">
+
+
+      <!-- =================================================
+           MAIN PANEL
+           ================================================= -->
+
+      <div class="main-panel">
+
+
+        <!-- STATUS + MESSAGE -->
+
+        <div class="top-row">
+
+          <div
+            class="status-banner"
+            [style.background]="statusColor(booking.status) + '18'"
+            [style.color]="statusColor(booking.status)">
+
+            <span
+              class="status-dot"
+              [style.background]="statusColor(booking.status)">
+            </span>
+
+            {{ booking.status | titlecase }}
+
+          </div>
+
+
+          <button
+            mat-stroked-button
+            class="message-btn"
+            (click)="router.navigate(
+              ['/chat/booking', booking.id],
+              {
+                queryParams: {
+                  receiverId: vendorUserId,
+                  name: vendorName
+                }
+              }
+            )">
+
+            <mat-icon>chat</mat-icon>
+
+            Message
+
+          </button>
+
+        </div>
+
+
+        <!-- BOOKING REFERENCE -->
+
+        <div class="booking-heading">
+
+          <span class="section-label">
+            BOOKING REFERENCE
+          </span>
+
+          <h1>
+            {{ booking.booking_ref }}
+          </h1>
+
+        </div>
+
+
+        <!-- =================================================
+             EVENT INFORMATION
+             ================================================= -->
 
         <div class="info-grid">
+
+
+          <!-- DATE -->
+
           <div class="info-item">
-            <mat-icon>event</mat-icon>
-            <div>
-              <span class="label">Event Date</span>
-              <span class="value">{{ booking.event_date | date:'fullDate' }}</span>
+
+            <div class="info-icon">
+              <mat-icon>event</mat-icon>
+            </div>
+
+            <div class="info-content">
+
+              <span class="label">
+                Event Date
+              </span>
+
+              <span class="value">
+                {{ booking.event_date | date:'fullDate' }}
+              </span>
 
             </div>
+
           </div>
+
+
+          <!-- TIME -->
 
           @if (booking.event_time) {
+
             <div class="info-item">
-              <mat-icon>schedule</mat-icon>
-              <div>
-                <span class="label">Event Time</span>
-                <span class="value">{{ booking.event_time }}</span>
+
+              <div class="info-icon">
+                <mat-icon>schedule</mat-icon>
               </div>
+
+              <div class="info-content">
+
+                <span class="label">
+                  Event Time
+                </span>
+
+                <span class="value">
+                  {{ booking.event_time }}
+                </span>
+
+              </div>
+
             </div>
+
           }
+
+
+          <!-- LOCATION -->
 
           <div class="info-item">
-            <mat-icon>place</mat-icon>
-            <div>
-              <span class="label">Location</span>
-              <span class="value">{{ booking.event_location }}</span>
+
+            <div class="info-icon">
+              <mat-icon>place</mat-icon>
             </div>
+
+            <div class="info-content">
+
+              <span class="label">
+                Location
+              </span>
+
+              <span class="value">
+                {{ booking.event_location }}
+              </span>
+
+            </div>
+
           </div>
+
+
+          <!-- GUESTS -->
 
           @if (booking.guests_count) {
+
             <div class="info-item">
-              <mat-icon>groups</mat-icon>
-              <div>
-                <span class="label">Guests</span>
-                <span class="value">{{ booking.guests_count }}</span>
+
+              <div class="info-icon">
+                <mat-icon>groups</mat-icon>
               </div>
+
+              <div class="info-content">
+
+                <span class="label">
+                  Guests
+                </span>
+
+                <span class="value">
+                  {{ booking.guests_count }}
+                </span>
+
+              </div>
+
             </div>
+
           }
+
         </div>
+
+
+        <!-- =================================================
+             SPECIAL REQUESTS
+             ================================================= -->
 
         @if (booking.special_requests) {
+
           <div class="special-requests">
-            <h4>Special Requests</h4>
-            <p>{{ booking.special_requests }}</p>
+
+            <div class="special-icon">
+              <mat-icon>notes</mat-icon>
+            </div>
+
+            <div>
+
+              <h4>
+                Special Requests
+              </h4>
+
+              <p>
+                {{ booking.special_requests }}
+              </p>
+
+            </div>
+
           </div>
+
         }
+
+
+        <!-- =================================================
+             REVIEW SECTION
+             ================================================= -->
 
         @if (booking.status === 'completed') {
+
           <div class="review-section">
-            <h4>{{ existingReview ? 'Your Review' : 'Leave a Review' }}</h4>
+
+            <div class="section-heading">
+
+              <div>
+
+                <span class="section-label">
+                  CUSTOMER FEEDBACK
+                </span>
+
+                <h3>
+                  {{ existingReview
+                    ? 'Your Review'
+                    : 'Leave a Review' }}
+                </h3>
+
+              </div>
+
+            </div>
+
+
+            <!-- EXISTING REVIEW -->
 
             @if (existingReview && !editingReview) {
+
               <div class="review-display">
+
+
                 <div class="review-stars">
-                  @for (i of [1,2,3,4,5]; track i) {
-                    <span [class.filled]="i <= existingReview.overall_rating">★</span>
+
+                  @for (
+                    i of [1,2,3,4,5];
+                    track i
+                  ) {
+
+                    <span
+                      [class.filled]="
+                        i <= existingReview.overall_rating
+                      ">
+
+                      ★
+
+                    </span>
+
                   }
-                  <span class="review-score">{{ existingReview.overall_rating }}</span>
+
+                  <strong class="review-score">
+                    {{ existingReview.overall_rating }}/5
+                  </strong>
+
                 </div>
-                <p class="review-title">{{ existingReview.title }}</p>
-                <p class="review-body">{{ existingReview.body }}</p>
+
+
+                <p class="review-title">
+                  {{ existingReview.title }}
+                </p>
+
+
+                <p class="review-body">
+                  {{ existingReview.body }}
+                </p>
+
+
                 @if (existingReview.vendor_reply) {
+
                   <div class="vendor-reply">
-                    <strong>Vendor reply:</strong> {{ existingReview.vendor_reply }}
+
+                    <mat-icon>reply</mat-icon>
+
+                    <div>
+
+                      <strong>
+                        Vendor reply
+                      </strong>
+
+                      <p>
+                        {{ existingReview.vendor_reply }}
+                      </p>
+
+                    </div>
+
                   </div>
+
                 }
+
+
                 <div class="review-actions">
-                  <button mat-button (click)="editingReview = true">Edit</button>
-                  <button mat-button color="warn" (click)="deleteMyReview()">Delete</button>
-                </div>
-              </div>
-            } @else {
-              <div class="review-form">
-                <div class="rating-row">
-                  <label>Quality</label>
-                  <select [(ngModel)]="reviewForm.quality_rating">
-                    @for (n of [1,2,3,4,5]; track n) { <option [value]="n">{{n}} star</option> }
-                  </select>
-                </div>
-                <div class="rating-row">
-                  <label>Price</label>
-                  <select [(ngModel)]="reviewForm.price_rating">
-                    @for (n of [1,2,3,4,5]; track n) { <option [value]="n">{{n}} star</option> }
-                  </select>
-                </div>
-                <div class="rating-row">
-                  <label>Service</label>
-                  <select [(ngModel)]="reviewForm.service_rating">
-                    @for (n of [1,2,3,4,5]; track n) { <option [value]="n">{{n}} star</option> }
-                  </select>
-                </div>
-                <input class="review-input" [(ngModel)]="reviewForm.title" placeholder="Review title">
-                <textarea class="review-textarea" [(ngModel)]="reviewForm.body" rows="3" placeholder="Share your experience..."></textarea>
-                <div class="review-actions">
-                  <button mat-raised-button color="primary" (click)="submitReview()">
-                    {{ existingReview ? 'Update Review' : 'Submit Review' }}
+
+                  <button
+                    mat-stroked-button
+                    class="edit-review-btn"
+                    (click)="editingReview = true">
+
+                    <mat-icon>edit</mat-icon>
+
+                    Edit
+
                   </button>
-                  @if (editingReview) {
-                    <button mat-button (click)="editingReview = false">Cancel</button>
-                  }
+
+
+                  <button
+                    mat-button
+                    color="warn"
+                    (click)="deleteMyReview()">
+
+                    <mat-icon>delete_outline</mat-icon>
+
+                    Delete
+
+                  </button>
+
                 </div>
+
               </div>
+
             }
+
+
+            <!-- REVIEW FORM -->
+
+            @else {
+
+              <div class="review-form">
+
+
+                <!-- QUALITY -->
+
+                <div class="rating-row">
+
+                  <label>
+                    Quality
+                  </label>
+
+                  <select
+                    [(ngModel)]="reviewForm.quality_rating">
+
+                    @for (
+                      n of [1,2,3,4,5];
+                      track n
+                    ) {
+
+                      <option [value]="n">
+                        {{ n }} star
+                      </option>
+
+                    }
+
+                  </select>
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="rating-row">
+
+                  <label>
+                    Price
+                  </label>
+
+                  <select
+                    [(ngModel)]="reviewForm.price_rating">
+
+                    @for (
+                      n of [1,2,3,4,5];
+                      track n
+                    ) {
+
+                      <option [value]="n">
+                        {{ n }} star
+                      </option>
+
+                    }
+
+                  </select>
+
+                </div>
+
+
+                <!-- SERVICE -->
+
+                <div class="rating-row">
+
+                  <label>
+                    Service
+                  </label>
+
+                  <select
+                    [(ngModel)]="reviewForm.service_rating">
+
+                    @for (
+                      n of [1,2,3,4,5];
+                      track n
+                    ) {
+
+                      <option [value]="n">
+                        {{ n }} star
+                      </option>
+
+                    }
+
+                  </select>
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <input
+                  class="review-input"
+                  [(ngModel)]="reviewForm.title"
+                  placeholder="Review title">
+
+
+                <!-- BODY -->
+
+                <textarea
+                  class="review-textarea"
+                  [(ngModel)]="reviewForm.body"
+                  rows="4"
+                  placeholder="Share your experience...">
+                </textarea>
+
+
+                <!-- ACTIONS -->
+
+                <div class="review-actions">
+
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="submit-review-btn"
+                    (click)="submitReview()">
+
+                    {{ existingReview
+                      ? 'Update Review'
+                      : 'Submit Review' }}
+
+                  </button>
+
+
+                  @if (editingReview) {
+
+                    <button
+                      mat-button
+                      (click)="editingReview = false">
+
+                      Cancel
+
+                    </button>
+
+                  }
+
+                </div>
+
+              </div>
+
+            }
+
           </div>
+
         }
+
+
+        <!-- =================================================
+             AMOUNT
+             ================================================= -->
 
         <div class="amount-breakdown">
-          <h4>Estimated Amount</h4>
-          <div class="breakdown-row">
-            <span>Total Amount</span>
-            <span>₹{{ booking.total_amount | number }}</span>
+
+          <div class="amount-header">
+
+            <div>
+
+              <span class="section-label">
+                PAYMENT
+              </span>
+
+              <h3>
+                Estimated Amount
+              </h3>
+
+            </div>
+
+            <span class="amount-total">
+              ₹{{ booking.total_amount | number }}
+            </span>
+
           </div>
 
+
+          <div class="breakdown-row">
+
+            <span>
+              Total Amount
+            </span>
+
+            <strong>
+              ₹{{ booking.total_amount | number }}
+            </strong>
+
+          </div>
+
+
+          <!-- PHASE ONE -->
+
           @if (!paymentsEnabled) {
+
             <div class="phase-one-notice">
-              💬 Evenzoo does not process payments during this early phase. Please arrange payment
-              directly with your vendor via chat or their listed contact details.
+
+              <mat-icon>info</mat-icon>
+
+              <span>
+                Evenzoo does not process payments during this
+                early phase. Please arrange payment directly
+                with your vendor via chat or their listed
+                contact details.
+              </span>
+
             </div>
+
           }
+
+
+          <!-- PAYMENT SUCCESS -->
 
           @if (isPaid) {
+
             <div class="payment-success">
-              <mat-icon>check_circle</mat-icon>
-              Payment Completed
+
+              <mat-icon>
+                check_circle
+              </mat-icon>
+
+              <span>
+                Payment Completed
+              </span>
+
             </div>
+
           }
+
         </div>
 
-        @if (needsPayment) {
-          <button mat-raised-button color="primary" class="pay-btn"
-                  (click)="payNow()" [disabled]="payingNow">
-            @if (payingNow) {
-              <mat-spinner diameter="20"></mat-spinner>
-            } @else {
-              💳 Pay ₹{{ booking.total_amount | number }} Now
-            }
-          </button>
-        }
+
+        <!-- =================================================
+             PAY NOW
+             ================================================= -->
 
         @if (needsPayment) {
-          <button mat-raised-button color="primary" class="pay-btn"
-                  (click)="payNow()" [disabled]="payingNow">
+
+          <button
+            mat-raised-button
+            color="primary"
+            class="pay-btn"
+            (click)="payNow()"
+            [disabled]="payingNow">
+
             @if (payingNow) {
+
               <mat-spinner diameter="20"></mat-spinner>
+
+              <span>
+                Processing...
+              </span>
+
             } @else {
-              💳 Pay ₹{{ booking.total_amount | number }} Now
+
+              <mat-icon>
+                payments
+              </mat-icon>
+
+              <span>
+                Pay ₹{{ booking.total_amount | number }} Now
+              </span>
+
             }
+
           </button>
+
         }
+
+
+        <!-- =================================================
+             CANCEL
+             ================================================= -->
 
         @if (canCancel && !payingNow) {
-          <button mat-stroked-button color="warn" class="cancel-btn"
-                  (click)="cancelBooking()" [disabled]="cancelling">
-            {{ cancelling ? 'Cancelling...' : 'Cancel Booking' }}
+
+          <button
+            mat-stroked-button
+            color="warn"
+            class="cancel-btn"
+            (click)="cancelBooking()"
+            [disabled]="cancelling">
+
+            <mat-icon>
+              cancel
+            </mat-icon>
+
+            {{ cancelling
+              ? 'Cancelling...'
+              : 'Cancel Booking' }}
+
           </button>
+
         }
+
       </div>
+
+
+      <!-- =================================================
+           TIMELINE
+           ================================================= -->
 
       <div class="timeline-panel">
-        <h3>Status Timeline</h3>
-        <div class="timeline">
-          @for (item of history; track item.id) {
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <p class="timeline-status">{{ item.new_status | titlecase }}</p>
-                @if (item.reason) {
-                  <p class="timeline-reason">{{ item.reason }}</p>
-                }
-                <p class="timeline-time">{{ item.created_at | date:'medium' }}</p>
-              </div>
-            </div>
-          }
+
+        <div class="timeline-header">
+
+          <div>
+
+            <span class="section-label">
+              BOOKING JOURNEY
+            </span>
+
+            <h3>
+              Status Timeline
+            </h3>
+
+          </div>
+
+          <mat-icon>
+            timeline
+          </mat-icon>
+
         </div>
+
+
+        <div class="timeline">
+
+          @for (
+            item of history;
+            track item.id
+          ) {
+
+            <div class="timeline-item">
+
+              <div class="timeline-line"></div>
+
+              <div class="timeline-dot"></div>
+
+
+              <div class="timeline-content">
+
+                <p class="timeline-status">
+                  {{ item.new_status | titlecase }}
+                </p>
+
+
+                @if (item.reason) {
+
+                  <p class="timeline-reason">
+                    {{ item.reason }}
+                  </p>
+
+                }
+
+
+                <p class="timeline-time">
+
+                  <mat-icon>
+                    schedule
+                  </mat-icon>
+
+                  {{ item.created_at | date:'medium' }}
+
+                </p>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
       </div>
+
     </div>
+
   </div>
 
-} @else {
+}
+
+<!-- =====================================================
+     NOT FOUND
+     ===================================================== -->
+
+@else {
+
   <div class="error-container">
-    <p>Booking not found</p>
+
+    <div class="error-icon">
+
+      <mat-icon>
+        search_off
+      </mat-icon>
+
+    </div>
+
+    <h2>
+      Booking not found
+    </h2>
+
+    <p>
+      We couldn't find the booking you're looking for.
+    </p>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="router.navigate(['/customer/bookings'])">
+
+      Back to Bookings
+
+    </button>
+
   </div>
+
 }

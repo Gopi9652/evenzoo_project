@@ -1,107 +1,276 @@
+/* ================================
+   LOGIN PAGE
+================================ */
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+/* Main background */
 .auth-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-  135deg,
-  #050505 0%,
-  #1B102B 45%,
-  #0B0B0F 100%
-  );
-  padding: 1rem;
+  padding: 32px 20px;
+
+  background: #f5f7fb;
 }
+
+/* ================================
+   CARD
+================================ */
 
 .auth-card {
   width: 100%;
-  max-width: 420px;
-  padding: 2.5rem 2rem;
-  border-radius: 16px;
-  
+  max-width: 430px;
+
+  padding: 38px 36px 30px;
+
+  background: #ffffff;
+
+  border: 1px solid #e8ebf2;
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 30px rgba(31, 41, 55, 0.08),
+    0 2px 8px rgba(31, 41, 55, 0.04);
+
+  box-sizing: border-box;
 }
+
+/* ================================
+   HEADER
+================================ */
 
 .auth-header {
   text-align: center;
-  margin-bottom: 2rem;
-
-  .logo-icon {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-  }
-
-  h1 {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #1a1a2e;
-    margin: 0 0 0.5rem;
-  }
-
-  p {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin: 0;
-  }
+  margin-bottom: 30px;
 }
+
+/* Logo */
+.logo-img {
+  display: block;
+
+  width: 210px;
+  max-width: 80%;
+  height: auto;
+
+  margin: 0 auto 18px;
+}
+
+/* Subtitle */
+.auth-header p {
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ================================
+   FORM
+================================ */
 
 .full-width {
   width: 100%;
-  margin-bottom: 0.5rem;
 }
 
-.submit-btn {
-  height: 48px;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-top: 0.5rem;
-
-  mat-spinner {
-    display: inline-block;
-    margin: 0 auto;
-  }
+/* Space between fields */
+mat-form-field {
+  margin-bottom: 8px;
 }
 
-.error-banner {
-  background: #fee2e2;
-  color: #dc2626;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  margin-bottom: 1rem;
-  text-align: center;
+/* ================================
+   INPUT ICONS
+================================ */
+
+mat-icon[matSuffix] {
+  color: #9ca3af;
 }
 
-.auth-footer {
-  text-align: center;
-  margin-top: 1.5rem;
-
-  p {
-    color: #64748b;
-    font-size: 0.9rem;
-  }
-
-  a {
-    color: #e8650a;
-    font-weight: 600;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+/* Clickable password icon */
+mat-icon[matSuffix][style] {
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
+
+mat-icon[matSuffix][style]:hover {
+  color: #6c4ce8;
+}
+
+/* ================================
+   FORGOT PASSWORD
+================================ */
 
 .forgot-link {
-  text-align: right;
-  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
 
-  a {
-    color: #64748b;
-    font-size: 0.82rem;
-    text-decoration: none;
+  margin: 2px 0 22px;
+}
 
-    &:hover {
-      color: #e8650a;
-      text-decoration: underline;
-    }
+.forgot-link a {
+  color: #6c4ce8;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.forgot-link a:hover {
+  color: #5636d8;
+}
+
+/* ================================
+   ERROR
+================================ */
+
+.error-banner {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 18px;
+  padding: 11px 13px;
+
+  background: #fff1f2;
+
+  border: 1px solid #fecdd3;
+  border-radius: 9px;
+
+  color: #be123c;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ================================
+   LOGIN BUTTON
+================================ */
+
+.submit-btn {
+  min-height: 48px;
+
+  border-radius: 10px !important;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  letter-spacing: 0.1px;
+}
+
+/* Spinner inside button */
+.submit-btn mat-spinner {
+  margin: auto;
+}
+
+/* ================================
+   FOOTER
+================================ */
+
+.auth-footer {
+  margin-top: 26px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid #edf0f5;
+
+  text-align: center;
+}
+
+.auth-footer p {
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+.auth-footer a {
+  color: #6c4ce8;
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  color: #5636d8;
+}
+
+/* ================================
+   MATERIAL FIELD IMPROVEMENTS
+================================ */
+
+::ng-deep .auth-card .mat-mdc-form-field {
+  --mdc-outlined-text-field-container-shape: 10px;
+}
+
+::ng-deep .auth-card .mat-mdc-text-field-wrapper {
+  background: #ffffff !important;
+}
+
+::ng-deep .auth-card
+  .mdc-notched-outline__leading,
+::ng-deep .auth-card
+  .mdc-notched-outline__notch,
+::ng-deep .auth-card
+  .mdc-notched-outline__trailing {
+  border-color: #dfe3eb !important;
+}
+
+::ng-deep .auth-card
+  .mat-mdc-form-field:hover
+  .mdc-notched-outline__leading,
+::ng-deep .auth-card
+  .mat-mdc-form-field:hover
+  .mdc-notched-outline__notch,
+::ng-deep .auth-card
+  .mat-mdc-form-field:hover
+  .mdc-notched-outline__trailing {
+  border-color: #b8b2e8 !important;
+}
+
+::ng-deep .auth-card
+  .mat-mdc-form-field.mat-focused
+  .mdc-notched-outline__leading,
+::ng-deep .auth-card
+  .mat-mdc-form-field.mat-focused
+  .mdc-notched-outline__notch,
+::ng-deep .auth-card
+  .mat-mdc-form-field.mat-focused
+  .mdc-notched-outline__trailing {
+  border-color: #6c4ce8 !important;
+  border-width: 2px !important;
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+
+  .auth-container {
+    padding: 20px 14px;
+  }
+
+  .auth-card {
+    padding: 30px 22px 24px;
+    border-radius: 15px;
+  }
+
+  .logo-img {
+    width: 180px;
+  }
+
+  .auth-header {
+    margin-bottom: 24px;
   }
 }

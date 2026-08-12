@@ -1,36 +1,136 @@
+
 <app-navbar></app-navbar>
 
-<div class="page-header">
-  <h1>Messages</h1>
-  <p>Conversations with your booking contacts</p>
-</div>
+<div class="messages-page">
 
-<div class="conv-container">
-  @if (loading) {
-    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
-  } @else if (conversations.length === 0) {
-    <div class="empty-state">
-      <span class="empty-icon">💬</span>
-      <h3>No conversations yet</h3>
-      <p>Messages tied to your bookings will appear here</p>
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+
+    <div class="header-icon">
+      <mat-icon>chat</mat-icon>
     </div>
-  } @else {
-    <div class="conv-list">
-      @for (c of conversations; track c.booking_id) {
-        <div class="conv-row" (click)="openChat(c)">
-          <div class="conv-avatar">{{ c.other_user_name.charAt(0).toUpperCase() }}</div>
-          <div class="conv-info">
-            <div class="conv-top">
-              <span class="conv-name">{{ c.other_user_name }}</span>
-              <span class="conv-ref">{{ c.booking_ref }}</span>
-            </div>
-            <span class="conv-preview">{{ c.last_message }}</span>
-          </div>
-          @if (c.unread_count > 0) {
-            <span class="unread-badge">{{ c.unread_count }}</span>
-          }
+
+    <div>
+      <h1>Messages</h1>
+      <p>Conversations with your booking contacts</p>
+    </div>
+
+  </div>
+
+
+  <!-- MAIN CONTAINER -->
+  <div class="conv-container">
+
+    @if (loading) {
+
+      <!-- LOADING -->
+      <div class="loading-container">
+
+        <mat-spinner diameter="40"></mat-spinner>
+
+        <p>Loading conversations...</p>
+
+      </div>
+
+    } @else if (conversations.length === 0) {
+
+      <!-- EMPTY STATE -->
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          <mat-icon>forum</mat-icon>
         </div>
-      }
-    </div>
-  }
+
+        <h3>No conversations yet</h3>
+
+        <p>
+          Messages tied to your bookings will appear here.
+        </p>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="browse-btn"
+          routerLink="/customer/home">
+
+          <mat-icon>search</mat-icon>
+          Browse Vendors
+
+        </button>
+
+      </div>
+
+    } @else {
+
+      <!-- CONVERSATIONS -->
+      <div class="conv-list">
+
+        @for (c of conversations; track c.booking_id) {
+
+          <div
+            class="conv-row"
+            [class.has-unread]="c.unread_count > 0"
+            (click)="openChat(c)">
+
+            <!-- AVATAR -->
+            <div class="conv-avatar">
+
+              {{ c.other_user_name.charAt(0).toUpperCase() }}
+
+            </div>
+
+
+            <!-- CONVERSATION INFO -->
+            <div class="conv-info">
+
+              <div class="conv-top">
+
+                <span class="conv-name">
+                  {{ c.other_user_name }}
+                </span>
+
+                <span class="conv-ref">
+                  {{ c.booking_ref }}
+                </span>
+
+              </div>
+
+              <span
+                class="conv-preview"
+                [class.unread-preview]="c.unread_count > 0">
+
+                {{ c.last_message }}
+
+              </span>
+
+            </div>
+
+
+            <!-- RIGHT SIDE -->
+            <div class="conv-right">
+
+              @if (c.unread_count > 0) {
+
+                <span class="unread-badge">
+                  {{ c.unread_count > 99 ? '99+' : c.unread_count }}
+                </span>
+
+              }
+
+              <mat-icon class="arrow-icon">
+                chevron_right
+              </mat-icon>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+
 </div>

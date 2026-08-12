@@ -273,3 +273,47 @@ body {
   font-family: var(--font-body);
   background: var(--cream);
 }
+
+/* =========================================================
+   ANGULAR MATERIAL TAB CONTRAST
+   ========================================================= */
+
+.detail-tabs .mat-mdc-tab {
+  --mdc-tab-indicator-active-indicator-color: #b56dff;
+
+  color: #bdbdc9 !important;
+}
+
+
+.detail-tabs .mat-mdc-tab.mdc-tab--active {
+  color: #ffffff !important;
+}
+
+
+.detail-tabs .mdc-tab__text-label {
+  color: #bdbdc9 !important;
+}
+
+
+.detail-tabs .mdc-tab--active .mdc-tab__text-label {
+  color: #ffffff !important;
+}
+
+
+/* Tab header background */
+
+.detail-tabs .mat-mdc-tab-header {
+  background: #111218;
+
+  border-bottom:
+    1px solid #2c2d38;
+}
+
+
+/* Tab content */
+
+.detail-tabs .mat-mdc-tab-body-content {
+  background: #15161d;
+
+  color: #f5f5f7;
+}

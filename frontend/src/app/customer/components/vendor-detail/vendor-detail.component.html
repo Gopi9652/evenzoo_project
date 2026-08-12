@@ -1,212 +1,329 @@
 <app-navbar></app-navbar>
 
 @if (loading) {
-  <div class="loading-container">
-    <mat-spinner diameter="40"></mat-spinner>
+
+  <div class="vendor-detail-loading">
+
+    <div class="loading-content">
+      <mat-spinner diameter="45"></mat-spinner>
+
+      <h3>Loading vendor</h3>
+
+      <p>Please wait while we load the vendor details...</p>
+    </div>
+
   </div>
+
 } @else if (vendor) {
 
-  <div class="detail-hero" [style.background]="vendor.profile_photo_url ? 'none' : 'linear-gradient(135deg, #2c1810, #4a2c1a)'">
-    @if (vendor.profile_photo_url) {
-      <img [src]="vendor. profile_photo_url" class="hero-photo" alt="{{ vendor.business_name }}">
-    } @else {
-      <span class="hero-icon">🏪</span>
-    }
-    @if (vendor.is_approved) {
-      <span class="verified-tag">✓ Verified Vendor</span>
-    }
-  </div>
+  <div class="vendor-detail-page">
 
-  <div class="detail-container">
+    <!-- =====================================================
+         TOP COVER / HERO
+         ===================================================== -->
 
-    <div class="detail-main">
+    <section class="vendor-hero">
 
-      <div class="detail-header">
-        <h1>{{ vendor.business_name }}</h1>
+      <div class="hero-background"></div>
 
-        <div class="rating-row">
-          <div class="stars">
-            @for (star of ratingStars; track $index) {
-              <mat-icon class="star-icon"
-                        [class.filled]="star === 1">
-                star
-              </mat-icon>
-            }
-          </div>
+      <div class="hero-content">
 
-          <span class="rating-text">
-            {{ vendor.avg_rating || 0 }}
-            · {{ vendor.total_reviews }} reviews
-            · {{ vendor.total_bookings }} bookings
-          </span>
+        <!-- Profile Photo -->
+
+        <div class="profile-photo-wrapper">
+
+          @if (vendor.profile_photo_url) {
+
+            <img
+              [src]="vendor.profile_photo_url"
+              [alt]="vendor.business_name"
+              class="profile-photo">
+
+          } @else {
+
+            <div class="profile-photo-placeholder">
+              <mat-icon>storefront</mat-icon>
+            </div>
+
+          }
+
+          @if (vendor.is_approved) {
+
+            <div class="profile-verified">
+              <mat-icon>verified</mat-icon>
+            </div>
+
+          }
+
         </div>
 
-        <p class="address" *ngIf="vendor.address">
-          <mat-icon>place</mat-icon>
-          {{ vendor.address }}
-        </p>
+
+        <!-- Vendor Header Information -->
+
+        <div class="detail-header">
+
+          <div class="business-title-row">
+
+            <h1>
+              {{ vendor.business_name }}
+            </h1>
+
+            @if (vendor.is_approved) {
+
+              <span class="verified-label">
+                <mat-icon>verified</mat-icon>
+                Verified Vendor
+              </span>
+
+            }
+
+          </div>
+
+
+          <!-- Rating -->
+
+          <div class="rating-row">
+
+            <div class="stars">
+
+              @for (star of ratingStars; track $index) {
+
+                <mat-icon
+                  class="star-icon"
+                  [class.filled]="star === 1">
+
+                  star
+
+                </mat-icon>
+
+              }
+
+            </div>
+
+            <span class="rating-text">
+
+              <strong>
+                {{ vendor.avg_rating || 0 }}
+              </strong>
+
+              <span>
+                · {{ vendor.total_reviews || 0 }} reviews
+              </span>
+
+              <span>
+                · {{ vendor.total_bookings || 0 }} bookings
+              </span>
+
+            </span>
+
+          </div>
+
+
+          <!-- Address -->
+
+          @if (vendor.address) {
+
+            <p class="address">
+
+              <mat-icon>place</mat-icon>
+
+              <span>
+                {{ vendor.address }}
+              </span>
+
+            </p>
+
+          }
+
+        </div>
+
       </div>
 
-      <mat-tab-group class="detail-tabs">
+    </section>
 
-        <!-- ABOUT -->
 
-        <mat-tab label="About">
-          <div class="tab-content">
-            <p class="description">
-              {{ vendor.description || 'No description provided.' }}
-            </p>
-          </div>
-        </mat-tab>
+    <!-- =====================================================
+         MAIN PAGE
+         ===================================================== -->
 
-        <!-- SERVICES -->
+    <div class="detail-layout">
 
-        <mat-tab label="Services & Pricing">
-          <div class="tab-content">
 
-            @if (services.length === 0) {
+      <!-- ===================================================
+           MAIN CONTENT
+           =================================================== -->
 
-              <p class="empty-text">
-                No services listed yet.
-              </p>
+      <div class="detail-main">
 
-            } @else {
 
-              <div class="services-list">
+        <!-- =================================================
+             TABS
+             ================================================= -->
 
-                @for (service of services; track service.id) {
+        <mat-tab-group class="detail-tabs">
 
-                  <div class="service-item">
 
-                    <div class="service-info">
-                      <h4>{{ service.name }}</h4>
-                      <p>{{ service.description }}</p>
-                    </div>
+          <!-- ===============================================
+               ABOUT
+               =============================================== -->
 
-                    <div class="service-price">
-                      <span class="price">
-                        ₹{{ service.price | number }}
-                      </span>
+          <mat-tab label="About">
 
-                      <span class="price-type">
-                        {{ service.price_type }}
-                      </span>
-                    </div>
+            <div class="tab-content">
 
-                  </div>
+              <div class="section-heading">
 
-                }
+                <span class="section-icon">
+                  <mat-icon>info_outline</mat-icon>
+                </span>
+
+                <div>
+                  <h2>About this vendor</h2>
+                  <p>Learn more about this business</p>
+                </div>
 
               </div>
 
-            }
 
-          </div>
-        </mat-tab>
+              <p class="description">
 
-        <!-- PHOTOS -->
+                {{ vendor.description || 'No description provided.' }}
 
-        <mat-tab label="Photos">
-
-          <div class="tab-content">
-
-            @if (photos.length === 0) {
-
-              <p class="empty-text">
-                No photos uploaded yet.
               </p>
 
-            } @else {
 
-              <div class="photo-grid">
+              <!-- Quick Stats -->
 
-                @for (photo of photos; track photo.id) {
+              <div class="quick-stats">
 
-                  <div class="photo-item">
-                    <img
-                      [src]="photo.photo_url"
-                      [alt]="photo.caption">
+                <div class="quick-stat">
+
+                  <mat-icon>star</mat-icon>
+
+                  <div>
+                    <strong>
+                      {{ vendor.avg_rating || 0 }}
+                    </strong>
+
+                    <span>Average Rating</span>
                   </div>
-
-                }
-
-              </div>
-
-            }
-
-          </div>
-
-        </mat-tab>
-
-        <!-- REVIEWS -->
-
-        <mat-tab [label]="'Reviews (' + reviews.length + ')'">
-
-          <div class="tab-content">
-
-            @if (reviewsLoading) {
-
-              <div class="reviews-loading">
-                <mat-spinner diameter="30"></mat-spinner>
-              </div>
-
-            } @else if (reviews.length === 0) {
-
-              <p class="empty-text">
-                No reviews yet. Be the first to book and review this vendor!
-              </p>
-
-            } @else {
-
-              <div class="review-summary">
-
-                <div class="summary-score">
-
-                  <span class="big-score">
-                    {{ vendor.avg_rating || 0 }}
-                  </span>
-
-                  <div class="summary-stars">
-
-                    @for (star of ratingStars; track $index) {
-
-                      <mat-icon
-                        class="star-icon"
-                        [class.filled]="star === 1">
-                        star
-                      </mat-icon>
-
-                    }
-
-                  </div>
-
-                  <span class="summary-count">
-                    {{ reviews.length }}
-                    review{{ reviews.length !== 1 ? 's' : '' }}
-                  </span>
 
                 </div>
 
-                <div class="summary-bars">
 
-                  @for (row of ratingBreakdown; track row.star) {
+                <div class="quick-stat">
 
-                    <div class="bar-row">
+                  <mat-icon>rate_review</mat-icon>
 
-                      <span class="bar-label">
-                        {{ row.star }}★
-                      </span>
+                  <div>
+                    <strong>
+                      {{ vendor.total_reviews || 0 }}
+                    </strong>
 
-                      <div class="bar-track">
-                        <div
-                          class="bar-fill"
-                          [style.width.%]="row.percent">
-                        </div>
+                    <span>Reviews</span>
+                  </div>
+
+                </div>
+
+
+                <div class="quick-stat">
+
+                  <mat-icon>event_available</mat-icon>
+
+                  <div>
+                    <strong>
+                      {{ vendor.total_bookings || 0 }}
+                    </strong>
+
+                    <span>Bookings</span>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </mat-tab>
+
+
+          <!-- ===============================================
+               SERVICES
+               =============================================== -->
+
+          <mat-tab label="Services & Pricing">
+
+            <div class="tab-content">
+
+              <div class="section-heading">
+
+                <span class="section-icon">
+                  <mat-icon>design_services</mat-icon>
+                </span>
+
+                <div>
+                  <h2>Services & Pricing</h2>
+                  <p>Choose from the services offered by this vendor</p>
+                </div>
+
+              </div>
+
+
+              @if (services.length === 0) {
+
+                <div class="empty-tab-state">
+
+                  <mat-icon>inventory_2</mat-icon>
+
+                  <h3>No services listed yet</h3>
+
+                  <p>
+                    This vendor hasn't added any services yet.
+                  </p>
+
+                </div>
+
+              } @else {
+
+                <div class="services-list">
+
+                  @for (service of services; track service.id) {
+
+                    <div class="service-item">
+
+                      <div class="service-icon">
+                        <mat-icon>check_circle</mat-icon>
                       </div>
 
-                      <span class="bar-count">
-                        {{ row.count }}
-                      </span>
+
+                      <div class="service-info">
+
+                        <h4>
+                          {{ service.name }}
+                        </h4>
+
+                        @if (service.description) {
+
+                          <p>
+                            {{ service.description }}
+                          </p>
+
+                        }
+
+                      </div>
+
+
+                      <div class="service-price">
+
+                        <span class="price">
+                          ₹{{ service.price | number }}
+                        </span>
+
+                        <span class="price-type">
+                          {{ service.price_type }}
+                        </span>
+
+                      </div>
 
                     </div>
 
@@ -214,59 +331,192 @@
 
                 </div>
 
+              }
+
+            </div>
+
+          </mat-tab>
+
+
+          <!-- ===============================================
+               PHOTOS
+               =============================================== -->
+
+          <mat-tab label="Photos">
+
+            <div class="tab-content">
+
+              <div class="section-heading">
+
+                <span class="section-icon">
+                  <mat-icon>photo_library</mat-icon>
+                </span>
+
+                <div>
+                  <h2>Photos</h2>
+                  <p>Explore this vendor's work</p>
+                </div>
+
               </div>
 
-              <div class="reviews-list-public">
-                                @for (review of reviews; track review.id) {
 
-                  <div class="public-review-card">
+              @if (photos.length === 0) {
 
-                    <div class="public-review-header">
+                <div class="empty-tab-state">
 
-                      <div class="reviewer-stars">
-                        @for (star of starsFor(review.overall_rating); track $index) {
-                          <span [class.filled]="star === 1">★</span>
-                        }
-                      </div>
+                  <mat-icon>photo_library</mat-icon>
 
-                      <span class="public-review-date">
-                        {{ review.created_at | date:'mediumDate' }}
-                      </span>
+                  <h3>No photos uploaded yet</h3>
 
-                    </div>
+                  <p>
+                    This vendor hasn't uploaded any photos yet.
+                  </p>
 
-                    <h5>{{ review.title }}</h5>
+                </div>
 
-                    <p>{{ review.body }}</p>
+              } @else {
 
-                    <div class="public-rating-breakdown">
+                <div class="photo-grid">
 
-                      <span>
-                        Quality:
-                        {{ review.quality_rating }}★
-                      </span>
+                  @for (photo of photos; track photo.id) {
 
-                      <span>
-                        Price:
-                        {{ review.price_rating }}★
-                      </span>
+                    <div class="photo-item">
 
-                      <span>
-                        Service:
-                        {{ review.service_rating }}★
-                      </span>
+                      <img
+                        [src]="photo.photo_url"
+                        [alt]="photo.caption || vendor.business_name">
+
+                      @if (photo.caption) {
+
+                        <div class="photo-caption">
+                          {{ photo.caption }}
+                        </div>
+
+                      }
 
                     </div>
 
-                    @if (review.vendor_reply) {
+                  }
 
-                      <div class="public-vendor-reply">
+                </div>
 
-                        <strong>
-                          {{ vendor.business_name }} replied:
-                        </strong>
+              }
 
-                        {{ review.vendor_reply }}
+            </div>
+
+          </mat-tab>
+
+
+          <!-- ===============================================
+               REVIEWS
+               =============================================== -->
+
+          <mat-tab
+            [label]="'Reviews (' + reviews.length + ')'">
+
+            <div class="tab-content">
+
+              @if (reviewsLoading) {
+
+                <div class="reviews-loading">
+
+                  <mat-spinner diameter="30"></mat-spinner>
+
+                  <span>
+                    Loading reviews...
+                  </span>
+
+                </div>
+
+              } @else if (reviews.length === 0) {
+
+                <div class="empty-tab-state">
+
+                  <mat-icon>rate_review</mat-icon>
+
+                  <h3>No reviews yet</h3>
+
+                  <p>
+                    Be the first to book and review this vendor!
+                  </p>
+
+                </div>
+
+              } @else {
+
+
+                <!-- =========================================
+                     REVIEW SUMMARY
+                     ========================================= -->
+
+                <div class="review-summary">
+
+
+                  <div class="summary-score">
+
+                    <span class="big-score">
+                      {{ vendor.avg_rating || 0 }}
+                    </span>
+
+
+                    <div class="summary-stars">
+
+                      @for (
+                        star of ratingStars;
+                        track $index
+                      ) {
+
+                        <mat-icon
+                          class="star-icon"
+                          [class.filled]="star === 1">
+
+                          star
+
+                        </mat-icon>
+
+                      }
+
+                    </div>
+
+
+                    <span class="summary-count">
+
+                      {{ reviews.length }}
+
+                      review{{ reviews.length !== 1 ? 's' : '' }}
+
+                    </span>
+
+                  </div>
+
+
+                  <!-- Rating Breakdown -->
+
+                  <div class="summary-bars">
+
+                    @for (
+                      row of ratingBreakdown;
+                      track row.star
+                    ) {
+
+                      <div class="bar-row">
+
+                        <span class="bar-label">
+                          {{ row.star }}★
+                        </span>
+
+                        <div class="bar-track">
+
+                          <div
+                            class="bar-fill"
+                            [style.width.%]="row.percent">
+                          </div>
+
+                        </div>
+
+                        <span class="bar-count">
+                          {{ row.count }}
+                        </span>
 
                       </div>
 
@@ -274,65 +524,290 @@
 
                   </div>
 
-                }
+                </div>
 
-              </div>
 
-            }
+                <!-- =========================================
+                     PUBLIC REVIEWS
+                     ========================================= -->
+
+                <div class="reviews-list-public">
+
+                  @for (
+                    review of reviews;
+                    track review.id
+                  ) {
+
+                    <div class="public-review-card">
+
+
+                      <div class="public-review-header">
+
+                        <div class="reviewer-info">
+
+                          <div class="reviewer-avatar">
+
+                            @if (review.customer_profile_photo) {
+
+                              <img
+                                [src]="review.customer_profile_photo"
+                                alt="Reviewer">
+
+                            } @else {
+
+                              <mat-icon>
+                                person
+                              </mat-icon>
+
+                            }
+
+                          </div>
+
+                          <div>
+
+                            <span class="reviewer-name">
+                              {{ review.customer_name || 'Customer' }}
+                            </span>
+
+                            <div class="reviewer-stars">
+
+                              @for (
+                                star of starsFor(review.overall_rating);
+                                track $index
+                              ) {
+
+                                <span
+                                  [class.filled]="star === 1">
+                                  ★
+                                </span>
+
+                              }
+
+                            </div>
+
+                          </div>
+
+                        </div>
+
+
+                        <span class="public-review-date">
+
+                          {{ review.created_at | date:'mediumDate' }}
+
+                        </span>
+
+                      </div>
+
+
+                      @if (review.title) {
+
+                        <h5>
+                          {{ review.title }}
+                        </h5>
+
+                      }
+
+
+                      @if (review.body) {
+
+                        <p>
+                          {{ review.body }}
+                        </p>
+
+                      }
+
+
+                      <!-- Rating Breakdown -->
+
+                      <div class="public-rating-breakdown">
+
+                        <span>
+                          <strong>Quality</strong>
+                          {{ review.quality_rating }}★
+                        </span>
+
+                        <span>
+                          <strong>Price</strong>
+                          {{ review.price_rating }}★
+                        </span>
+
+                        <span>
+                          <strong>Service</strong>
+                          {{ review.service_rating }}★
+                        </span>
+
+                      </div>
+
+
+                      <!-- Vendor Reply -->
+
+                      @if (review.vendor_reply) {
+
+                        <div class="public-vendor-reply">
+
+                          <div class="reply-icon">
+                            <mat-icon>reply</mat-icon>
+                          </div>
+
+                          <div>
+
+                            <strong>
+                              {{ vendor.business_name }} replied
+                            </strong>
+
+                            <p>
+                              {{ review.vendor_reply }}
+                            </p>
+
+                          </div>
+
+                        </div>
+
+                      }
+
+                    </div>
+
+                  }
+
+                </div>
+
+              }
+
+            </div>
+
+          </mat-tab>
+
+        </mat-tab-group>
+
+      </div>
+
+
+      <!-- ===================================================
+           SIDEBAR
+           =================================================== -->
+
+      <aside class="detail-sidebar">
+
+        <div class="booking-card">
+
+          <div class="booking-card-header">
+
+            <span class="booking-icon">
+              <mat-icon>event</mat-icon>
+            </span>
+
+            <div>
+
+              <h3>
+                Ready to book?
+              </h3>
+
+              <p>
+                Select services and pick your event date
+              </p>
+
+            </div>
 
           </div>
 
-        </mat-tab>
 
-      </mat-tab-group>
+          <!-- Book -->
 
-    </div>
+          <button
+            mat-raised-button
+            color="primary"
+            class="book-btn"
+            (click)="openBookingDialog()">
 
-    <!-- SIDEBAR -->
+            <mat-icon>calendar_month</mat-icon>
 
-    <div class="detail-sidebar">
+            Book Now
 
-      <div class="booking-card">
+          </button>
 
-        <h3>Ready to book?</h3>
 
-        <p>
-          Select services and pick your event date
-        </p>
+          <!-- Message -->
 
-        <button
-          mat-raised-button
-          color="primary"
-          class="book-btn"
-          (click)="openBookingDialog()">
+          <button
+            mat-stroked-button
+            class="message-btn"
+            (click)="router.navigate(
+              ['/chat/user', vendor.user_id],
+              {
+                queryParams: {
+                  name: vendor.business_name
+                }
+              }
+            )">
 
-          📅 Book Now
+            <mat-icon>chat_bubble_outline</mat-icon>
 
-        </button>
-        <button mat-stroked-button class="message-btn"
-            (click)="router.navigate(['/chat/user', vendor.user_id], { queryParams: { name: vendor.business_name } })">
-          💬 Message Vendor
-        </button>
-        @if (vendor.whatsapp_number) {
-        <a [href]="whatsappLink" target="_blank" rel="noopener" class="whatsapp-btn">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m5.83 14.07c-.24.68-1.4 1.3-1.93 1.38-.49.08-1.11.11-1.79-.11-.41-.13-.94-.31-1.62-.6-2.85-1.23-4.7-4.1-4.85-4.29-.14-.19-1.16-1.54-1.16-2.94 0-1.4.73-2.09.99-2.37.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.37-.42.49-.14.13-.28.28-.12.55.16.27.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.27.14.43.12.59-.07.16-.19.68-.79.86-1.06.18-.27.36-.22.61-.13.25.09 1.6.76 1.87.89.27.14.45.2.51.32.07.12.07.68-.17 1.36" />
-          </svg>
-          Chat on WhatsApp
-        </a>
-      }
+            Message Vendor
 
-      <p class="disclaimer">You won't be charged until the vendor confirms</p>
+          </button>
 
-        <p class="disclaimer">
-          @if (paymentsEnabled) {
-            You won't be charged until the vendor confirms
-          } @else {
-            Payment is arranged directly with the vendor once confirmed
+
+          <!-- WhatsApp -->
+
+          @if (vendor.whatsapp_number) {
+
+            <a
+              [href]="whatsappLink"
+              target="_blank"
+              rel="noopener"
+              class="whatsapp-btn">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="currentColor">
+
+                <path
+                  d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m5.83 14.07c-.24.68-1.4 1.3-1.93 1.38-.49.08-1.11.11-1.79-.11-.41-.13-.94-.31-1.62-.6-2.85-1.23-4.7-4.1-4.85-4.29-.14-.19-1.16-1.54-1.16-2.94 0-1.4.73-2.09.99-2.37.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.37-.42.49-.14.13-.28.28-.12.55.16.27.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.27.14.43.12.59-.07.16-.19.68-.79.86-1.06.18-.27.36-.22.61-.13.25.09 1.6.76 1.87.89.27.14.45.2.51.32.07.12.07.68-.17 1.36" />
+
+              </svg>
+
+              Chat on WhatsApp
+
+            </a>
+
           }
-        </p>
 
-      </div>
+
+          <!-- Payment Disclaimer -->
+
+          @if (paymentsEnabled) {
+
+            <div class="payment-note">
+
+              <mat-icon>lock</mat-icon>
+
+              <p>
+                You won't be charged until the
+                vendor confirms.
+              </p>
+
+            </div>
+
+          } @else {
+
+            <div class="payment-note">
+
+              <mat-icon>handshake</mat-icon>
+
+              <p>
+                Payment is arranged directly
+                with the vendor once confirmed.
+              </p>
+
+            </div>
+
+          }
+
+        </div>
+
+      </aside>
 
     </div>
 
@@ -340,9 +815,29 @@
 
 } @else {
 
-  <div class="error-container">
+  <div class="vendor-not-found">
 
-    <p>Vendor not found</p>
+    <div class="not-found-icon">
+      <mat-icon>storefront</mat-icon>
+    </div>
+
+    <h2>Vendor not found</h2>
+
+    <p>
+      This vendor may no longer be available
+      or the link may be invalid.
+    </p>
+
+    <button
+      mat-raised-button
+      color="primary"
+      routerLink="/customer/home">
+
+      <mat-icon>arrow_back</mat-icon>
+
+      Browse Vendors
+
+    </button>
 
   </div>
 

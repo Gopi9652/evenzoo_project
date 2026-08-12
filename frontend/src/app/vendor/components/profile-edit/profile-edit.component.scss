@@ -1,91 +1,511 @@
-.page-header {
-  padding: 2rem 2rem 0;
-  max-width: 700px;
+/* =========================================================
+   EVENZOO - EDIT BUSINESS PROFILE
+   Light Modern Dashboard UI
+   ========================================================= */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f7f8fc;
+  color: #1f2937;
+}
+
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
+
+.container {
+  max-width: 700px !important;
   margin: 0 auto;
-
-  h1 {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: #1a1a2e;
-    margin: 0 0 0.3rem;
-  }
-
-  p {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin: 0;
-  }
+  padding-top: 40px !important;
+  padding-bottom: 60px;
 }
 
-.form-container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 1.5rem 2rem 3rem;
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.container > .mb-4 {
+  margin-bottom: 28px !important;
 }
 
-.loading-container {
-  display: flex;
-  justify-content: center;
-  padding: 4rem 0;
+.container h1 {
+  color: #172033;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  letter-spacing: -0.4px;
 }
+
+.container > .mb-4 p {
+  margin-top: 6px;
+
+  color: #667085 !important;
+
+  font-size: 15px;
+}
+
+/* =========================================================
+   FORM SECTION
+   ========================================================= */
 
 .form-section {
-  background: #fff;
-  border: 1.5px solid #f0e6d3;
-  border-radius: 14px;
-  padding: 1.5rem;
-  margin-bottom: 1.25rem;
+  background: #ffffff;
 
-  h3 {
-    font-size: 1rem;
-    color: #1a1a2e;
-    margin: 0 0 1rem;
-  }
+  padding: 26px;
 
-  .section-note {
-    font-size: 0.8rem;
-    color: #94a3b8;
-    margin: -0.5rem 0 1rem;
-  }
+  margin-bottom: 18px;
+
+  border: 1px solid #e8eaf0;
+  border-radius: 16px;
+
+  box-shadow:
+    0 2px 8px rgba(16, 24, 40, 0.035),
+    0 8px 24px rgba(16, 24, 40, 0.025);
 }
+
+.form-section h3 {
+  margin: 0 0 22px;
+
+  color: #172033;
+
+  font-size: 19px;
+  font-weight: 650;
+}
+
+/* =========================================================
+   MATERIAL FORM FIELDS
+   ========================================================= */
 
 .full-width {
   width: 100%;
-  margin-bottom: 0.3rem;
+  display: block;
+  margin-bottom: 8px;
 }
 
-.success-banner {
-  background: #dcfce7;
-  color: #16a34a;
-  padding: 0.85rem 1rem;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.error-banner {
-  background: #fee2e2;
-  color: #dc2626;
-  padding: 0.85rem 1rem;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.save-btn {
-  width: 100%;
-  height: 48px;
-  font-size: 0.95rem;
-  font-weight: 700;
-}
 .location-row {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+
+  gap: 16px;
 }
 
 .half-width {
   width: 100%;
+}
+
+/* =========================================================
+   MATERIAL INPUT TEXT
+   ========================================================= */
+
+::ng-deep
+.mat-mdc-form-field
+.mat-mdc-input-element {
+  color: #1f2937 !important;
+
+  caret-color: #6d4aff !important;
+}
+
+/* Placeholder */
+
+::ng-deep
+.mat-mdc-form-field
+.mat-mdc-input-element::placeholder {
+  color: #98a2b3 !important;
+  opacity: 1;
+}
+
+/* =========================================================
+   MATERIAL LABELS
+   ========================================================= */
+
+::ng-deep
+.mat-mdc-form-field
+.mdc-floating-label {
+  color: #667085 !important;
+}
+
+::ng-deep
+.mat-mdc-form-field
+.mdc-text-field--focused
+.mdc-floating-label {
+  color: #6d4aff !important;
+}
+
+/* =========================================================
+   MATERIAL OUTLINE
+   ========================================================= */
+
+::ng-deep
+.mat-mdc-form-field
+.mdc-notched-outline__leading,
+::ng-deep
+.mat-mdc-form-field
+.mdc-notched-outline__notch,
+::ng-deep
+.mat-mdc-form-field
+.mdc-notched-outline__trailing {
+  border-color: #d9dce5 !important;
+}
+
+/* Focused outline */
+
+::ng-deep
+.mat-mdc-form-field
+.mdc-text-field--focused
+.mdc-notched-outline__leading,
+
+::ng-deep
+.mat-mdc-form-field
+.mdc-text-field--focused
+.mdc-notched-outline__notch,
+
+::ng-deep
+.mat-mdc-form-field
+.mdc-text-field--focused
+.mdc-notched-outline__trailing {
+  border-color: #6d4aff !important;
+}
+
+/* =========================================================
+   MATERIAL SELECT
+   ========================================================= */
+
+::ng-deep
+.mat-mdc-select-value {
+  color: #1f2937 !important;
+}
+
+::ng-deep
+.mat-mdc-select-placeholder {
+  color: #98a2b3 !important;
+}
+
+::ng-deep
+.mat-mdc-select-arrow {
+  color: #667085 !important;
+}
+
+/* =========================================================
+   BOOTSTRAP CARDS
+   ========================================================= */
+
+.card {
+  background: #ffffff !important;
+
+  border: 1px solid #e8eaf0 !important;
+
+  border-radius: 16px !important;
+
+  box-shadow:
+    0 2px 8px rgba(16, 24, 40, 0.035),
+    0 8px 24px rgba(16, 24, 40, 0.025) !important;
+}
+
+.card-body {
+  padding: 26px !important;
+}
+
+.card-title {
+  margin-bottom: 7px !important;
+
+  color: #172033 !important;
+
+  font-size: 18px;
+
+  font-weight: 650;
+}
+
+.card-body > p {
+  color: #667085 !important;
+
+  line-height: 1.55;
+}
+
+/* =========================================================
+   CATEGORY SECTION
+   ========================================================= */
+
+.card .row {
+  margin-top: 4px;
+}
+
+/* Category buttons */
+
+.card .row .btn {
+  min-height: 86px;
+
+  border-radius: 10px !important;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+/* Unselected */
+
+.card .row .btn-outline-secondary {
+  background: #ffffff;
+
+  border-color: #dfe2e8 !important;
+
+  color: #475467 !important;
+}
+
+.card .row .btn-outline-secondary:hover {
+  background: #fafaff;
+
+  border-color: #b9b2f5 !important;
+
+  color: #6d4aff !important;
+
+  transform: translateY(-1px);
+}
+
+/* Selected */
+
+.card .row .btn-primary {
+  background: #6d4aff !important;
+
+  border-color: #6d4aff !important;
+
+  color: #ffffff !important;
+
+  box-shadow:
+    0 4px 12px rgba(109, 74, 255, 0.18);
+}
+
+.card .row .btn-primary:hover {
+  background: #5b3ce6 !important;
+
+  border-color: #5b3ce6 !important;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 18px rgba(109, 74, 255, 0.24);
+}
+
+/* Category icon */
+
+.card .row .btn span.fs-4 {
+  font-size: 24px !important;
+
+  line-height: 1;
+}
+
+/* Category name */
+
+.card .row .btn span.small {
+  font-size: 12px;
+
+  font-weight: 600;
+
+  line-height: 1.25;
+}
+
+/* =========================================================
+   WARNING CATEGORY MESSAGE
+   ========================================================= */
+
+.alert-warning {
+  background: #fffaf0 !important;
+
+  border: 1px solid #f5dfad !important;
+
+  border-radius: 9px;
+
+  color: #8a6116 !important;
+}
+
+/* =========================================================
+   BOOTSTRAP INPUTS
+   ========================================================= */
+
+.form-control {
+  min-height: 44px;
+
+  padding: 9px 12px;
+
+  background: #ffffff !important;
+
+  border: 1px solid #d9dce5 !important;
+
+  border-radius: 9px !important;
+
+  color: #1f2937 !important;
+
+  font-size: 14px;
+
+  box-shadow: none !important;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-control::placeholder {
+  color: #98a2b3;
+}
+
+.form-control:hover {
+  border-color: #b9b2f5 !important;
+}
+
+.form-control:focus {
+  border-color: #6d4aff !important;
+
+  box-shadow:
+    0 0 0 3px rgba(109, 74, 255, 0.10) !important;
+}
+
+/* Labels */
+
+.form-label {
+  color: #344054 !important;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+
+  font-weight: 600 !important;
+}
+
+/* =========================================================
+   SUCCESS / ERROR
+   ========================================================= */
+
+.alert-success {
+  margin-bottom: 16px;
+
+  background: #ecfdf3 !important;
+
+  border: 1px solid #abefc6 !important;
+
+  border-radius: 10px;
+
+  color: #067647 !important;
+
+  font-size: 14px;
+}
+
+.alert-danger {
+  margin-bottom: 16px;
+
+  background: #fef3f2 !important;
+
+  border: 1px solid #fecdca !important;
+
+  border-radius: 10px;
+
+  color: #b42318 !important;
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+.container form > .btn-primary {
+  min-height: 46px;
+
+  border: none !important;
+
+  border-radius: 10px !important;
+
+  background: #6d4aff !important;
+
+  color: #ffffff !important;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  box-shadow:
+    0 4px 12px rgba(109, 74, 255, 0.16);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.container form > .btn-primary:hover:not(:disabled) {
+  background: #5b3ce6 !important;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 18px rgba(109, 74, 255, 0.23);
+}
+
+.container form > .btn-primary:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.spinner-border.text-primary {
+  color: #6d4aff !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .container {
+    width: calc(100% - 28px);
+
+    padding-top: 28px !important;
+  }
+
+  .container h1 {
+    font-size: 26px;
+  }
+
+  .form-section,
+  .card-body {
+    padding: 20px !important;
+  }
+
+  .location-row {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+  .container {
+    width: calc(100% - 20px);
+  }
+
+  .container h1 {
+    font-size: 23px;
+  }
+
+  .card .row .btn {
+    min-height: 78px;
+  }
+
+  .card .row .btn span.fs-4 {
+    font-size: 21px !important;
+  }
+
 }

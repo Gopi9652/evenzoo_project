@@ -1,48 +1,347 @@
-.post-form-container {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 2rem 2rem 4rem;
+/* =========================================
+   EVENT POST PAGE
+========================================= */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #1f2937;
 }
+
+.event-post-page {
+  width: 100%;
+  min-height: calc(100vh - 70px);
+
+  padding: 100px 20px 60px;
+
+  box-sizing: border-box;
+
+  background: #f6f7fb;
+}
+
+/* =========================================
+   PAGE HEADER
+========================================= */
 
 .page-header {
-  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 850px;
 
-  h1 { font-size: 1.5rem; font-weight: 800; color: #1a1a2e; margin: 0 0 0.3rem; }
-  p { color: #64748b; font-size: 0.9rem; margin: 0; }
+  margin: 0 auto 28px;
+
+  text-align: center;
 }
 
-.post-form {
-  background: #fff;
-  border: 1.5px solid #f0e6d3;
+.page-header h1 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 32px;
+  font-weight: 700;
+
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+}
+
+.page-header p {
+  max-width: 650px;
+
+  margin: 10px auto 0;
+
+  color: #6b7280;
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   FORM CARD
+========================================= */
+
+.event-form {
+  width: 100%;
+  max-width: 850px;
+
+  margin: 0 auto;
+
+  padding: 32px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
   border-radius: 16px;
-  padding: 1.75rem;
+
+  box-shadow:
+    0 4px 20px rgba(15, 23, 42, 0.06);
 }
 
-.full-width { width: 100%; margin-bottom: 0.3rem; }
+/* =========================================
+   FORM
+========================================= */
+
+.event-form form {
+  width: 100%;
+}
+
+/* =========================================
+   FULL WIDTH
+========================================= */
+
+.full-width {
+  width: 100%;
+}
+
+/* =========================================
+   ANGULAR MATERIAL FORM FIELDS
+========================================= */
+
+.event-form mat-form-field {
+  margin-bottom: 6px;
+}
+
+/*
+   Angular Material MDC field text
+*/
+
+.event-form
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+/* Labels */
+
+.event-form
+.mat-mdc-form-field
+.mdc-floating-label {
+  color: #6b7280 !important;
+}
+
+/* Label when focused */
+
+.event-form
+.mat-mdc-form-field.mat-focused
+.mdc-floating-label {
+  color: #7c3aed !important;
+}
+
+
+
+
+
+/* =========================================
+   SELECT
+========================================= */
+
+.event-form
+.mat-mdc-select {
+  color: #1f2937 !important;
+}
+
+.event-form
+.mat-mdc-select-value {
+  color: #1f2937 !important;
+}
+
+.event-form
+.mat-mdc-select-placeholder {
+  color: #9ca3af !important;
+}
+
+.event-form
+.mat-mdc-select-arrow {
+  color: #6b7280 !important;
+}
+
+/* =========================================
+   STATE + CITY / BUDGET + DATE
+========================================= */
 
 .form-row {
+  width: 100%;
+
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-top: 4px;
 }
 
-.error-banner {
-  background: #fee2e2;
-  color: #dc2626;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  margin-bottom: 1rem;
+.form-row mat-form-field {
+  width: 100%;
 }
+
+
+/* =========================================
+   DATE PICKER
+========================================= */
+
+::ng-deep .mat-datepicker-content {
+  background: #ffffff !important;
+}
+
+::ng-deep .mat-calendar {
+  background: #ffffff !important;
+}
+
+::ng-deep .mat-calendar-body-cell-content {
+  color: #1f2937 !important;
+}
+
+::ng-deep .mat-calendar-body-label,
+::ng-deep .mat-calendar-table-header {
+  color: #6b7280 !important;
+}
+
+::ng-deep .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+.mat-calendar-body-cell-content {
+  background: #f3e8ff !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background: #7c3aed !important;
+  color: #ffffff !important;
+}
+
+::ng-deep .mat-datepicker-toggle {
+  color: #6b7280 !important;
+}
+
+/* =========================================
+   ERROR BANNER
+========================================= */
+
+.error-banner {
+  width: 100%;
+
+  margin: 10px 0 18px;
+
+  padding: 13px 15px;
+
+  box-sizing: border-box;
+
+  color: #b91c1c;
+
+  background: #fef2f2;
+
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   SUBMIT BUTTON
+========================================= */
 
 .submit-btn {
   width: 100%;
-  height: 46px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin-top: 0.5rem;
+
+  min-height: 48px;
+
+  margin-top: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff !important;
+
+  background: #7c3aed !important;
+
+  border-radius: 8px !important;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  box-shadow:
+    0 4px 12px rgba(124, 58, 237, 0.20);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-@media (max-width: 640px) {
-  .form-row { grid-template-columns: 1fr; }
+.submit-btn:hover:not(:disabled) {
+  background: #6d28d9 !important;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 16px rgba(124, 58, 237, 0.25);
+}
+
+.submit-btn:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+/* =========================================
+   RESPONSIVE TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+  .event-post-page {
+    padding: 95px 16px 45px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+  }
+
+  .event-form {
+    padding: 25px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+  .event-post-page {
+    padding: 90px 12px 35px;
+  }
+
+  .page-header {
+    margin-bottom: 22px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .page-header p {
+    font-size: 13px;
+  }
+
+  .event-form {
+    padding: 18px;
+
+    border-radius: 12px;
+  }
+
+  .submit-btn {
+    min-height: 46px;
+  }
 }

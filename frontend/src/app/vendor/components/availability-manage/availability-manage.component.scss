@@ -1,187 +1,483 @@
-/* Page */
+/* =========================================
+   PAGE
+========================================= */
+
 :host {
   display: block;
   min-height: 100vh;
-  background: #f5f7fb;
+  background: #f6f7fb;
+  color: #1f2937;
 }
 
-/* Header */
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
 .page-header {
-  padding: 40px 6% 28px;
-  background: linear-gradient(135deg, #ffffff, #f4f7ff);
-  border-bottom: 1px solid #e5e7eb;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 25px;
+  text-align: center;
 }
 
 .page-header h1 {
   margin: 0;
+  color: #1f2937;
+
   font-size: 32px;
   font-weight: 700;
-  color: #1f2937;
+  line-height: 1.25;
 }
 
 .page-header p {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
+
   color: #6b7280;
+
   font-size: 15px;
+  line-height: 1.6;
 }
 
-/* Main container */
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
 .availability-container {
-  max-width: 1200px;
-  margin: 32px auto;
-  padding: 0 24px;
+  max-width: 1100px;
+
+  margin: 0 auto;
+  padding: 0 24px 50px;
+
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
+  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+
+  gap: 24px;
+
   align-items: start;
 }
 
-/* Cards */
+
+/* =========================================
+   COMMON CARD STYLE
+========================================= */
+
 .block-form,
 .blocked-list {
   background: #ffffff;
-  border-radius: 18px;
-  padding: 28px;
+
   border: 1px solid #e5e7eb;
-  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
+
+  padding: 24px;
+
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.06);
 }
+
+
+/* =========================================
+   CARD HEADINGS
+========================================= */
 
 .block-form h3,
 .blocked-list h3 {
-  margin: 0 0 24px;
-  font-size: 20px;
-  font-weight: 650;
+  margin: 0 0 20px;
+
   color: #1f2937;
+
+  font-size: 19px;
+  font-weight: 700;
 }
 
-/* Form layout */
-.form-row {
+
+/* =========================================
+   BLOCK FORM
+========================================= */
+
+.block-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  align-items: center;
 }
 
-/* Calendar */
-mat-calendar {
+.block-form h3 {
+  width: 100%;
+}
+
+
+/* =========================================
+   CALENDAR
+========================================= */
+
+.block-form mat-calendar {
   width: 100%;
   max-width: 360px;
-  margin: 0 auto;
-  border-radius: 14px;
-  border: 1px solid #e5e7eb;
-  padding: 8px;
+
+  margin-bottom: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #eef0f4;
+  border-radius: 12px;
+
+  overflow: hidden;
 }
 
-/* Reason input */
-.form-row input[type="text"] {
+
+/* =========================================
+   CALENDAR TEXT COLORS
+========================================= */
+
+::ng-deep .block-form .mat-calendar {
+  background: #ffffff !important;
+}
+
+::ng-deep .block-form .mat-calendar-body-label,
+::ng-deep .block-form .mat-calendar-table-header th {
+  color: #6b7280 !important;
+}
+
+::ng-deep .block-form .mat-calendar-body-cell-content {
+  color: #374151 !important;
+}
+
+::ng-deep .block-form .mat-calendar-body-disabled
+  .mat-calendar-body-cell-content {
+  color: #cbd5e1 !important;
+}
+
+::ng-deep .block-form .mat-calendar-body-selected {
+  background-color: #7c3aed !important;
+  color: #ffffff !important;
+}
+
+::ng-deep .block-form .mat-calendar-body-today {
+  border-color: #7c3aed !important;
+}
+
+::ng-deep .block-form .mat-calendar-period-button {
+  color: #1f2937 !important;
+}
+
+::ng-deep .block-form .mat-calendar-previous-button,
+::ng-deep .block-form .mat-calendar-next-button {
+  color: #4b5563 !important;
+}
+
+
+/* =========================================
+   FORM ROW
+========================================= */
+
+.form-row {
   width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+/* =========================================
+   REASON INPUT
+========================================= */
+
+.block-form input[type="text"] {
   box-sizing: border-box;
-  padding: 14px 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
-  font-size: 14px;
-  outline: none;
-  transition: 0.2s ease;
-}
 
-.form-row input[type="text"]:focus {
-  border-color: #3f51b5;
-  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.12);
-}
-
-/* Button */
-.form-row button {
   width: 100%;
-  min-height: 46px;
-  border-radius: 10px;
-  font-weight: 600;
+
+  min-height: 48px;
+
+  padding: 12px 14px;
+
+  background: #ffffff;
+
+  color: #1f2937;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  outline: none;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* Blocked dates */
+.block-form input[type="text"]::placeholder {
+  color: #9ca3af;
+}
+
+.block-form input[type="text"]:focus {
+  border-color: #7c3aed;
+
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.10);
+}
+
+
+/* =========================================
+   BLOCK BUTTON
+========================================= */
+
+.block-form button {
+  width: 100%;
+
+  min-height: 46px;
+
+  border-radius: 8px !important;
+
+  background: #7c3aed !important;
+  color: #ffffff !important;
+
+  font-weight: 600;
+
+  box-shadow: none !important;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.block-form button:hover:not(:disabled) {
+  background: #6d28d9 !important;
+
+  transform: translateY(-1px);
+}
+
+.block-form button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   BLOCKED LIST
+========================================= */
+
 .blocked-list {
   min-height: 300px;
 }
 
+
+/* =========================================
+   BLOCKED ROW
+========================================= */
+
 .blocked-row {
   display: flex;
+
   align-items: center;
+
   gap: 14px;
-  padding: 16px 0;
-  border-bottom: 1px solid #eef0f3;
+
+  padding: 15px 0;
+
+  border-bottom: 1px solid #eef0f4;
 }
 
 .blocked-row:last-child {
   border-bottom: none;
 }
 
-.blocked-row mat-icon {
+
+/* =========================================
+   EVENT ICON
+========================================= */
+
+.blocked-row > mat-icon {
+  flex-shrink: 0;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #fef2f2;
+
   color: #dc2626;
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
+
+  border-radius: 10px;
+
+  font-size: 22px;
 }
 
+
+/* =========================================
+   BLOCKED INFORMATION
+========================================= */
+
 .blocked-info {
+  min-width: 0;
+
   flex: 1;
+
   display: flex;
   flex-direction: column;
+
   gap: 4px;
 }
 
 .blocked-date {
+  color: #1f2937;
+
+  font-size: 14px;
   font-weight: 600;
-  color: #374151;
+
+  line-height: 1.4;
 }
 
 .blocked-reason {
-  font-size: 13px;
   color: #6b7280;
+
+  font-size: 13px;
+
+  line-height: 1.4;
+
+  word-break: break-word;
 }
+
+
+/* =========================================
+   UNBLOCK BUTTON
+========================================= */
 
 .blocked-row button {
-  color: #dc2626;
+  flex-shrink: 0;
+
+  color: #dc2626 !important;
+
   font-weight: 600;
+
+  border-radius: 7px;
 }
 
-/* Empty state */
+.blocked-row button:hover {
+  background: #fef2f2 !important;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
 .empty-text {
-  text-align: center;
-  color: #9ca3af;
-  padding: 60px 20px;
-  line-height: 1.6;
-}
-
-/* Loading */
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 220px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+
+  padding: 30px;
+
+  text-align: center;
+
+  color: #6b7280;
+
+  font-size: 14px;
+
+  line-height: 1.7;
 }
 
-/* Responsive */
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading-container {
+  min-height: 220px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .loading-container .mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #7c3aed;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
 @media (max-width: 850px) {
+
   .availability-container {
     grid-template-columns: 1fr;
+
+    max-width: 650px;
   }
+
+  .block-form mat-calendar {
+    max-width: 380px;
+  }
+
 }
 
+
 @media (max-width: 600px) {
+
   .page-header {
-    padding: 28px 20px 22px;
+    padding: 30px 18px 20px;
   }
 
   .page-header h1 {
-    font-size: 26px;
+    font-size: 27px;
+  }
+
+  .page-header p {
+    font-size: 14px;
   }
 
   .availability-container {
-    margin: 20px auto;
-    padding: 0 14px;
+    padding: 0 18px 40px;
+
+    gap: 18px;
   }
 
   .block-form,
   .blocked-list {
-    padding: 20px;
-    border-radius: 14px;
+    padding: 18px;
   }
+
+  .block-form mat-calendar {
+    width: 100%;
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .blocked-row {
+    align-items: flex-start;
+  }
+
+  .blocked-row > mat-icon {
+    width: 38px;
+    height: 38px;
+
+    font-size: 20px;
+  }
+
+  .blocked-row button {
+    padding: 0 8px;
+  }
+
 }

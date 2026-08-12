@@ -1,46 +1,260 @@
+
 <app-navbar></app-navbar>
 
-<div class="profile-container">
+<div class="profile-page">
+
   @if (loading) {
+
     <div class="loading-container">
       <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading profile...</p>
     </div>
+
   } @else if (user) {
-    <div class="profile-card">
-      <div class="avatar-section">
-        @if (user.profile_photo) {
-          <img [src]="user.profile_photo" class="avatar-img" alt="Profile photo">
-        } @else {
-          <div class="avatar-placeholder">{{ initial }}</div>
-        }
 
-        <input type="file" id="avatarUpload" accept="image/*" (change)="onFileSelected($event)" hidden>
-        <label for="avatarUpload" class="upload-btn">
-          @if (uploading) {
-            <mat-spinner diameter="16"></mat-spinner>
-          } @else {
-            <mat-icon>photo_camera</mat-icon>
-          }
-        </label>
-      </div>
+    <div class="profile-wrapper">
 
-      <h2>{{ user.name }}</h2>
-      <p class="role-tag">{{ user.role | titlecase }}</p>
+      <!-- PROFILE HEADER -->
+      <section class="profile-card">
 
-      <div class="info-rows">
-        <div class="info-row">
-          <mat-icon>email</mat-icon>
-          <span>{{ user.email }}</span>
+        <div class="profile-cover">
+          <div class="cover-glow glow-one"></div>
+          <div class="cover-glow glow-two"></div>
         </div>
-        <div class="info-row">
-          <mat-icon>phone</mat-icon>
-          <span>{{ user.phone }}</span>
+
+        <!-- AVATAR -->
+        <div class="avatar-section">
+
+          <div class="avatar-wrapper">
+
+            @if (user.profile_photo) {
+
+              <img
+                [src]="user.profile_photo"
+                class="avatar-img"
+                alt="Profile photo">
+
+            } @else {
+
+              <div class="avatar-placeholder">
+                {{ initial }}
+              </div>
+
+            }
+
+            <input
+              type="file"
+              id="avatarUpload"
+              accept="image/*"
+              (change)="onFileSelected($event)"
+              hidden>
+
+            <label
+              for="avatarUpload"
+              class="upload-btn"
+              [class.uploading]="uploading">
+
+              @if (uploading) {
+
+                <mat-spinner diameter="18"></mat-spinner>
+
+              } @else {
+
+                <mat-icon>photo_camera</mat-icon>
+
+              }
+
+            </label>
+
+          </div>
+
+          <span class="photo-hint">
+            Change profile photo
+          </span>
+
         </div>
-        <div class="info-row">
-          <mat-icon>{{ user.is_verified ? 'verified' : 'error_outline' }}</mat-icon>
-          <span>{{ user.is_verified ? 'Verified Account' : 'Not Verified' }}</span>
+
+        <!-- NAME -->
+        <div class="profile-heading">
+
+          <h1>{{ user.name }}</h1>
+
+          <div class="role-row">
+
+            <span class="role-tag">
+              <mat-icon>person</mat-icon>
+              {{ user.role | titlecase }}
+            </span>
+
+            @if (user.is_verified) {
+
+              <span class="verified-tag">
+                <mat-icon>verified</mat-icon>
+                Verified
+              </span>
+
+            } @else {
+
+              <span class="unverified-tag">
+                <mat-icon>error_outline</mat-icon>
+                Not Verified
+              </span>
+
+            }
+
+          </div>
+
         </div>
-      </div>
+
+        <!-- PROFILE INFORMATION -->
+        <div class="profile-content">
+
+          <div class="section-title">
+            <div class="section-icon">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+
+            <div>
+              <h3>Personal Information</h3>
+              <p>Your account details</p>
+            </div>
+          </div>
+
+          <div class="info-grid">
+
+            <!-- EMAIL -->
+            <div class="info-card">
+
+              <div class="info-icon email-icon">
+                <mat-icon>email</mat-icon>
+              </div>
+
+              <div class="info-text">
+                <span class="info-label">Email Address</span>
+                <span class="info-value">
+                  {{ user.email }}
+                </span>
+              </div>
+
+            </div>
+
+            <!-- PHONE -->
+            <div class="info-card">
+
+              <div class="info-icon phone-icon">
+                <mat-icon>phone</mat-icon>
+              </div>
+
+              <div class="info-text">
+                <span class="info-label">Phone Number</span>
+                <span class="info-value">
+                  {{ user.phone || 'Not provided' }}
+                </span>
+              </div>
+
+            </div>
+
+            <!-- ACCOUNT STATUS -->
+            <div class="info-card">
+
+              <div
+                class="info-icon"
+                [class.verified-icon]="user.is_verified"
+                [class.warning-icon]="!user.is_verified">
+
+                <mat-icon>
+                  {{ user.is_verified ? 'verified' : 'error_outline' }}
+                </mat-icon>
+
+              </div>
+
+              <div class="info-text">
+
+                <span class="info-label">
+                  Account Status
+                </span>
+
+                <span
+                  class="info-value"
+                  [class.success-text]="user.is_verified"
+                  [class.warning-text]="!user.is_verified">
+
+                  {{ user.is_verified
+                    ? 'Verified Account'
+                    : 'Verification Pending'
+                  }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+            <!-- ROLE -->
+            <div class="info-card">
+
+              <div class="info-icon role-icon">
+                <mat-icon>badge</mat-icon>
+              </div>
+
+              <div class="info-text">
+
+                <span class="info-label">
+                  Account Type
+                </span>
+
+                <span class="info-value">
+                  {{ user.role | titlecase }}
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- SECURITY / STATUS -->
+        <div class="account-footer">
+
+          <div class="security-info">
+
+            <div class="security-icon">
+              <mat-icon>shield</mat-icon>
+            </div>
+
+            <div>
+              <strong>Your account is secure</strong>
+              <p>
+                Keep your profile information up to date.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
     </div>
+
+  } @else {
+
+    <div class="error-container">
+
+      <div class="error-icon">
+        <mat-icon>person_off</mat-icon>
+      </div>
+
+      <h2>Profile Not Found</h2>
+
+      <p>
+        We couldn't load your profile information.
+      </p>
+
+    </div>
+
   }
+
 </div>

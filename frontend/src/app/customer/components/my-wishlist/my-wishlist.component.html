@@ -1,48 +1,215 @@
+
 <app-navbar></app-navbar>
 
-<div class="page-header">
-  <h1>Saved Vendors</h1>
-  <p>Vendors you've bookmarked for later</p>
-</div>
+<div class="wishlist-page">
 
-<div class="wishlist-container">
-  @if (loading) {
-    <div class="loading-container">
-      <mat-spinner diameter="40"></mat-spinner>
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="header-content">
+
+      <div class="header-icon">
+        <mat-icon>favorite</mat-icon>
+      </div>
+
+      <div>
+        <span class="eyebrow">YOUR COLLECTION</span>
+        <h1>Saved Vendors</h1>
+        <p>Vendors you've bookmarked for later</p>
+      </div>
+
     </div>
-  } @else if (items.length === 0) {
-    <div class="empty-state">
-      <span class="empty-icon">💔</span>
-      <h3>No saved vendors yet</h3>
-      <p>Tap the heart icon on any vendor to save them here</p>
-      <button mat-raised-button color="primary" routerLink="/customer/home">
-        Browse Vendors
-      </button>
-    </div>
-  } @else {
-    <div class="wishlist-grid">
-      @for (item of items; track item.wishlist_id) {
-        <div class="wishlist-card">
-          <a [routerLink]="['/customer/vendor', item.vendor_id]" class="card-link">
-            <div class="card-icon">🏪</div>
-            <div class="card-body">
-              <h4>{{ item.business_name }}</h4>
-              <p>{{ item.description || 'No description available' }}</p>
-              <div class="card-meta">
-                <span>⭐ {{ item.avg_rating || 0 }} ({{ item.total_reviews }} reviews)</span>
-                @if (!item.is_approved) {
-                  <span class="pending-tag">Pending Approval</span>
-                }
-              </div>
-            </div>
-          </a>
-          <button mat-icon-button class="remove-btn"
-                  [disabled]="removingId === item.vendor_id"
-                  (click)="remove(item.vendor_id)">
-            <mat-icon>delete_outline</mat-icon>
-          </button>
+
+    @if (!loading && items.length > 0) {
+      <div class="saved-count">
+        <mat-icon>favorite</mat-icon>
+        <span>{{ items.length }} Saved</span>
+      </div>
+    }
+  </section>
+
+
+  <!-- Main Content -->
+  <section class="wishlist-container">
+
+    <!-- Loading -->
+    @if (loading) {
+
+      <div class="loading-container">
+        <div class="loading-card">
+          <mat-spinner diameter="42"></mat-spinner>
+          <h3>Loading your saved vendors</h3>
+          <p>Please wait a moment...</p>
         </div>
-      }
-    </div>
-  }
+      </div>
+
+
+    <!-- Empty State -->
+    } @else if (items.length === 0) {
+
+      <div class="empty-state">
+
+        <div class="empty-heart">
+          <mat-icon>favorite_border</mat-icon>
+        </div>
+
+        <span class="empty-eyebrow">YOUR WISHLIST IS EMPTY</span>
+
+        <h2>No saved vendors yet</h2>
+
+        <p>
+          Discover amazing vendors and save your favorites here
+          for quick access later.
+        </p>
+
+        <button
+          mat-raised-button
+          color="primary"
+          routerLink="/customer/home"
+          class="browse-btn">
+
+          <mat-icon>explore</mat-icon>
+          Browse Vendors
+
+        </button>
+
+      </div>
+
+
+    <!-- Vendor Cards -->
+    } @else {
+
+      <div class="wishlist-grid">
+
+        @for (item of items; track item.wishlist_id) {
+
+          <article class="wishlist-card">
+
+            <!-- Clickable Vendor Area -->
+            <a
+              [routerLink]="['/customer/vendor', item.vendor_id]"
+              class="card-link">
+
+              <!-- Vendor Image / Icon -->
+              <div class="vendor-cover">
+
+                <div class="cover-gradient"></div>
+
+                <div class="vendor-icon">
+                  <mat-icon>storefront</mat-icon>
+                </div>
+
+                <!-- Saved Heart -->
+                <div class="saved-heart">
+                  <mat-icon>favorite</mat-icon>
+                </div>
+
+                <!-- Approval -->
+                @if (item.is_approved) {
+
+                  <span class="status-badge approved">
+                    <mat-icon>verified</mat-icon>
+                    Verified
+                  </span>
+
+                } @else {
+
+                  <span class="status-badge pending">
+                    <mat-icon>schedule</mat-icon>
+                    Pending
+                  </span>
+
+                }
+
+              </div>
+
+
+              <!-- Card Body -->
+              <div class="card-body">
+
+                <div class="business-title">
+                  <h3>{{ item.business_name }}</h3>
+
+                  @if (item.is_approved) {
+                    <mat-icon class="verified-icon">
+                      verified
+                    </mat-icon>
+                  }
+                </div>
+
+
+                <p class="description">
+                  {{ item.description || 'No description available' }}
+                </p>
+
+
+                <!-- Rating -->
+                <div class="rating-row">
+
+                  <div class="rating">
+
+                    <mat-icon>star</mat-icon>
+
+                    <strong>
+                      {{ item.avg_rating || 0 }}
+                    </strong>
+
+                    <span>
+                      ({{ item.total_reviews || 0 }} reviews)
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <!-- Bottom -->
+                <div class="card-footer">
+
+                  <span class="view-details">
+                    View Vendor
+                    <mat-icon>arrow_forward</mat-icon>
+                  </span>
+
+                  <span class="saved-label">
+                    <mat-icon>bookmark</mat-icon>
+                    Saved
+                  </span>
+
+                </div>
+
+              </div>
+
+            </a>
+
+
+            <!-- Remove -->
+            <button
+              mat-icon-button
+              class="remove-btn"
+              [disabled]="removingId === item.vendor_id"
+              (click)="remove(item.vendor_id); $event.stopPropagation()"
+              aria-label="Remove saved vendor">
+
+              @if (removingId === item.vendor_id) {
+
+                <mat-spinner diameter="20"></mat-spinner>
+
+              } @else {
+
+                <mat-icon>delete_outline</mat-icon>
+
+              }
+
+            </button>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </section>
+
 </div>

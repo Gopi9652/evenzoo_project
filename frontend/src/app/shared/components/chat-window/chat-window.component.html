@@ -1,42 +1,164 @@
+
 <app-navbar></app-navbar>
 
-<div class="chat-container">
-  <button mat-button class="back-btn" (click)="router.navigate(['/messages'])">
-    <mat-icon>arrow_back</mat-icon> Back to Messages
-  </button>
+<div class="chat-page">
 
-  <div class="chat-box">
-    <div class="chat-header">
-      <div class="chat-header-avatar">{{ otherPartyName.charAt(0).toUpperCase() }}</div>
-      <span class="chat-header-name">{{ otherPartyName }}</span>
+  <div class="chat-container">
+
+    <!-- BACK BUTTON -->
+    <button
+      mat-button
+      class="back-btn"
+      (click)="router.navigate(['/messages'])">
+
+      <mat-icon>arrow_back</mat-icon>
+
+      <span>Back to Messages</span>
+
+    </button>
+
+
+    <!-- CHAT BOX -->
+    <div class="chat-box">
+
+      <!-- HEADER -->
+      <div class="chat-header">
+
+        <div class="chat-user">
+
+          <div class="chat-header-avatar">
+            {{ otherPartyName.charAt(0).toUpperCase() }}
+          </div>
+
+          <div class="chat-user-info">
+
+            <span class="chat-header-name">
+              {{ otherPartyName }}
+            </span>
+
+            <span class="chat-online">
+              <span class="online-dot"></span>
+              Conversation
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="header-icon">
+          <mat-icon>chat</mat-icon>
+        </div>
+
+      </div>
+
+
+      <!-- LOADING -->
+      @if (loading) {
+
+        <div class="loading-container">
+
+          <mat-spinner diameter="40"></mat-spinner>
+
+          <p>Loading conversation...</p>
+
+        </div>
+
+      } @else {
+
+        <!-- MESSAGES -->
+        <div class="messages-scroll">
+
+          @if (messages.length === 0) {
+
+            <div class="empty-chat">
+
+              <div class="empty-chat-icon">
+                <mat-icon>forum</mat-icon>
+              </div>
+
+              <h3>No messages yet</h3>
+
+              <p>
+                Start the conversation by sending a message.
+              </p>
+
+            </div>
+
+          }
+
+          @for (msg of messages; track msg.id) {
+
+            <div
+              class="message-row"
+              [class.mine-row]="isMine(msg)">
+
+              <div
+                class="message-bubble"
+                [class.mine]="isMine(msg)">
+
+                <span class="bubble-text">
+                  {{ msg.content }}
+                </span>
+
+                <div class="bubble-footer">
+
+                  <span class="bubble-time">
+                    {{ msg.created_at | date:'shortTime' }}
+                  </span>
+
+                  @if (isMine(msg)) {
+                    <mat-icon class="message-check">
+                      done
+                    </mat-icon>
+                  }
+
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+          <div #messagesEnd></div>
+
+        </div>
+
+
+        <!-- MESSAGE INPUT -->
+        <div class="input-area">
+
+          <div class="input-row">
+
+            <input
+              type="text"
+              placeholder="Type a message..."
+              [(ngModel)]="newMessage"
+              (keyup.enter)="send()">
+
+            <button
+              mat-icon-button
+              color="primary"
+              class="send-btn"
+              [disabled]="!newMessage.trim()"
+              (click)="send()">
+
+              <mat-icon>send</mat-icon>
+
+            </button>
+
+          </div>
+
+          <span class="input-hint">
+            Press Enter to send
+          </span>
+
+        </div>
+
+      }
+
     </div>
 
-    @if (loading) {
-      <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
-    } @else {
-      <div class="messages-scroll">
-        @if (messages.length === 0) {
-          <p class="empty-chat">No messages yet. Say hello!</p>
-        }
-        @for (msg of messages; track msg.id) {
-          <div class="message-bubble" [class.mine]="isMine(msg)">
-            <span class="bubble-text">{{ msg.content }}</span>
-            <span class="bubble-time">{{ msg.created_at | date:'shortTime' }}</span>
-          </div>
-        }
-        <div #messagesEnd></div>
-      </div>
-
-      <div class="input-row">
-        <input
-          type="text"
-          placeholder="Type a message..."
-          [(ngModel)]="newMessage"
-          (keyup.enter)="send()">
-        <button mat-icon-button color="primary" (click)="send()">
-          <mat-icon>send</mat-icon>
-        </button>
-      </div>
-    }
   </div>
+
 </div>

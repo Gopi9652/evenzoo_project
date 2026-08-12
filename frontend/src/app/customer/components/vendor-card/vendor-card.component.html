@@ -1,37 +1,123 @@
-<a [routerLink]="['/customer/vendor', vendor.id]" class="vendor-card">
-  <div class="card-image">
-    @if (vendor. profile_photo_url) {
-      <img [src]="vendor.profile_photo_url" alt="{{ vendor.business_name }}" class="card-photo">
+
+<a
+  [routerLink]="['/customer/vendor', vendor.id]"
+  class="vendor-card">
+
+  <!-- Vendor Image -->
+  <div class="vendor-image-wrapper">
+
+    @if (vendor.profile_photo_url) {
+
+      <img
+        [src]="vendor.profile_photo_url"
+        [alt]="vendor.business_name"
+        class="vendor-image" />
+
     } @else {
-      <span class="placeholder-icon">🏪</span>
+
+      <div class="vendor-image-placeholder">
+        <mat-icon>storefront</mat-icon>
+      </div>
+
     }
+
+    <!-- Image Overlay -->
+    <div class="image-overlay"></div>
+
+    <!-- Verified Badge -->
     @if (vendor.is_approved) {
-      <span class="verified-badge">✓ Verified</span>
+      <div class="verified-badge">
+        <mat-icon>verified</mat-icon>
+        Verified
+      </div>
     }
-    <button class="wishlist-btn" [class.active]="isWishlisted"
+
+    <!-- Favorite -->
+     <button  class="favorite-badge" [class.active]="isWishlisted"
             (click)="toggleWishlist($event)" [disabled]="toggling">
       <mat-icon>{{ isWishlisted ? 'favorite' : 'favorite_border' }}</mat-icon>
     </button>
+
   </div>
 
-  <div class="card-body">
-    <h3 class="business-name">{{ vendor.business_name }}</h3>
 
+  <!-- Card Content -->
+  <div class="vendor-content">
+
+    <!-- Business Name -->
+    <div class="vendor-title-row">
+
+      <h3>
+        {{ vendor.business_name }}
+      </h3>
+
+      @if (vendor.is_approved) {
+        <mat-icon class="verified-icon">
+          verified
+        </mat-icon>
+      }
+
+    </div>
+
+
+    <!-- Rating -->
     <div class="rating-row">
+
       <div class="stars">
+
         @for (star of ratingStars; track $index) {
-          <mat-icon class="star-icon" [class.filled]="star === 1">star</mat-icon>
+
+          <mat-icon
+            class="star-icon"
+            [class.filled]="star === 1">
+            star
+          </mat-icon>
+
         }
+
       </div>
+
       <span class="rating-text">
-        {{ vendor.avg_rating || 0 }} ({{ vendor.total_reviews }} reviews)
+        <strong>{{ vendor.avg_rating || 0 }}</strong>
+        <span>
+          ({{ vendor.total_reviews || 0 }} reviews)
+        </span>
       </span>
+
     </div>
 
-    <p class="description">{{ vendor.description || 'No description available' }}</p>
 
+    <!-- Description -->
+    <p class="description">
+      {{ vendor.description || 'No description available' }}
+    </p>
+
+
+    <!-- Footer -->
     <div class="card-footer">
-      <span class="bookings-count">{{ vendor.total_bookings }} bookings completed</span>
+
+      <div class="bookings-info">
+
+        <mat-icon>event_available</mat-icon>
+
+        <span>
+          {{ vendor.total_bookings || 0 }} bookings
+        </span>
+
+      </div>
+
+      <span class="view-vendor">
+
+        View Vendor
+
+        <mat-icon>
+          arrow_forward
+        </mat-icon>
+
+      </span>
+
     </div>
+
   </div>
+
 </a>

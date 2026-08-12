@@ -1,157 +1,906 @@
-.page-header {
-  padding: 2rem 2rem 0;
-  max-width: 1100px;
+
+/* =========================================================
+   EVENZOO - MY BOOKINGS
+   Premium Dark Theme
+   ========================================================= */
+
+:host {
+  display: block;
+
+  min-height: 100vh;
+
+  color: #ffffff;
+
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(138, 43, 226, 0.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(212, 175, 55, 0.06),
+      transparent 28%
+    ),
+    #08090d;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.bookings-page {
+  width: 100%;
+
+  max-width: 1200px;
+
   margin: 0 auto;
 
-  h1 {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: #1a1a2e;
-    margin: 0 0 0.3rem;
-  }
+  padding: 40px 30px 80px;
 
-  p {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin: 0;
-  }
+  box-sizing: border-box;
 }
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  margin-bottom: 32px;
+}
+
+
+.page-header h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 38px;
+
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  letter-spacing: -0.5px;
+}
+
+
+.page-header p {
+  margin: 10px 0 0;
+
+  color: #bfc0ca;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
 
 .bookings-container {
-  max-width: 1100px;
+  width: 100%;
+
   margin: 0 auto;
-  padding: 1.5rem 2rem 3rem;
 }
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
 
 .loading-container {
+  min-height: 400px;
+
+  width: 100%;
+
   display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
   justify-content: center;
-  padding: 4rem 0;
+
+  gap: 18px;
+
+  text-align: center;
 }
+
+
+.loading-container p {
+  margin: 0;
+
+  color: #bfc0ca;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   EMPTY MAIN STATE
+   ========================================================= */
 
 .empty-state {
+  min-height: 450px;
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
   text-align: center;
-  padding: 4rem 0;
 
-  .empty-icon {
-    font-size: 3rem;
-    display: block;
-    margin-bottom: 1rem;
-  }
+  padding: 40px;
 
-  h3 {
-    color: #1a1a2e;
-    margin: 0 0 0.5rem;
-  }
+  box-sizing: border-box;
 
-  p {
-    color: #64748b;
-    font-size: 0.9rem;
-  }
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #181920,
+      #13141a
+    );
+
+  border: 1px solid #2d2e39;
+
+  box-shadow:
+    0 20px 55px rgba(0, 0, 0, 0.30);
 }
+
+
+.empty-icon {
+  width: 80px;
+
+  height: 80px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-bottom: 20px;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #251637,
+      #18121f
+    );
+
+  border: 1px solid
+    rgba(181, 109, 255, 0.20);
+}
+
+
+.empty-icon mat-icon {
+  width: 38px;
+
+  height: 38px;
+
+  color: #b56dff;
+
+  font-size: 38px;
+}
+
+
+.empty-state h3 {
+  margin: 0 0 8px;
+
+  color: #ffffff;
+
+  font-size: 22px;
+
+  font-weight: 800;
+}
+
+
+.empty-state p {
+  max-width: 450px;
+
+  margin: 0 0 24px;
+
+  color: #aeb0bc;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   BROWSE BUTTON
+   ========================================================= */
+
+.browse-btn {
+  min-height: 44px;
+
+  padding: 0 22px;
+
+  border-radius: 10px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8a2be2,
+      #6920b3
+    ) !important;
+
+  color: #ffffff !important;
+
+  font-weight: 700 !important;
+
+  box-shadow:
+    0 10px 25px
+    rgba(138, 43, 226, 0.25);
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.bookings-tabs {
+  width: 100%;
+
+  display: block;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background: #15161d;
+
+  border: 1px solid #2d2e39;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.30);
+}
+
+
+/* =========================================================
+   ANGULAR MATERIAL TAB HEADER
+   ========================================================= */
+
+::ng-deep
+.bookings-tabs
+.mat-mdc-tab-header {
+  background: #111218;
+
+  border-bottom: 1px solid #2d2e39;
+}
+
+
+/* Tab text */
+
+::ng-deep
+.bookings-tabs
+.mdc-tab__text-label {
+  color: #aeb0bc !important;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+::ng-deep
+.bookings-tabs
+.mat-mdc-tab.mdc-tab--active
+.mdc-tab__text-label {
+  color: #ffffff !important;
+}
+
+
+/* Active indicator */
+
+::ng-deep
+.bookings-tabs
+.mdc-tab-indicator__content--underline {
+  border-color: #b56dff !important;
+}
+
+
+/* =========================================================
+   TAB BODY
+   ========================================================= */
+
+::ng-deep
+.bookings-tabs
+.mat-mdc-tab-body-wrapper {
+  background: #15161d;
+}
+
+
+::ng-deep
+.bookings-tabs
+.mat-mdc-tab-body-content {
+  background: #15161d;
+
+  color: #ffffff;
+
+  overflow: visible !important;
+}
+
+
+/* =========================================================
+   BOOKING LIST
+   ========================================================= */
 
 .booking-list {
+  width: 100%;
+
+  min-height: 300px;
+
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-  padding-top: 1.5rem;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 22px;
+
+  padding: 28px;
+
+  box-sizing: border-box;
+
+  background: #15161d;
 }
 
-.empty-tab {
-  color: #94a3b8;
-  font-size: 0.88rem;
-  padding: 2rem 0;
-  grid-column: 1 / -1;
-  text-align: center;
-}
+
+/* =========================================================
+   BOOKING CARD
+   ========================================================= */
 
 .booking-card {
-  background: #fff;
-  border: 1.5px solid #f0e6d3;
-  border-radius: 14px;
-  padding: 1.25rem;
+  position: relative;
+
+  width: 100%;
+
+  min-height: 245px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
   cursor: pointer;
-  transition: all 0.2s;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  }
+  border-radius: 18px;
 
-  &.cancelled {
-    opacity: 0.7;
-  }
+  background:
+    linear-gradient(
+      145deg,
+      #191a21,
+      #13141a
+    );
 
-  h4 {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #1a1a2e;
-    margin: 0.7rem 0 0.5rem;
-    font-family: monospace;
-  }
+  border: 1px solid #2d2e39;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.22);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
+
+
+/* Top gradient */
+
+.booking-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #8a2be2,
+      #b56dff,
+      #d4af37
+    );
+}
+
+
+.booking-card:hover {
+  transform: translateY(-5px);
+
+  border-color:
+    rgba(181, 109, 255, 0.45);
+
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.40);
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
 
 .booking-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 100px;
-  font-size: 0.72rem;
-  font-weight: 700;
+  align-self: flex-start;
 
-  mat-icon {
-    font-size: 14px;
-    width: 14px;
-    height: 14px;
-  }
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  min-height: 30px;
+
+  padding: 0 10px;
+
+  margin-bottom: 16px;
+
+  border-radius: 50px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.08);
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
 }
+
+
+.booking-status mat-icon {
+  width: 16px;
+
+  height: 16px;
+
+  font-size: 16px;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   BOOKING REFERENCE
+   ========================================================= */
+
+.booking-card h4 {
+  margin: 0 0 18px;
+
+  color: #ffffff !important;
+
+  font-size: 17px;
+
+  font-weight: 800;
+
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   META
+   ========================================================= */
 
 .booking-meta {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.8rem;
-  color: #64748b;
-  margin: 0.3rem 0;
 
-  mat-icon {
-    font-size: 15px;
-    width: 15px;
-    height: 15px;
-    color: #9e7a63;
-  }
+  align-items: center;
+
+  gap: 9px;
+
+  margin: 0 0 11px;
+
+  color: #c8c9d3 !important;
+
+  font-size: 12px;
+
+  line-height: 1.5;
 }
+
+
+.booking-meta mat-icon {
+  width: 18px;
+
+  height: 18px;
+
+  flex-shrink: 0;
+
+  color: #b56dff !important;
+
+  font-size: 18px;
+}
+
+
+.booking-meta span {
+  color: #c8c9d3 !important;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
 .booking-footer {
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
-  margin-top: 0.9rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid #f0e6d3;
 
-  .amount {
-    font-size: 1rem;
-    font-weight: 800;
-    color: #1a1a2e;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-top: auto;
+
+  padding-top: 17px;
+
+  border-top: 1px solid #2d2e39;
+}
+
+
+/* =========================================================
+   AMOUNT
+   ========================================================= */
+
+.amount {
+  color: #f0d875 !important;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   WAITING
+   ========================================================= */
+
+.waiting-text {
+  padding: 8px 11px;
+
+  border-radius: 8px;
+
+  background: #29231a;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.20);
+
+  color: #e5c96a !important;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   PAYMENT
+   ========================================================= */
+
+.pay-now {
+  padding: 8px 11px;
+
+  border-radius: 8px;
+
+  background: #35171d;
+
+  border:
+    1px solid
+    rgba(255, 102, 117, 0.20);
+
+  color: #ff8f99 !important;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   REVIEW
+   ========================================================= */
+
+.review-text {
+  padding: 8px 11px;
+
+  border-radius: 8px;
+
+  background: #12311f;
+
+  border:
+    1px solid
+    rgba(74, 222, 128, 0.18);
+
+  color: #70e69b !important;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   CANCELLED
+   ========================================================= */
+
+.booking-card.cancelled {
+  opacity: 0.85;
+}
+
+
+.booking-card.cancelled::before {
+  background:
+    linear-gradient(
+      90deg,
+      #7d343c,
+      #b94b56
+    );
+}
+
+
+.booking-card.cancelled:hover {
+  opacity: 1;
+
+  border-color:
+    rgba(255, 102, 117, 0.30);
+}
+
+
+/* =========================================================
+   EMPTY TAB
+   ========================================================= */
+
+.empty-tab {
+  grid-column: 1 / -1;
+
+  min-height: 330px;
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 40px;
+
+  box-sizing: border-box;
+
+  color: #ffffff !important;
+}
+
+
+/* Empty icon */
+
+.empty-tab-icon {
+  width: 70px;
+
+  height: 70px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-bottom: 16px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #251637,
+      #18121f
+    );
+
+  border:
+    1px solid
+    rgba(181, 109, 255, 0.20);
+}
+
+
+.empty-tab-icon mat-icon {
+  width: 32px;
+
+  height: 32px;
+
+  color: #b56dff !important;
+
+  font-size: 32px;
+}
+
+
+.empty-tab h3 {
+  margin: 0 0 8px;
+
+  color: #ffffff !important;
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+  text-align: center;
+}
+
+
+.empty-tab p {
+  margin: 0;
+
+  max-width: 400px;
+
+  color: #aeb0bc !important;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .bookings-page {
+    padding:
+      35px 25px 70px;
   }
 
-  .waiting-text {
-    font-size: 0.72rem;
-    color: #f5a623;
-    font-weight: 600;
+
+  .booking-list {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
-  .pay-now {
-    font-size: 0.72rem;
-    color: #e8650a;
-    font-weight: 700;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .bookings-page {
+    padding:
+      25px 15px 60px;
   }
 
+
+  .page-header {
+    margin-bottom: 25px;
+  }
+
+
+  .page-header h1 {
+    font-size: 30px;
+  }
+
+
+  .page-header p {
+    font-size: 13px;
+  }
+
+
+  .bookings-tabs {
+    border-radius: 16px;
+  }
+
+
+  .booking-list {
+    grid-template-columns: 1fr;
+
+    padding: 18px;
+
+    gap: 15px;
+  }
+
+
+  .booking-card {
+    min-height: 225px;
+  }
+
+
+  .booking-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .waiting-text,
+  .pay-now,
   .review-text {
-    font-size: 0.72rem;
-    color: #16a34a;
-    font-weight: 700;
+    width: 100%;
+
+    box-sizing: border-box;
   }
+
+
+  .empty-tab {
+    min-height: 280px;
+
+    padding: 30px 15px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 430px) {
+
+  .bookings-page {
+    padding-left: 10px;
+
+    padding-right: 10px;
+  }
+
+
+  .booking-list {
+    padding: 12px;
+  }
+
+
+  .booking-card {
+    padding: 18px;
+  }
+
 }

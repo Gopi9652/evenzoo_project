@@ -1,131 +1,569 @@
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem 2rem 0;
-  max-width: 1000px;
-  margin: 0 auto;
-  flex-wrap: wrap;
-  gap: 1rem;
+/* =========================================================
+   EVENZOO - MANAGE SERVICES
+   Light Modern Dashboard Style
+   ========================================================= */
 
-  h1 {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: #1a1a2e;
-    margin: 0 0 0.3rem;
-  }
-
-  p {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin: 0;
-  }
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f7f8fc;
+  color: #1f2937;
 }
+
+/* =========================
+   PAGE HEADER
+   ========================= */
+
+.page-header {
+  width: min(1200px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 42px 0 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.page-header > div {
+  min-width: 0;
+}
+
+.page-header h1 {
+  margin: 0 0 7px;
+
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  color: #172033;
+  letter-spacing: -0.4px;
+}
+
+.page-header p {
+  margin: 0;
+
+  font-size: 15px;
+  line-height: 1.6;
+
+  color: #667085;
+}
+
+/* =========================
+   ADD SERVICE BUTTON
+   ========================= */
+
+.page-header button {
+  min-height: 44px;
+  padding: 0 22px;
+
+  border-radius: 10px !important;
+
+  background: #6d4aff !important;
+  color: #ffffff !important;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  box-shadow: 0 4px 12px rgba(109, 74, 255, 0.18);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.page-header button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(109, 74, 255, 0.25);
+}
+
+/* =========================
+   MAIN CONTAINER
+   ========================= */
 
 .services-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 1.5rem 2rem 3rem;
+  width: min(1200px, calc(100% - 40px));
+  margin: 0 auto 60px;
 }
+
+/* =========================
+   SERVICE FORM
+   ========================= */
 
 .service-form {
-  background: #fff;
-  border: 1.5px solid #f0e6d3;
-  border-radius: 14px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  background: #ffffff;
 
-  h3 {
-    margin: 0 0 1rem;
-    font-size: 1rem;
-    color: #1a1a2e;
-  }
+  border: 1px solid #e8eaf0;
+  border-radius: 16px;
 
-  .full-width {
-    width: 100%;
-  }
+  padding: 28px;
 
-  .price-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
+  margin-bottom: 30px;
+
+  box-shadow:
+    0 2px 8px rgba(16, 24, 40, 0.04),
+    0 8px 24px rgba(16, 24, 40, 0.04);
+
+  animation: fadeUp 0.25s ease;
 }
 
-.loading-container {
-  display: flex;
-  justify-content: center;
-  padding: 4rem 0;
+.service-form h3 {
+  margin: 0 0 24px;
+
+  font-size: 20px;
+  font-weight: 650;
+
+  color: #172033;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 4rem 0;
+/* =========================
+   MATERIAL FORM FIELDS
+   ========================= */
 
-  .empty-icon {
-    font-size: 3rem;
-    display: block;
-    margin-bottom: 1rem;
-  }
-
-  h3 {
-    color: #1a1a2e;
-    margin: 0 0 0.5rem;
-  }
-
-  p {
-    color: #64748b;
-    font-size: 0.9rem;
-  }
+.full-width {
+  width: 100%;
+  display: block;
+  margin-bottom: 8px;
 }
+
+mat-form-field {
+  color: #1f2937;
+}
+
+/* Input text */
+
+::ng-deep .service-form .mat-mdc-input-element {
+  color: #1f2937 !important;
+  caret-color: #6d4aff !important;
+}
+
+/* Placeholder */
+
+::ng-deep .service-form
+.mat-mdc-input-element::placeholder {
+  color: #98a2b3 !important;
+  opacity: 1;
+}
+
+/* Labels */
+
+::ng-deep .service-form
+.mdc-floating-label {
+  color: #667085 !important;
+}
+
+/* Focused label */
+
+::ng-deep .service-form
+.mdc-text-field--focused
+.mdc-floating-label {
+  color: #6d4aff !important;
+}
+
+/* Outline */
+
+::ng-deep .service-form
+.mdc-notched-outline__leading,
+::ng-deep .service-form
+.mdc-notched-outline__notch,
+::ng-deep .service-form
+.mdc-notched-outline__trailing {
+  border-color: #d9dce5 !important;
+}
+
+/* Focus outline */
+
+::ng-deep .service-form
+.mdc-text-field--focused
+.mdc-notched-outline__leading,
+::ng-deep .service-form
+.mdc-text-field--focused
+.mdc-notched-outline__notch,
+::ng-deep .service-form
+.mdc-text-field--focused
+.mdc-notched-outline__trailing {
+  border-color: #6d4aff !important;
+}
+
+/* =========================
+   PRICE ROW
+   ========================= */
+
+.price-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 18px;
+
+  margin-top: 4px;
+}
+
+.price-row mat-form-field {
+  width: 100%;
+}
+
+/* =========================
+   SELECT TEXT
+   ========================= */
+
+::ng-deep .service-form
+.mat-mdc-select-value {
+  color: #1f2937 !important;
+}
+
+::ng-deep .service-form
+.mat-mdc-select-placeholder {
+  color: #98a2b3 !important;
+}
+
+::ng-deep .service-form
+.mat-mdc-select-arrow {
+  color: #667085 !important;
+}
+
+/* =========================
+   FORM SUBMIT BUTTON
+   ========================= */
+
+.service-form > button {
+  min-height: 44px;
+
+  margin-top: 8px;
+
+  padding: 0 24px;
+
+  border-radius: 9px !important;
+
+  background: #6d4aff !important;
+  color: #ffffff !important;
+
+  font-weight: 600;
+
+  box-shadow: 0 4px 12px rgba(109, 74, 255, 0.16);
+
+  transition: all 0.2s ease;
+}
+
+.service-form > button:hover:not(:disabled) {
+  background: #5b3ce6 !important;
+  transform: translateY(-1px);
+
+  box-shadow: 0 7px 16px rgba(109, 74, 255, 0.22);
+}
+
+.service-form > button:disabled {
+  opacity: 0.65;
+}
+
+/* =========================
+   SERVICES GRID
+   ========================= */
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
 }
 
+/* =========================
+   SERVICE CARD
+   ========================= */
+
 .service-card {
-  background: #fff;
-  border: 1.5px solid #f0e6d3;
-  border-radius: 14px;
-  padding: 1.25rem;
+  position: relative;
+
+  background: #ffffff;
+
+  border: 1px solid #e8eaf0;
+  border-radius: 15px;
+
+  padding: 22px;
+
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow:
+    0 2px 8px rgba(16, 24, 40, 0.035);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
+
+.service-card:hover {
+  transform: translateY(-3px);
+
+  border-color: #ddd6fe;
+
+  box-shadow:
+    0 8px 22px rgba(16, 24, 40, 0.08);
+}
+
+/* =========================
+   SERVICE HEADER
+   ========================= */
 
 .service-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
 
-  h4 {
-    margin: 0;
-    font-size: 0.95rem;
-    color: #1a1a2e;
-  }
+  gap: 12px;
 }
+
+.service-header h4 {
+  margin: 0;
+
+  color: #172033;
+
+  font-size: 17px;
+  font-weight: 650;
+
+  line-height: 1.4;
+}
+
+/* Delete button */
+
+.service-header button {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  color: #98a2b3 !important;
+
+  border-radius: 8px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.service-header button:hover {
+  background: #fff1f2;
+
+  color: #dc2626 !important;
+}
+
+.service-header mat-icon {
+  font-size: 20px;
+}
+
+/* =========================
+   DESCRIPTION
+   ========================= */
 
 .service-desc {
-  font-size: 0.82rem;
-  color: #64748b;
-  margin: 0.4rem 0 0.8rem;
+  margin: 12px 0 20px;
+
+  color: #667085;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+  flex: 1;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
 }
+
+/* =========================
+   SERVICE FOOTER
+   ========================= */
 
 .service-footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-top: 0.7rem;
-  border-top: 1px solid #f0e6d3;
 
-  .price {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #e8650a;
+  gap: 10px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #eef0f4;
+}
+
+/* Price */
+
+.service-footer .price {
+  color: #6d4aff;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Price type */
+
+.service-footer .price-type {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  background: #f3f0ff;
+
+  color: #6d4aff;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  text-transform: capitalize;
+}
+
+/* =========================
+   EMPTY STATE
+   ========================= */
+
+.empty-state {
+  background: #ffffff;
+
+  border: 1px solid #e8eaf0;
+
+  border-radius: 16px;
+
+  padding: 60px 30px;
+
+  text-align: center;
+
+  box-shadow:
+    0 2px 8px rgba(16, 24, 40, 0.035);
+}
+
+.empty-icon {
+  display: block;
+
+  font-size: 48px;
+
+  margin-bottom: 14px;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px;
+
+  color: #172033;
+
+  font-size: 19px;
+  font-weight: 650;
+}
+
+.empty-state p {
+  margin: 0;
+
+  color: #667085;
+
+  font-size: 14px;
+}
+
+/* =========================
+   LOADING
+   ========================= */
+
+.loading-container {
+  min-height: 260px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  color: #667085;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 900px) {
+
+  .services-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
-  .price-type {
-    font-size: 0.72rem;
-    color: #94a3b8;
-    text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+
+  .page-header {
+    width: min(100% - 28px, 1200px);
+
+    padding: 28px 0 22px;
+
+    align-items: flex-start;
+
+    flex-direction: column;
   }
+
+  .page-header h1 {
+    font-size: 26px;
+  }
+
+  .page-header button {
+    width: 100%;
+  }
+
+  .services-container {
+    width: min(100% - 28px, 1200px);
+  }
+
+  .service-form {
+    padding: 20px;
+  }
+
+  .price-row {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+}
+
+@media (max-width: 400px) {
+
+  .page-header h1 {
+    font-size: 23px;
+  }
+
+  .service-card {
+    padding: 18px;
+  }
+
+}
+
+/* =========================
+   ANIMATION
+   ========================= */
+
+@keyframes fadeUp {
+
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
 }
