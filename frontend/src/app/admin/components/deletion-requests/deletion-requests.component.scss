@@ -1,0 +1,39 @@
+.page-header {
+  padding: 2rem 2rem 0;
+  max-width: 900px;
+  margin: 0 auto;
+  h1 { font-size: 1.6rem; font-weight: 800; color: #1a1a2e; margin: 0 0 0.3rem; }
+  p { color: #64748b; font-size: 0.9rem; margin: 0; }
+}
+
+.requests-container { max-width: 900px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+.loading-container { display: flex; justify-content: center; padding: 3rem 0; }
+
+.empty-text { text-align: center; color: #94a3b8; font-size: 0.9rem; padding: 3rem 0; }
+
+.requests-list { display: flex; flex-direction: column; gap: 0.9rem; }
+
+.request-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 1.5px solid #fecaca;
+  border-radius: 14px;
+  padding: 1.25rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.request-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  .email { font-weight: 700; color: #1a1a2e; font-size: 0.92rem; }
+  .reason { font-style: italic; color: #64748b; font-size: 0.82rem; }
+  .date { color: #94a3b8; font-size: 0.75rem; }
+}
+
+.request-actions { display: flex; gap: 0.6rem; }

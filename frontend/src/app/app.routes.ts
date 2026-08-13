@@ -52,6 +52,9 @@ import { EventPostsFeedComponent } from './vendor/components/event-posts-feed/ev
 
 import { AvailabilityManageComponent } from './vendor/components/availability-manage/availability-manage.component';
 import { WorkingHoursManageComponent } from './vendor/components/working-hours-manage/working-hours-manage.component';
+import { PrivacySettingsComponent } from './shared/components/privacy-settings/privacy-settings.component';
+import { DeletionRequestsComponent } from './admin/components/deletion-requests/deletion-requests.component';
+
 
 export const routes: Routes = [
   { path: '', component: SplashComponent },
@@ -73,7 +76,9 @@ export const routes: Routes = [
   { path: 'refund-policy', component: RefundPolicyComponent },
   { path: 'cookie-policy', component: CookiePolicyComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'settings/privacy', component: PrivacySettingsComponent, canActivate: [authGuard] },
 
+  { path: 'admin/deletion-requests', component: DeletionRequestsComponent, canActivate: [authGuard, roleGuard(['admin'])] },
 
   // Customer routes
   { path: 'customer/home', component: HomeComponent, canActivate: [authGuard, roleGuard(['customer'])] },

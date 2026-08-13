@@ -1,0 +1,36 @@
+<app-navbar></app-navbar>
+
+<div class="page-header">
+  <h1>Account Deletion Requests</h1>
+  <p>Review and process user requests to delete their personal data</p>
+</div>
+
+<div class="requests-container">
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="36"></mat-spinner></div>
+  } @else if (requests.length === 0) {
+    <p class="empty-text">No pending deletion requests</p>
+  } @else {
+    <div class="requests-list">
+      @for (req of requests; track req.id) {
+        <div class="request-row">
+          <div class="request-info">
+            <span class="email">{{ req.user_email }}</span>
+            @if (req.reason) {
+              <span class="reason">"{{ req.reason }}"</span>
+            }
+            <span class="date">Requested {{ req.requested_at | date:'medium' }}</span>
+          </div>
+          <div class="request-actions">
+            <button mat-raised-button color="warn" [disabled]="processingId === req.id" (click)="approve(req)">
+              Approve & Anonymize
+            </button>
+            <button mat-stroked-button [disabled]="processingId === req.id" (click)="reject(req)">
+              Reject
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

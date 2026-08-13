@@ -9,8 +9,7 @@ from app.routers import event_post
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from app.utils.rate_limiter import limiter
-
-Base.metadata.create_all(bind=engine)
+from app.routers import privacy
 
 app = FastAPI(
     title="Evenzoo API",
@@ -45,6 +44,8 @@ app.include_router(location.router,        prefix="/api/location")
 app.include_router(wishlist.router, prefix="/api/wishlist")
 app.include_router(message.router, prefix="/api/messages")
 app.include_router(event_post.router, prefix="/api/event-posts")
+app.include_router(privacy.router, prefix="/api/privacy")
+Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def root():

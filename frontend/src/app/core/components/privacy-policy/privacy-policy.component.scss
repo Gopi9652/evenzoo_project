@@ -1,96 +1,260 @@
-.legal-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2.5rem 2rem 5rem;
-  font-family: inherit;
+/* =========================================
+   EVENZOO - PRIVACY / LEGAL PAGE
+   Light Modern Theme
+   ========================================= */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f7f8fc;
+  color: #1f2937;
 }
+
+/* =========================================
+   MAIN PAGE
+   ========================================= */
+
+.legal-page {
+  min-height: 100vh;
+  padding: 32px 20px 60px;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
 
 .legal-header {
-  margin-bottom: 2.5rem;
-  border-bottom: 1px solid #f0e6d3;
-  padding-bottom: 1.5rem;
-
-  .back-link {
-    display: inline-block;
-    color: #64748b;
-    text-decoration: none;
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
-
-    &:hover { color: #e8650a; }
-  }
-
-  h1 {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #1a1a2e;
-    margin: 0 0 0.4rem;
-  }
-
-  .last-updated {
-    color: #94a3b8;
-    font-size: 0.85rem;
-    margin: 0;
-  }
+  width: min(900px, 100%);
+  margin: 0 auto 24px;
 }
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 20px;
+
+  color: #6c63ff;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: #5148e5;
+}
+
+.legal-header h1 {
+  margin: 0;
+
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+
+  color: #1f2937;
+  letter-spacing: -0.6px;
+}
+
+.last-updated {
+  margin: 8px 0 0;
+
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* =========================================
+   CONTENT CARD
+   ========================================= */
 
 .legal-content {
-  section {
-    margin-bottom: 2rem;
+  width: min(900px, 100%);
+  margin: 0 auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e8eaf0;
+  border-radius: 14px;
+
+  padding: 38px 42px;
+
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+
+/* =========================================
+   SECTIONS
+   ========================================= */
+
+.legal-content section {
+  padding: 0 0 28px;
+  margin: 0 0 28px;
+
+  border-bottom: 1px solid #eef0f4;
+}
+
+.legal-content section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* =========================================
+   HEADINGS
+   ========================================= */
+
+.legal-content h2 {
+  margin: 0 0 12px;
+
+  font-size: 19px;
+  line-height: 1.4;
+
+  font-weight: 700;
+
+  color: #1f2937;
+}
+
+.legal-content h3 {
+  margin: 20px 0 8px;
+
+  font-size: 15px;
+  font-weight: 650;
+
+  color: #374151;
+}
+
+/* =========================================
+   TEXT
+   ========================================= */
+
+.legal-content p {
+  margin: 0 0 12px;
+
+  font-size: 14px;
+  line-height: 1.75;
+
+  color: #596273;
+}
+
+.legal-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================
+   LISTS
+   ========================================= */
+
+.legal-content ul {
+  margin: 10px 0 14px;
+  padding-left: 22px;
+}
+
+.legal-content li {
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  line-height: 1.7;
+
+  color: #596273;
+}
+
+.legal-content li::marker {
+  color: #6c63ff;
+}
+
+/* =========================================
+   LINKS
+   ========================================= */
+
+.legal-content a {
+  color: #6c63ff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.legal-content a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   STRONG TEXT
+   ========================================= */
+
+.legal-content strong {
+  color: #374151;
+  font-weight: 650;
+}
+
+/* =========================================
+   CONTACT INFORMATION
+   ========================================= */
+
+.contact-info {
+  margin-top: 14px !important;
+
+  padding: 16px 18px;
+
+  background: #f8f8ff;
+
+  border: 1px solid #e8e6ff;
+  border-radius: 10px;
+
+  color: #4b5563 !important;
+
+  line-height: 2 !important;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  .legal-page {
+    padding: 24px 14px 40px;
   }
 
-  h2 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #1a1a2e;
-    margin: 0 0 0.75rem;
+  .legal-header h1 {
+    font-size: 27px;
   }
 
-  h3 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #e8650a;
-    margin: 1.2rem 0 0.5rem;
+  .legal-content {
+    padding: 26px 22px;
+    border-radius: 12px;
   }
 
-  p {
-    font-size: 0.92rem;
-    color: #475569;
-    line-height: 1.7;
-    margin: 0 0 0.9rem;
+  .legal-content h2 {
+    font-size: 18px;
   }
 
-  ul {
-    margin: 0 0 0.9rem;
-    padding-left: 1.4rem;
-
-    li {
-      font-size: 0.92rem;
-      color: #475569;
-      line-height: 1.7;
-      margin-bottom: 0.4rem;
-    }
+  .legal-content h3 {
+    font-size: 15px;
   }
 
-  strong {
-    color: #1a1a2e;
-    font-weight: 700;
-  }
-
-  a {
-    color: #e8650a;
-    text-decoration: underline;
-  }
-
-  .contact-info {
-    background: #fafafa;
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-    line-height: 1.9;
+  .legal-content p,
+  .legal-content li {
+    font-size: 13.5px;
   }
 }
 
-@media (max-width: 640px) {
-  .legal-page { padding: 1.5rem 1.25rem 4rem; }
-  .legal-header h1 { font-size: 1.5rem; }
+@media (max-width: 480px) {
+
+  .legal-page {
+    padding: 20px 10px 30px;
+  }
+
+  .legal-content {
+    padding: 22px 18px;
+  }
+
+  .legal-header h1 {
+    font-size: 24px;
+  }
+
+  .legal-content section {
+    padding-bottom: 22px;
+    margin-bottom: 22px;
+  }
 }

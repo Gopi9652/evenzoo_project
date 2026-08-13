@@ -17,7 +17,8 @@ class User(Base):
     profile_photo = Column(String(500))
     created_at    = Column(DateTime, default=datetime.utcnow)
     updated_at    = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
+    deletion_requested_at = Column(DateTime, nullable=True)   
+    deleted_at             = Column(DateTime, nullable=True) 
     vendor_profile   = relationship("VendorProfile", back_populates="user", uselist=False)
     customer_profile = relationship("CustomerProfile", back_populates="user", uselist=False)
     bookings_made    = relationship("Booking", foreign_keys="Booking.customer_id", back_populates="customer")

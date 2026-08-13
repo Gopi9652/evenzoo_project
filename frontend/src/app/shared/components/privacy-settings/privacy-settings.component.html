@@ -1,0 +1,125 @@
+<app-navbar></app-navbar>
+
+<div class="privacy-container">
+
+  <div class="page-header">
+    <h1>Privacy & Data</h1>
+    <p>
+      Manage your personal data and account, in line with our Privacy Policy
+    </p>
+  </div>
+
+  @if (loading) {
+
+    <div class="loading-container">
+      <mat-spinner diameter="36"></mat-spinner>
+    </div>
+
+  } @else {
+
+    @if (pendingRequests.length > 0) {
+
+      <div class="pending-banner">
+
+        <div class="pending-icon">
+          <mat-icon>hourglass_empty</mat-icon>
+        </div>
+
+        <div class="pending-content">
+          <strong>Deletion request pending review</strong>
+
+          <p>
+            Your account is currently deactivated while an admin
+            processes your deletion request.
+          </p>
+        </div>
+
+        <button
+          mat-stroked-button
+          class="cancel-btn"
+          (click)="cancelRequest(pendingRequests[0].id)"
+        >
+          Cancel Request
+        </button>
+
+      </div>
+    }
+
+    <!-- Download Data -->
+
+    <div class="privacy-card">
+
+      <div class="card-icon data-icon">
+        <mat-icon>download</mat-icon>
+      </div>
+
+      <div class="card-body">
+
+        <h3>Download My Data</h3>
+
+        <p>
+          Get a copy of all the personal data Evenzoo holds about you —
+          your profile, bookings, reviews, and event posts —
+          as a downloadable file.
+        </p>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="action-btn"
+          (click)="exportData()"
+          [disabled]="exporting"
+        >
+          <mat-icon>
+            {{ exporting ? 'hourglass_empty' : 'download' }}
+          </mat-icon>
+
+          {{ exporting ? 'Preparing...' : 'Download My Data (JSON)' }}
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- Delete Account -->
+
+    <div class="privacy-card danger">
+
+      <div class="card-icon danger-icon">
+        <mat-icon>delete_forever</mat-icon>
+      </div>
+
+      <div class="card-body">
+
+        <h3>Delete My Account</h3>
+
+        <p>
+          Permanently remove your personal information from Evenzoo.
+          Your account will be deactivated immediately and anonymized
+          once an admin reviews the request. This cannot be undone.
+        </p>
+
+        <button
+          mat-stroked-button
+          color="warn"
+          class="delete-btn"
+          (click)="requestDeletion()"
+          [disabled]="requestingDeletion || pendingRequests.length > 0"
+        >
+          <mat-icon>delete_outline</mat-icon>
+
+          {{
+            requestingDeletion
+              ? 'Submitting...'
+              : 'Request Account Deletion'
+          }}
+        </button>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

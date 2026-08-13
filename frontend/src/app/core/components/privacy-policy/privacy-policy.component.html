@@ -21,7 +21,7 @@
         <li>Profile photo, if you choose to upload one</li>
         <li>For vendors: business name, description, address, service pricing, photos of your work, and business documents (GSTIN/PAN) if submitted for verification</li>
         <li>Booking details: event date, location, guest count, and special requests</li>
-        <li>Messages sent through our in-app chat feature</li>
+        <li>Messages sent through our in-app chat feature — encrypted at rest in our database, meaning even in the unlikely event of unauthorized database access, message content cannot be read without our separate encryption key.</li>
         <li>Reviews and ratings you submit</li>
       </ul>
 
@@ -50,9 +50,18 @@
         <li>To improve our platform and detect fraudulent or abusive activity</li>
       </ul>
     </section>
-
+  <section>
+    <h2>4. Location-Based Features</h2>
+    <p>When you post an event on Evenzoo describing services you need, the state and city you provide are used to notify approved vendors located in your area, so they can see your post and reach out to help.</p>
+    <ul>
+      <li>Your event post's location (city/state) is visible to vendors browsing event posts in that area.</li>
+      <li>Vendors in your area may receive an in-app notification when you post, specifically naming your post's title and general location — never your exact address, phone number, or email unless you choose to share it directly through chat.</li>
+      <li>Your precise event venue address (if you provide one) is only shown on the post itself, which is visible to any vendor browsing that location's feed — avoid including sensitive address details you're not comfortable sharing publicly with vendors in your city.</li>
+      <li>We do not use GPS or precise device location — only the city/state you manually select when creating your post or vendor profile.</li>
+    </ul>
+  </section>
     <section>
-      <h2>4. How We Share Your Information</h2>
+      <h2>5. How We Share Your Information</h2>
       <p>We do not sell your personal data to third parties. We share information only in these circumstances:</p>
       <ul>
         <li><strong>Between customers and vendors:</strong> When you make a booking, relevant details (name, contact information, event details) are shared with the vendor you're booking, and vice versa, so the service can actually be delivered.</li>
@@ -64,7 +73,7 @@
     </section>
 
     <section>
-      <h2>5. Data Security</h2>
+      <h2>6. Data Security</h2>
       <p>We take reasonable technical and organizational measures to protect your data, including:</p>
       <ul>
         <li>All data transmitted between your device and our servers uses HTTPS encryption</li>
@@ -74,13 +83,21 @@
       <p>However, no method of transmission or storage is 100% secure. While we strive to protect your information, we cannot guarantee absolute security.</p>
     </section>
 
-    <section>
-      <h2>6. Data Retention</h2>
-      <p>We retain your personal information for as long as your account remains active, and for a reasonable period afterward to comply with legal, accounting, or reporting obligations (such as transaction records required under Indian tax law).</p>
-    </section>
+  <section>
+    <h2>7. Data Retention</h2>
+    <p>We retain different categories of information for different periods, as follows:</p>
+    <ul>
+      <li><strong>Account information</strong> (name, email, phone) — retained while your account is active, and until you request deletion.</li>
+      <li><strong>Booking and payment records</strong> — retained for a minimum of 7 years after completion, in line with Indian tax and accounting record-keeping requirements, even if you later delete your account (records are anonymized but not removed, to preserve financial audit trails).</li>
+      <li><strong>Notifications</strong> — automatically deleted after 90 days.</li>
+      <li><strong>OTP verification codes</strong> — automatically deleted after 7 days (they expire after 10 minutes regardless).</li>
+      <li><strong>Login session tokens</strong> — automatically deleted 30 days after expiry.</li>
+      <li><strong>Chat messages</strong> — retained indefinitely while your account is active, to preserve booking-related conversation history for dispute resolution; deleted or anonymized upon account deletion request.</li>
+    </ul>
+  </section>
 
     <section>
-      <h2>7. Your Rights</h2>
+      <h2>8. Your Rights</h2>
       <p>You have the right to:</p>
       <ul>
         <li>Access the personal information we hold about you</li>
@@ -93,22 +110,33 @@
     </section>
 
     <section>
-      <h2>8. Cookies</h2>
+      <h2>9. Cookies</h2>
       <p>We use essential cookies and browser local storage to keep you logged in and remember your preferences. See our <a routerLink="/cookie-policy">Cookie Policy</a> for details.</p>
+    </section>
+    <section>
+      <h2>10. Data Breach Response</h2>
+      <p>In the unlikely event of a data breach affecting your personal information, we commit to:</p>
+      <ul>
+        <li>Investigating and containing the breach as our first priority upon discovery</li>
+        <li>Notifying affected users via email within <strong>72 hours</strong> of confirming a breach, describing what data was affected and what steps we are taking</li>
+        <li>Notifying the relevant Indian data protection authority as required under applicable law</li>
+        <li>Providing guidance on protective steps you can take (such as changing your password)</li>
+      </ul>
+      <p>If you ever suspect your account has been compromised, please contact us immediately at the email address below.</p>
     </section>
 
     <section>
-      <h2>9. Children's Privacy</h2>
+      <h2>11. Children's Privacy</h2>
       <p>Evenzoo is not intended for use by individuals under the age of 18. We do not knowingly collect personal information from minors.</p>
     </section>
 
     <section>
-      <h2>10. Changes to This Policy</h2>
+      <h2>12. Changes to This Policy</h2>
       <p>We may update this Privacy Policy from time to time. Material changes will be communicated via email or an in-app notice. Continued use of Evenzoo after changes take effect constitutes acceptance of the revised policy.</p>
     </section>
 
     <section>
-      <h2>11. Contact Us</h2>
+      <h2>13. Contact Us</h2>
       <p>If you have questions about this Privacy Policy or how your data is handled, contact us at:</p>
       <p class="contact-info">
         📧 privacy&#64;evenzoo.in<br>

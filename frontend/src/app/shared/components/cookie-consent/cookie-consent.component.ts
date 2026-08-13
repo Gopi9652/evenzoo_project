@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ConsentService } from '../../../core/services/consent.service';
 
 @Component({
   selector: 'app-cookie-consent',
@@ -12,24 +13,19 @@ import { RouterLink } from '@angular/router';
 export class CookieConsentComponent implements OnInit {
   showBanner = false;
 
+  constructor(private consentService: ConsentService) {}
+
   ngOnInit() {
-    const consent = localStorage.getItem('cookie_consent');
-    if (!consent) {
-      this.showBanner = true;
-    }
+    this.showBanner = !this.consentService.hasConsented();
   }
 
   accept() {
-    localStorage.setItem('cookie_consent', 'accepted');
-    localStorage.setItem('cookie_consent_date', new Date().toISOString());
+    this.consentService.setConsent('accepted');
     this.showBanner = false;
   }
 
   decline() {
-    // Since Evenzoo only uses essential cookies (login sessions), declining
-    // still allows core functionality, but we record the preference.
-    localStorage.setItem('cookie_consent', 'essential_only');
-    localStorage.setItem('cookie_consent_date', new Date().toISOString());
+    this.consentService.setConsent('essential_only');
     this.showBanner = false;
   }
 }

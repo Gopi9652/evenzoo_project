@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     CLOUDINARY_CLOUD_NAME: str = "elm5helo"
     CLOUDINARY_API_KEY: str = "916785571475724"
     CLOUDINARY_API_SECRET: str = "NihIvJC0ko43X0r2SRHqIDRAXDg"
+    MESSAGE_ENCRYPTION_KEY: str = "tExog41sk102t-cbRQjk8its7M7V6mebksBSC8wcXnM="
     class Config:
         env_file = ".env"
 

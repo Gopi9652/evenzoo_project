@@ -1,43 +1,369 @@
+/* ================================
+   EVENZOO COOKIE POLICY
+   ================================ */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #1f2937;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+/* Main page */
+.legal-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 50px 20px 80px;
+}
+
+/* ================================
+   HEADER
+   ================================ */
+
+.legal-header {
+  max-width: 950px;
+  margin: 0 auto 35px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 28px;
+
+  color: #6d28d9;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition: all 0.2s ease;
+}
+
+.back-link:hover {
+  color: #4c1d95;
+  transform: translateX(-3px);
+}
+
+.legal-header h1 {
+  margin: 0 0 8px;
+
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -1px;
+
+  color: #111827;
+}
+
+.last-updated {
+  margin: 0;
+
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* ================================
+   CONTENT CARD
+   ================================ */
+
+.legal-content {
+  max-width: 950px;
+  margin: 0 auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  padding: 45px 50px;
+
+  box-shadow:
+    0 10px 30px rgba(17, 24, 39, 0.06),
+    0 2px 8px rgba(17, 24, 39, 0.03);
+}
+
+/* ================================
+   SECTIONS
+   ================================ */
+
+.legal-content section {
+  margin-bottom: 42px;
+}
+
+.legal-content section:last-child {
+  margin-bottom: 0;
+}
+
+.legal-content h2 {
+  position: relative;
+
+  margin: 0 0 16px;
+  padding-left: 15px;
+
+  color: #111827;
+
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 750;
+}
+
+/* Purple vertical line */
+.legal-content h2::before {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  top: 3px;
+
+  width: 4px;
+  height: calc(100% - 6px);
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    180deg,
+    #7c3aed,
+    #a855f7
+  );
+}
+
+/* Paragraphs */
+
+.legal-content p {
+  margin: 0 0 15px;
+
+  color: #4b5563;
+
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.legal-content strong {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* ================================
+   LIST
+   ================================ */
+
+.legal-content ul {
+  margin: 15px 0 0;
+  padding-left: 22px;
+}
+
+.legal-content li {
+  margin-bottom: 10px;
+
+  color: #4b5563;
+
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.legal-content li::marker {
+  color: #7c3aed;
+}
+
+/* ================================
+   COOKIE TABLE
+   ================================ */
+
 .cookie-table {
   width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0 1.5rem;
-  font-size: 0.85rem;
 
-  th {
-    background: #1a1a2e;
-    color: #fff;
-    text-align: left;
-    padding: 0.6rem 0.9rem;
-    font-weight: 700;
+  margin-top: 25px;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  overflow: hidden;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  font-size: 14px;
+}
+
+/* Header */
+
+.cookie-table th {
+  padding: 15px 16px;
+
+  text-align: left;
+
+  background: #f5f3ff;
+  color: #4c1d95;
+
+  font-weight: 700;
+
+  border-bottom: 1px solid #ddd6fe;
+}
+
+/* Cells */
+
+.cookie-table td {
+  padding: 15px 16px;
+
+  color: #4b5563;
+
+  line-height: 1.6;
+
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+/* Remove last borders */
+
+.cookie-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Hover */
+
+.cookie-table tbody tr:hover,
+.cookie-table tr:hover td {
+  background: #faf9ff;
+}
+
+/* ================================
+   CODE / STORAGE NAMES
+   ================================ */
+
+.legal-content code {
+  padding: 3px 7px;
+
+  border-radius: 5px;
+
+  background: #f3f4f6;
+  color: #6d28d9;
+
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ================================
+   CONTACT
+   ================================ */
+
+.contact-info {
+  margin-top: 15px !important;
+  padding: 18px 20px;
+
+  border-left: 4px solid #d4af37;
+  border-radius: 8px;
+
+  background: #fffbeb;
+
+  color: #4b5563 !important;
+}
+
+/* ================================
+   LINKS
+   ================================ */
+
+.legal-content a {
+  color: #6d28d9;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.legal-content a:hover {
+  text-decoration: underline;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+
+@media (max-width: 768px) {
+
+  .legal-page {
+    padding: 30px 14px 50px;
   }
 
-  td {
-    padding: 0.6rem 0.9rem;
-    border-bottom: 1px solid #f0e6d3;
-    color: #475569;
+  .legal-header {
+    margin-bottom: 25px;
   }
 
-  tr:nth-child(even) { background: #fafafa; }
+  .back-link {
+    margin-bottom: 20px;
+  }
 
-  code {
-    background: #f1f5f9;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 0.8rem;
+  .legal-header h1 {
+    font-size: 32px;
+  }
+
+  .legal-content {
+    padding: 30px 22px;
+    border-radius: 14px;
+  }
+
+  .legal-content section {
+    margin-bottom: 35px;
+  }
+
+  .legal-content h2 {
+    font-size: 20px;
+  }
+
+  .legal-content p,
+  .legal-content li {
+    font-size: 14px;
+  }
+
+  /* Make table scroll horizontally */
+  .cookie-table {
+    display: block;
+    overflow-x: auto;
+    white-space: normal;
+  }
+
+  .cookie-table th,
+  .cookie-table td {
+    min-width: 150px;
+    padding: 12px;
   }
 }
 
-.phase-banner {
-  background: #fff7ed;
-  border: 1.5px solid #fed7aa;
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 2rem;
-  font-size: 0.88rem;
-  color: #9a3412;
-  line-height: 1.6;
+/* ================================
+   SMALL MOBILE
+   ================================ */
 
-  strong { color: #c2410c; }
+@media (max-width: 480px) {
+
+  .legal-page {
+    padding: 22px 10px 40px;
+  }
+
+  .legal-header h1 {
+    font-size: 28px;
+  }
+
+  .legal-content {
+    padding: 24px 16px;
+  }
+
+  .legal-content h2 {
+    font-size: 18px;
+  }
+
+  .legal-content p,
+  .legal-content li {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .cookie-table {
+    font-size: 13px;
+  }
+
+  .cookie-table th,
+  .cookie-table td {
+    min-width: 140px;
+    padding: 10px;
+  }
 }
