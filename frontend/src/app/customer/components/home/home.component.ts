@@ -12,6 +12,8 @@ import { VendorCardComponent } from '../vendor-card/vendor-card.component';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { VendorProfile, Category } from '../../../core/models/vendor.model';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
+import { CompareService } from '../../../core/services/compare.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -43,7 +45,9 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private vendorService: VendorService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    public compareService: CompareService,   // ← new, public so template can read it
+    private router: Router  
   ) {}
 
   ngOnInit() {
@@ -52,7 +56,14 @@ export class HomeComponent implements OnInit {
     this.loadCities();
     this.loadVendors();
   }
-
+  goToCompare() {
+    const ids = this.compareService.getSelected();
+    if (ids.length < 2) {
+      alert('Select at least 2 vendors to compare');
+      return;
+    }
+    this.router.navigate(['/customer/compare'], { queryParams: { ids: ids.join(',') } });
+  }
   loadCategories() {
     this.vendorService.getCategories().subscribe({
       next: (data) => this.categories = data,

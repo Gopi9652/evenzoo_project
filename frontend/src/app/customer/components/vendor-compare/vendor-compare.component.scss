@@ -1,0 +1,753 @@
+/* =========================================
+   EVENZOO - VENDOR COMPARISON
+   ========================================= */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f7f7fb;
+  color: #1f2937;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+/* =========================================
+   MAIN CONTAINER
+   ========================================= */
+
+.compare-container {
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  padding: 35px 30px 70px;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   PAGE HEADER
+   ========================================= */
+
+.page-header {
+  max-width: 1450px;
+  margin: 0 auto 28px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+
+  margin-bottom: 15px;
+
+  color: #6d28d9;
+  font-size: 14px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: all 0.2s ease;
+}
+
+.back-link:hover {
+  color: #4c1d95;
+  transform: translateX(-3px);
+}
+
+.page-header h1 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.7px;
+}
+
+/* =========================================
+   LOADING
+   ========================================= */
+
+.loading-container {
+  min-height: 400px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================
+   ERROR / EMPTY
+   ========================================= */
+
+.empty-state {
+  max-width: 550px;
+  margin: 70px auto;
+  padding: 45px 30px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  box-shadow: 0 8px 25px rgba(17, 24, 39, 0.06);
+}
+
+.empty-icon {
+  display: block;
+
+  margin-bottom: 15px;
+
+  font-size: 45px;
+}
+
+.empty-state h3 {
+  margin: 0 0 22px;
+
+  color: #374151;
+
+  font-size: 18px;
+}
+
+/* =========================================
+   HORIZONTAL SCROLL CONTAINER
+   ========================================= */
+
+.compare-scroll {
+  max-width: 1450px;
+  margin: 0 auto;
+
+  overflow-x: auto;
+  overflow-y: visible;
+
+  padding-bottom: 12px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #c4b5fd #f1f1f5;
+}
+
+/* Chrome / Edge scrollbar */
+
+.compare-scroll::-webkit-scrollbar {
+  height: 9px;
+}
+
+.compare-scroll::-webkit-scrollbar-track {
+  background: #eeeef4;
+  border-radius: 10px;
+}
+
+.compare-scroll::-webkit-scrollbar-thumb {
+  background: #c4b5fd;
+  border-radius: 10px;
+}
+
+.compare-scroll::-webkit-scrollbar-thumb:hover {
+  background: #8b5cf6;
+}
+
+/* =========================================
+   COMPARISON GRID
+   ========================================= */
+
+.compare-grid {
+  min-width: 900px;
+
+  display: grid;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 10px 35px rgba(17, 24, 39, 0.07),
+    0 2px 8px rgba(17, 24, 39, 0.03);
+}
+
+/* =========================================
+   ROW LABELS
+   ========================================= */
+
+.row-label {
+  min-height: 75px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 18px 20px;
+
+  box-sizing: border-box;
+
+  background: #fafafa;
+
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+
+  color: #374151;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Keep first column visible when scrolling */
+
+.compare-grid > .row-label {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+}
+
+/* =========================================
+   VENDOR HEADER
+   ========================================= */
+
+.vendor-col-head {
+  position: relative;
+
+  min-height: 300px;
+
+  padding: 25px 18px 22px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+
+  box-sizing: border-box;
+}
+
+/* Purple top accent */
+
+.vendor-col-head::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 4px;
+
+  background: linear-gradient(
+    90deg,
+    #6d28d9,
+    #a855f7
+  );
+}
+
+/* =========================================
+   REMOVE BUTTON
+   ========================================= */
+
+.remove-btn {
+  position: absolute;
+
+  top: 14px;
+  right: 14px;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f3f4f6;
+  color: #6b7280;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+
+  transform: rotate(90deg);
+}
+
+/* =========================================
+   VENDOR PHOTO
+   ========================================= */
+
+.col-photo {
+  width: 105px;
+  height: 105px;
+
+  margin-bottom: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  background: #f3f4f6;
+
+  border: 3px solid #ede9fe;
+
+  box-shadow: 0 5px 15px rgba(109, 40, 217, 0.10);
+}
+
+.col-photo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.ph-icon {
+  font-size: 40px;
+}
+
+/* =========================================
+   VENDOR NAME
+   ========================================= */
+
+.vendor-col-head h3 {
+  max-width: 220px;
+
+  margin: 0 0 9px;
+
+  color: #111827;
+
+  font-size: 18px;
+  font-weight: 750;
+
+  line-height: 1.35;
+}
+
+/* =========================================
+   PROFILE LINK
+   ========================================= */
+
+.view-profile-link {
+  color: #7c3aed;
+
+  font-size: 13px;
+  font-weight: 650;
+
+  text-decoration: none;
+
+  transition: color 0.2s ease;
+}
+
+.view-profile-link:hover {
+  color: #4c1d95;
+  text-decoration: underline;
+}
+
+/* =========================================
+   NORMAL CELLS
+   ========================================= */
+
+.cell {
+  min-height: 75px;
+
+  padding: 18px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+
+  box-sizing: border-box;
+}
+
+.cell strong {
+  color: #111827;
+
+  font-size: 16px;
+}
+
+/* =========================================
+   SUBTEXT
+   ========================================= */
+
+.cell-sub {
+  color: #6b7280;
+
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* =========================================
+   STARS
+   ========================================= */
+
+.stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 4px;
+}
+
+.star-icon {
+  width: 19px !important;
+  height: 19px !important;
+
+  font-size: 19px !important;
+
+  color: #d1d5db;
+}
+
+.star-icon.filled {
+  color: #f59e0b;
+}
+
+/* Rating cell */
+
+.stars + .cell-sub {
+  display: block;
+}
+
+/* =========================================
+   PRICE RANGE
+   ========================================= */
+
+.price-range {
+  color: #6d28d9 !important;
+
+  font-size: 17px !important;
+}
+
+/* =========================================
+   DESCRIPTION
+   ========================================= */
+
+.desc-text {
+  width: 100%;
+
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 13px;
+  line-height: 1.65;
+
+  text-align: left;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+/* =========================================
+   SECTION DIVIDER
+   ========================================= */
+
+.section-divider-row {
+  grid-column: 1 / -1;
+
+  padding: 14px 20px;
+
+  background: linear-gradient(
+    90deg,
+    #f5f3ff,
+    #faf9ff
+  );
+
+  border-bottom: 1px solid #ddd6fe;
+
+  color: #5b21b6;
+
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: 0.2px;
+}
+
+/* =========================================
+   SERVICE PRICE
+   ========================================= */
+
+.price-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 12px;
+
+  border-radius: 8px;
+
+  background: #f5f3ff;
+
+  color: #6d28d9;
+
+  font-size: 14px;
+  font-weight: 750;
+
+  white-space: nowrap;
+}
+
+.not-offered {
+  color: #9ca3af;
+
+  font-size: 13px;
+
+  font-style: italic;
+}
+
+/* =========================================
+   PHOTOS
+   ========================================= */
+
+.photos-cell {
+  min-height: 155px;
+
+  align-items: flex-start;
+}
+
+.mini-photo-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 8px;
+}
+
+.mini-photo-grid img {
+  width: 100%;
+  height: 65px;
+
+  object-fit: cover;
+
+  border-radius: 8px;
+
+  background: #f3f4f6;
+
+  border: 1px solid #e5e7eb;
+
+  transition: transform 0.2s ease;
+}
+
+.mini-photo-grid img:hover {
+  transform: scale(1.04);
+}
+
+/* =========================================
+   REVIEWS
+   ========================================= */
+
+.reviews-cell {
+  min-height: 180px;
+
+  display: block;
+
+  padding: 15px;
+}
+
+.mini-review {
+  margin-bottom: 12px;
+  padding: 12px;
+
+  text-align: left;
+
+  background: #fafafa;
+
+  border: 1px solid #eeeeee;
+  border-radius: 10px;
+}
+
+.mini-review:last-child {
+  margin-bottom: 0;
+}
+
+.mini-review-rating {
+  margin-bottom: 5px;
+
+  color: #d97706;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mini-review strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #374151;
+
+  font-size: 13px;
+}
+
+.mini-review p {
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 12px;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+/* =========================================
+   CTA
+   ========================================= */
+
+.cta-btn {
+  min-width: 135px;
+
+  border-radius: 8px !important;
+
+  font-weight: 650 !important;
+}
+
+/* =========================================
+   ROW HOVER
+   ========================================= */
+
+.compare-grid > .cell:hover {
+  background: #fcfbff;
+}
+
+.compare-grid > .cell,
+.compare-grid > .vendor-col-head,
+.compare-grid > .row-label {
+  transition: background 0.2s ease;
+}
+
+/* =========================================
+   LAST ROW CLEANUP
+   ========================================= */
+
+.compare-grid > .cell:nth-last-child(-n + 5) {
+  border-bottom: none;
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 900px) {
+
+  .compare-container {
+    padding: 28px 18px 55px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+  }
+
+  .compare-grid {
+    min-width: 850px;
+  }
+
+  .vendor-col-head {
+    min-height: 275px;
+  }
+
+  .col-photo {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 600px) {
+
+  .compare-container {
+    padding: 22px 12px 45px;
+  }
+
+  .page-header {
+    margin-bottom: 20px;
+  }
+
+  .page-header h1 {
+    font-size: 25px;
+  }
+
+  .back-link {
+    font-size: 13px;
+  }
+
+  .compare-grid {
+    min-width: 780px;
+
+    border-radius: 14px;
+  }
+
+  .row-label {
+    min-height: 65px;
+
+    padding: 14px;
+
+    font-size: 13px;
+  }
+
+  .cell {
+    min-height: 65px;
+
+    padding: 14px;
+  }
+
+  .vendor-col-head {
+    min-height: 245px;
+
+    padding: 22px 12px;
+  }
+
+  .col-photo {
+    width: 78px;
+    height: 78px;
+  }
+
+  .vendor-col-head h3 {
+    font-size: 15px;
+  }
+
+  .view-profile-link {
+    font-size: 12px;
+  }
+
+  .remove-btn {
+    top: 10px;
+    right: 10px;
+
+    width: 27px;
+    height: 27px;
+  }
+
+  .section-divider-row {
+    padding: 12px 15px;
+
+    font-size: 13px;
+  }
+}

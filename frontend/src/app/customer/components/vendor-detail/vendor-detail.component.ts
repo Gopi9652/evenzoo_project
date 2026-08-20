@@ -12,6 +12,8 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar.compon
 import { VendorProfile, VendorService as VendorServiceModel } from '../../../core/models/vendor.model';
 import { BookingFormComponent } from '../booking-form/booking-form.component';
 import { environment } from '../../../../environments/environment';
+import { CompareService } from '../../../core/services/compare.service';
+
 @Component({
   selector: 'app-vendor-detail',
   standalone: true,
@@ -37,7 +39,8 @@ export class VendorDetailComponent implements OnInit {
     public router: Router,
     private vendorService: VendorService,
     private reviewService: ReviewService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public compareService: CompareService
   ) {}
 
   ngOnInit() {
@@ -128,5 +131,16 @@ export class VendorDetailComponent implements OnInit {
     );
 
     return `https://wa.me/${phone}?text=${message}`;
+  }
+  get isInCompare(): boolean {
+    return this.vendor ? this.compareService.isSelected(this.vendor.id) : false;
+  }
+
+  toggleCompare() {
+    if (!this.vendor) return;
+    const added = this.compareService.toggle(this.vendor.id);
+    if (!added && this.compareService.count() === 4) {
+      alert('You can compare up to 4 vendors at a time.');
+    }
   }
 }

@@ -712,7 +712,10 @@
 
 
           <!-- Book -->
-
+          <button mat-stroked-button class="compare-toggle-btn m-2 justify-content-center" (click)="toggleCompare()">
+            <mat-icon>{{ isInCompare ? 'check_circle' : 'compare_arrows' }}</mat-icon>
+            {{ isInCompare ? 'Added to Compare' : 'Add to Compare' }}
+          </button>
           <button
             mat-raised-button
             color="primary"

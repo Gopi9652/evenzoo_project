@@ -55,6 +55,8 @@ import { WorkingHoursManageComponent } from './vendor/components/working-hours-m
 import { PrivacySettingsComponent } from './shared/components/privacy-settings/privacy-settings.component';
 import { DeletionRequestsComponent } from './admin/components/deletion-requests/deletion-requests.component';
 
+import { VendorCompareComponent } from './customer/components/vendor-compare/vendor-compare.component';
+
 
 export const routes: Routes = [
   { path: '', component: SplashComponent },
@@ -89,7 +91,7 @@ export const routes: Routes = [
   { path: 'customer/reviews', component: MyReviewsComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/post/create', component: CreateEventPostComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/my-posts', component: MyEventPostsComponent, canActivate: [authGuard, roleGuard(['customer'])] },
-
+  { path: 'customer/compare', component: VendorCompareComponent, canActivate: [authGuard, roleGuard(['customer'])] },
 
   // Vendor routes
   { path: 'vendor/dashboard', component: VendorDashboardComponent, canActivate: [authGuard, roleGuard(['vendor'])] },

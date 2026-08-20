@@ -16,8 +16,8 @@ from app.schemas.vendor import (
     WorkingHoursCreate
 )
 from app.models.location import City
-
-
+from app.models.review import Review
+from typing import List
 class VendorService_:
 
     # ── GET VENDOR PROFILE ──
@@ -446,5 +446,75 @@ class VendorService_:
         db.delete(document)
         db.commit()
         return {"message": "Document deleted"}
+    def get_compare_data(self, db: Session, vendor_ids: List[int]):
+        """
+        Returns full comparison data for up to 4 vendors in a single call —
+        services, photos, recent reviews, and min/max pricing — so the
+        frontend can render a side-by-side comparison without needing
+        a separate round-trip per vendor.
+        """
+        if len(vendor_ids) < 2:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Select at least 2 vendors to compare"
+            )
 
+        if len(vendor_ids) > 4:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="You can compare up to 4 vendors at a time"
+            )
+
+        vendors = db.query(VendorProfile).filter(
+            VendorProfile.id.in_(vendor_ids),
+            VendorProfile.is_approved == True
+        ).all()
+
+        if len(vendors) != len(set(vendor_ids)):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="One or more selected vendors could not be found"
+            )
+
+        # Preserve the order the customer selected them in, not arbitrary DB order
+        vendor_map = {v.id: v for v in vendors}
+        ordered_vendors = [vendor_map[vid] for vid in vendor_ids if vid in vendor_map]
+
+        results = []
+        for vendor in ordered_vendors:
+            services = db.query(VendorService).filter(
+                VendorService.vendor_id == vendor.id,
+                VendorService.is_active == True
+            ).all()
+
+            photos = db.query(VendorPhoto).filter(
+                VendorPhoto.vendor_id == vendor.id
+            ).order_by(VendorPhoto.sort_order.asc()).limit(6).all()
+
+            cover = next((p for p in photos if p.is_cover), photos[0] if photos else None)
+
+            recent_reviews = db.query(Review).filter(
+                Review.vendor_id == vendor.id
+            ).order_by(Review.created_at.desc()).limit(2).all()
+
+            prices = [float(s.price) for s in services]
+
+            results.append({
+                "id": vendor.id,
+                "business_name": vendor.business_name,
+                "description": vendor.description,
+                "address": vendor.address,
+                "is_approved": vendor.is_approved,
+                "avg_rating": vendor.avg_rating,
+                "total_reviews": vendor.total_reviews,
+                "total_bookings": vendor.total_bookings,
+                "cover_photo_url": cover.photo_url if cover else None,
+                "services": services,
+                "photos": photos,
+                "recent_reviews": recent_reviews,
+                "min_price": min(prices) if prices else None,
+                "max_price": max(prices) if prices else None,
+            })
+
+        return results
 vendor_service = VendorService_()

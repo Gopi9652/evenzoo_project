@@ -338,7 +338,17 @@
       }
 
     }
-
+@if (compareService.count() > 0) {
+  <div class="compare-bar">
+    <span class="compare-count">{{ compareService.count() }} vendor{{ compareService.count() > 1 ? 's' : '' }} selected</span>
+    <div class="compare-bar-actions">
+      <button class="clear-btn" (click)="compareService.clear()">Clear</button>
+      <button class="compare-btn" [disabled]="compareService.count() < 2" (click)="goToCompare()">
+        Compare Now
+      </button>
+    </div>
+  </div>
+}
   </div>
 
 </section>

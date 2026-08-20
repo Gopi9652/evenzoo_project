@@ -1,0 +1,155 @@
+<app-navbar></app-navbar>
+
+<div class="compare-container">
+  <div class="page-header">
+    <a routerLink="/customer/home" class="back-link">← Back to Browse</a>
+    <h1>Compare Vendors</h1>
+  </div>
+
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (errorMessage) {
+    <div class="empty-state">
+      <span class="empty-icon">⚠️</span>
+      <h3>{{ errorMessage }}</h3>
+      <a routerLink="/customer/home" mat-raised-button color="primary">Browse Vendors</a>
+    </div>
+  } @else {
+
+    <div class="compare-scroll">
+      <div class="compare-grid" [style.grid-template-columns]="gridColumns">
+
+        <!-- ROW: Photo + Name + Remove -->
+        <div class="row-label"></div>
+        @for (vendor of vendors; track vendor.id) {
+          <div class="vendor-col-head">
+            <button class="remove-btn" (click)="removeVendor(vendor.id)" title="Remove from comparison">✕</button>
+            <div class="col-photo">
+              @if (vendor.cover_photo_url) {
+                <img [src]="vendor.cover_photo_url" [alt]="vendor.business_name">
+              } @else {
+                <span class="ph-icon">🏪</span>
+              }
+            </div>
+            <h3>{{ vendor.business_name }}</h3>
+            <a [routerLink]="['/customer/vendor', vendor.id]" class="view-profile-link">View Full Profile →</a>
+          </div>
+        }
+
+        <!-- ROW: Rating -->
+        <div class="row-label">Rating</div>
+        @for (vendor of vendors; track vendor.id) {
+          <div class="cell">
+            <div class="stars">
+              @for (star of ratingStars(vendor.avg_rating); track $index) {
+                <mat-icon class="star-icon" [class.filled]="star === 1">star</mat-icon>
+              }
+            </div>
+            <span class="cell-sub">{{ vendor.avg_rating || 0 }} ({{ vendor.total_reviews }} reviews)</span>
+          </div>
+        }
+
+        <!-- ROW: Bookings Completed -->
+        <div class="row-label">Bookings Completed</div>
+        @for (vendor of vendors; track vendor.id) {
+          <div class="cell"><strong>{{ vendor.total_bookings }}</strong></div>
+        }
+
+        <!-- ROW: Price Range -->
+        <div class="row-label">Price Range</div>
+        @for (vendor of vendors; track vendor.id) {
+          <div class="cell">
+            @if (vendor.min_price !== null && vendor.min_price !== undefined) {
+              <strong class="price-range">
+                ₹{{ vendor.min_price | number }}
+                @if (vendor.max_price !== vendor.min_price) {
+                  – ₹{{ vendor.max_price | number }}
+                }
+              </strong>
+            } @else {
+              <span class="cell-sub">No services listed</span>
+            }
+          </div>
+        }
+
+        <!-- ROW: Address -->
+        <div class="row-label">Location</div>
+        @for (vendor of vendors; track vendor.id) {
+          <div class="cell"><span class="cell-sub">{{ vendor.address || 'Not specified' }}</span></div>
+        }
+
+        <!-- ROW: Description -->
+        <div class="row-label">About</div>
+        @for (vendor of vendors; track vendor.id) {
+          <div class="cell"><p class="desc-text">{{ vendor.description || 'No description provided' }}</p></div>
+        }
+
+        <!-- SERVICE PRICE ROWS -->
+        @if (allServiceNames.length > 0) {
+          <div class="section-divider-row">Services & Pricing</div>
+          @for (serviceName of allServiceNames; track serviceName) {
+            <div class="row-label">{{ serviceName }}</div>
+            @for (vendor of vendors; track vendor.id) {
+              <div class="cell">
+                @if (getServicePrice(vendor, serviceName) !== null) {
+                  <span class="price-tag">₹{{ getServicePrice(vendor, serviceName) | number }}</span>
+                } @else {
+                  <span class="not-offered">Not offered</span>
+                }
+              </div>
+            }
+          }
+        }
+
+        <!-- PHOTOS ROW -->
+        <div class="section-divider-row">Photos</div>
+        <div class="row-label"></div>
+        @for (vendor of vendors; track vendor.id) {
+          <div class="cell photos-cell">
+            @if (vendor.photos.length === 0) {
+              <span class="cell-sub">No photos uploaded</span>
+            } @else {
+              <div class="mini-photo-grid">
+                @for (photo of vendor.photos.slice(0, 4); track photo.id) {
+                  <img [src]="photo.photo_url" [alt]="vendor.business_name">
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- REVIEWS ROW -->
+        <div class="section-divider-row">Recent Reviews</div>
+        <div class="row-label"></div>
+        @for (vendor of vendors; track vendor.id) {
+          <div class="cell reviews-cell">
+            @if (vendor.recent_reviews.length === 0) {
+              <span class="cell-sub">No reviews yet</span>
+            } @else {
+              @for (review of vendor.recent_reviews; track review.id) {
+                <div class="mini-review">
+                  <div class="mini-review-rating">⭐ {{ review.overall_rating }}</div>
+                  @if (review.title) {
+                    <strong>{{ review.title }}</strong>
+                  }
+                  <p>{{ review.body }}</p>
+                </div>
+              }
+            }
+          </div>
+        }
+
+        <!-- CTA ROW -->
+        <div class="row-label"></div>
+        @for (vendor of vendors; track vendor.id) {
+          <div class="cell">
+            <a [routerLink]="['/customer/vendor', vendor.id]" mat-raised-button color="primary" class="cta-btn">
+              View & Book
+            </a>
+          </div>
+        }
+
+      </div>
+    </div>
+  }
+</div>

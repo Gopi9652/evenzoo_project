@@ -18,6 +18,9 @@ from app.services.analytics_service import analytics_service
 from app.schemas.analytics import VendorAnalyticsResponse
 from fastapi import UploadFile, File
 from app.utils.cloudinary_client import upload_image
+from typing import List
+from app.schemas.compare import VendorCompareData
+
 router = APIRouter(tags=["Vendors"])
 
 
@@ -36,7 +39,17 @@ def list_vendors(
         db, state_id, city_id, category_id, skip, limit
     )
 
+@router.get("/compare", response_model=List[VendorCompareData])
+def compare_vendors(
+    ids: str = Query(..., description="Comma-separated vendor IDs, e.g. 3,7,12"),
+    db: Session = Depends(get_db)
+):
+    try:
+        vendor_ids = [int(x.strip()) for x in ids.split(",") if x.strip()]
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid vendor IDs format")
 
+    return vendor_service.get_compare_data(db, vendor_ids)
 @router.get("/categories", response_model=List[CategoryResponse])
 def get_categories(db: Session = Depends(get_db)):
     return vendor_service.get_categories(db)
@@ -281,3 +294,7 @@ def get_my_analytics(
 ):
     vendor = vendor_service.get_profile(db, current_user.id)
     return analytics_service.get_vendor_analytics(db, vendor.id)
+
+
+
+    
