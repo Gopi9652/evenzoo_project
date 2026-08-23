@@ -26,7 +26,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:4200",
         "http://10.239.249.79:4200",
-        "https://evenzoo-9bb04.web.app"
+        "https://evenzoo-9bb04.web.app",
+        "https://evenzoo-9bb04--test-tg9hayy4.web.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
