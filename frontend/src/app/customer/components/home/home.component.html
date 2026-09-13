@@ -64,7 +64,6 @@
     <div class="location-filter-row">
 
       <mat-form-field
-        appearance="outline"
         class="location-select">
 
         <mat-label>State</mat-label>
@@ -91,7 +90,6 @@
 
 
       <mat-form-field
-        appearance="outline"
         class="location-select">
 
         <mat-label>City</mat-label>
@@ -106,7 +104,7 @@
 
           @for (city of cities; track city.id) {
 
-            <mat-option [value]="city.id">
+            <mat-option [value]="city.id" >
               {{ city.name }}
             </mat-option>
 

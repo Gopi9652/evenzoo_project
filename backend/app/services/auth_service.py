@@ -100,7 +100,7 @@ class AuthService:
             device_info=device_label,
             ip_address=ip_address,
             last_used_at=datetime.utcnow(),
-            expires_at=datetime.utcnow()
+            expires_at = datetime.utcnow() + timedelta(days=7)
         ))
         db.commit()
 

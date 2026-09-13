@@ -163,6 +163,7 @@ class VendorListResponse(BaseModel):
     description:   Optional[str]    = None
     avg_rating:    Optional[Decimal] = None
     total_reviews: int
+    total_bookings: int
     city_id:       Optional[int]    = None
     is_approved:   bool
     profile_photo_url: Optional[str] = None

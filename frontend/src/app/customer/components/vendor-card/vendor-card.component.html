@@ -103,10 +103,10 @@
         <span>
           {{ vendor.total_bookings || 0 }} bookings
         </span>
-  <label class="compare-toggle" (click)="onCompareToggle($event)">
-    <mat-checkbox [checked]="isSelected" (click)="$event.preventDefault()"></mat-checkbox>
-    <span>Compare</span>
-  </label>
+        <label class="compare-toggle" (click)="onCompareToggle($event)">
+          <mat-checkbox [checked]="isSelected" (click)="$event.preventDefault()"></mat-checkbox>
+          <span>Compare</span>
+        </label>
       </div>
 
       <span class="view-vendor">

@@ -7,7 +7,13 @@ export interface State {
   id: number;
   name: string;
 }
-
+export interface NearestCity {
+  city_id: number;
+  city_name: string;
+  state_id: number;
+  state_name: string;
+  distance_km: number;
+}
 export interface City {
   id: number;
   name: string;
@@ -30,6 +36,12 @@ export class LocationService {
     return this.http.get<City[]>(url);
   }
   getCityById(cityId: number): Observable<City> {
-  return this.http.get<City>(`${this.apiUrl}/cities/${cityId}`);
-}
+    return this.http.get<City>(`${this.apiUrl}/cities/${cityId}`);
+  }
+
+
+// Add this method to the LocationService class:
+findNearestCity(lat: number, lng: number): Observable<NearestCity> {
+    return this.http.get<NearestCity>(`${this.apiUrl}/nearest-city?lat=${lat}&lng=${lng}`);
+  }
 }

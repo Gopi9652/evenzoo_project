@@ -14,7 +14,7 @@ import { VendorProfile, Category } from '../../../core/models/vendor.model';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { CompareService } from '../../../core/services/compare.service';
 import { Router } from '@angular/router';
-
+import { GeolocationService } from '../../../core/services/geolocation.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -43,11 +43,15 @@ export class HomeComponent implements OnInit {
   hasMore = true;
   loadingMore = false;
 
+  detectingLocation = false;
+  locationError = '';
+
   constructor(
     private vendorService: VendorService,
     private locationService: LocationService,
-    public compareService: CompareService,   // ← new, public so template can read it
-    private router: Router  
+    public compareService: CompareService,
+    private router: Router,
+    private geolocationService: GeolocationService   // ← new
   ) {}
 
   ngOnInit() {
@@ -198,5 +202,34 @@ export class HomeComponent implements OnInit {
     }
 
     return 0;
+  }
+
+  useMyLocation() {
+    this.detectingLocation = true;
+    this.locationError = '';
+
+    this.geolocationService.getCurrentPosition().subscribe({
+      next: (coords) => {
+        this.locationService.findNearestCity(coords.latitude, coords.longitude).subscribe({
+          next: (nearest) => {
+            this.detectingLocation = false;
+
+            // Auto-select the matched state and city
+            this.selectedStateId = nearest.state_id;
+            this.loadCities(nearest.state_id);
+            this.selectedCityId = nearest.city_id;
+            this.loadVendors();
+          },
+          error: () => {
+            this.detectingLocation = false;
+            this.locationError = 'Could not match your location to a supported city.';
+          }
+        });
+      },
+      error: (err) => {
+        this.detectingLocation = false;
+        this.locationError = err.message;
+      }
+    });
   }
 }

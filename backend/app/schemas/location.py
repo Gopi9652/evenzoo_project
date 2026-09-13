@@ -16,3 +16,9 @@ class CityResponse(BaseModel):
 
     class Config:
         from_attributes = True
+class NearestCityResponse(BaseModel):
+    city_id: int
+    city_name: str
+    state_id: int
+    state_name: str
+    distance_km: float
