@@ -14,6 +14,7 @@ from app.schemas.vendor import VendorProfileResponse
 from app.schemas.booking import BookingListResponse
 from app.models.booking import EventType
 from app.models.vendor import VendorCategory
+from app.schemas.booking import AdminBookingDetailResponse
 router = APIRouter(tags=["Admin"])
 
 
@@ -46,7 +47,7 @@ def review_vendor(
 ):
     return admin_service.review_vendor(db, vendor_id, data)
 
-
+'''
 # ── BOOKINGS OVERVIEW ──
 @router.get("/bookings", response_model=List[BookingListResponse])
 def get_all_bookings(
@@ -55,7 +56,7 @@ def get_all_bookings(
     db: Session = Depends(get_db)
 ):
     return admin_service.get_all_bookings(db, status)
-
+'''
 
 @router.put("/bookings/{booking_id}/force-cancel")
 def force_cancel_booking(
@@ -173,3 +174,22 @@ def get_vendor_directory(
 ):
     """Full vendor directory with photos for admin browsing."""
     return db.query(VendorProfile).order_by(VendorProfile.business_name).all()
+
+
+
+@router.get("/bookings", response_model=List[AdminBookingDetailResponse])
+def get_all_bookings(
+    status: Optional[str] = Query(None),
+    current_user: User = Depends(get_admin),
+    db: Session = Depends(get_db)
+):
+    return admin_service.get_all_bookings(db, status)
+
+
+@router.get("/bookings/{booking_id}")
+def get_booking_detail(
+    booking_id: int,
+    current_user: User = Depends(get_admin),
+    db: Session = Depends(get_db)
+):
+    return admin_service.get_booking_detail(db, booking_id)

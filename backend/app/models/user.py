@@ -15,16 +15,17 @@ class User(Base):
     is_active     = Column(Boolean, default=True)
     is_verified   = Column(Boolean, default=False)
     profile_photo = Column(String(500))
+    deletion_requested_at = Column(DateTime, nullable=True)
+    deleted_at             = Column(DateTime, nullable=True)
+    pending_email  = Column(String(150), nullable=True)   # ← new
+    pending_phone  = Column(String(15), nullable=True)    # ← new
     created_at    = Column(DateTime, default=datetime.utcnow)
     updated_at    = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    deletion_requested_at = Column(DateTime, nullable=True)   
-    deleted_at             = Column(DateTime, nullable=True) 
     vendor_profile   = relationship("VendorProfile", back_populates="user", uselist=False)
     customer_profile = relationship("CustomerProfile", back_populates="user", uselist=False)
     bookings_made    = relationship("Booking", foreign_keys="Booking.customer_id", back_populates="customer")
     notifications    = relationship("Notification", back_populates="user")
     reviews          = relationship("Review", foreign_keys="Review.customer_id", back_populates="customer")
-
 
 class OTPVerification(Base):
     __tablename__ = "otp_verifications"

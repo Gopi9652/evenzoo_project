@@ -7,7 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../core/services/admin.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-bookings-overview',
   standalone: true,
@@ -23,7 +23,7 @@ export class BookingsOverviewComponent implements OnInit {
   loading = true;
   statusFilter = '';
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService,  private router: Router) {}
 
   ngOnInit() {
     this.loadBookings();
@@ -62,5 +62,8 @@ export class BookingsOverviewComponent implements OnInit {
       cancelled: '#dc2626'
     };
     return colors[status] || '#64748b';
+  }
+  viewDetail(bookingId: number) {
+    this.router.navigate(['/admin/bookings', bookingId]);
   }
 }

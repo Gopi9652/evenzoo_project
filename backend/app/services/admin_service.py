@@ -97,9 +97,36 @@ class AdminService_:
         if status_filter:
             query = query.filter(Booking.status == status_filter)
 
-        return query.order_by(
-            Booking.created_at.desc()
-        ).limit(100).all()
+        bookings = query.order_by(Booking.created_at.desc()).limit(100).all()
+
+        results = []
+        for booking in bookings:
+            customer = db.query(User).filter(User.id == booking.customer_id).first()
+            vendor_profile = db.query(VendorProfile).filter(VendorProfile.id == booking.vendor_id).first()
+            vendor_owner = db.query(User).filter(User.id == vendor_profile.user_id).first() if vendor_profile else None
+
+            results.append({
+                "id": booking.id,
+                "booking_ref": booking.booking_ref,
+                "customer_id": booking.customer_id,
+                "customer_name": customer.name if customer else "Unknown",
+                "customer_email": customer.email if customer else "Unknown",
+                "customer_phone": customer.phone if customer else "Unknown",
+                "vendor_id": booking.vendor_id,
+                "vendor_business_name": vendor_profile.business_name if vendor_profile else "Unknown",
+                "vendor_owner_name": vendor_owner.name if vendor_owner else "Unknown",
+                "vendor_email": vendor_owner.email if vendor_owner else "Unknown",
+                "vendor_phone": vendor_owner.phone if vendor_owner else "Unknown",
+                "event_date": booking.event_date,
+                "event_location": booking.event_location,
+                "status": booking.status,
+                "total_amount": booking.total_amount,
+                "platform_fee": booking.platform_fee,
+                "vendor_amount": booking.vendor_amount,
+                "created_at": booking.created_at,
+            })
+
+        return results
 
 
     # ── PLATFORM STATS DASHBOARD ──
@@ -337,4 +364,62 @@ class AdminService_:
                 query = query.filter(User.is_active == active_only)
 
             return query.order_by(User.created_at.desc()).limit(200).all()
+
+    def get_booking_detail(self, db: Session, booking_id: int):
+        booking = db.query(Booking).filter(Booking.id == booking_id).first()
+        if not booking:
+            raise HTTPException(status_code=404, detail="Booking not found")
+
+        customer = db.query(User).filter(User.id == booking.customer_id).first()
+        vendor_profile = db.query(VendorProfile).filter(VendorProfile.id == booking.vendor_id).first()
+        vendor_owner = db.query(User).filter(User.id == vendor_profile.user_id).first() if vendor_profile else None
+
+        history = db.query(BookingStatusHistory).filter(
+            BookingStatusHistory.booking_id == booking_id
+        ).order_by(BookingStatusHistory.created_at.asc()).all()
+
+        payment = db.query(Payment).filter(Payment.booking_id == booking_id).first()
+
+        return {
+            "booking": {
+                "id": booking.id,
+                "booking_ref": booking.booking_ref,
+                "event_date": booking.event_date,
+                "event_location": booking.event_location,
+                "guests_count": booking.guests_count,
+                "special_requests": booking.special_requests,
+                "status": booking.status,
+                "total_amount": booking.total_amount,
+                "platform_fee": booking.platform_fee,
+                "vendor_amount": booking.vendor_amount,
+                "created_at": booking.created_at,
+            },
+            "customer": {
+                "id": customer.id,
+                "name": customer.name,
+                "email": customer.email,
+                "phone": customer.phone,
+            } if customer else None,
+            "vendor": {
+                "id": vendor_profile.id,
+                "business_name": vendor_profile.business_name,
+                "owner_name": vendor_owner.name if vendor_owner else None,
+                "email": vendor_owner.email if vendor_owner else None,
+                "phone": vendor_owner.phone if vendor_owner else None,
+            } if vendor_profile else None,
+            "payment": {
+                "status": payment.status,
+                "amount": payment.amount,
+                "paid_at": payment.paid_at,
+            } if payment else None,
+            "history": [
+                {
+                    "old_status": h.old_status,
+                    "new_status": h.new_status,
+                    "reason": h.reason,
+                    "created_at": h.created_at,
+                }
+                for h in history
+            ]
+        }
 admin_service = AdminService_()

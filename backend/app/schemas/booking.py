@@ -95,3 +95,25 @@ class StatusHistoryResponse(BaseModel):
 
     class Config:
         from_attributes = True
+class AdminBookingDetailResponse(BaseModel):
+    id:                  int
+    booking_ref:         str
+    customer_id:         int
+    customer_name:       str
+    customer_email:      str
+    customer_phone:      str
+    vendor_id:           int
+    vendor_business_name: str
+    vendor_owner_name:   str
+    vendor_email:        str
+    vendor_phone:        str
+    event_date:          date
+    event_location:      str
+    status:              str
+    total_amount:        Decimal
+    platform_fee:        Optional[Decimal] = None
+    vendor_amount:       Optional[Decimal] = None
+    created_at:          datetime
+
+    class Config:
+        from_attributes = True

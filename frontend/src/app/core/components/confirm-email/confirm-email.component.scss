@@ -1,0 +1,32 @@
+.confirm-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a2e;
+  padding: 1rem;
+}
+
+.confirm-card {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+
+  .icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
+
+  h2 { font-size: 1.3rem; color: #1a1a2e; margin: 0 0 0.75rem; }
+  p { color: #64748b; font-size: 0.9rem; line-height: 1.6; margin: 0 0 1.25rem; }
+}
+
+.cta-link {
+  display: inline-block;
+  background: #e8650a;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+}

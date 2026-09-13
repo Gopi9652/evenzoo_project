@@ -1,0 +1,18 @@
+<div class="confirm-container">
+  <mat-card class="confirm-card">
+    @if (status === 'loading') {
+      <mat-spinner diameter="36"></mat-spinner>
+      <p>Confirming your email change...</p>
+    } @else if (status === 'success') {
+      <span class="icon success">✅</span>
+      <h2>Email Updated</h2>
+      <p>{{ message }}</p>
+      <a routerLink="/login" class="cta-link">Go to Login</a>
+    } @else {
+      <span class="icon error">⚠️</span>
+      <h2>Confirmation Failed</h2>
+      <p>{{ message }}</p>
+      <a routerLink="/profile" class="cta-link">Back to Profile</a>
+    }
+  </mat-card>
+</div>

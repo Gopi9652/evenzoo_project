@@ -5,6 +5,7 @@
 
   @if (loading) {
 
+    <!-- LOADING -->
     <div class="loading-container">
       <mat-spinner diameter="40"></mat-spinner>
       <p>Loading profile...</p>
@@ -14,15 +15,20 @@
 
     <div class="profile-wrapper">
 
-      <!-- PROFILE HEADER -->
+      <!-- =====================================================
+           PROFILE HEADER
+      ====================================================== -->
       <section class="profile-card">
 
+        <!-- COVER -->
         <div class="profile-cover">
           <div class="cover-glow glow-one"></div>
           <div class="cover-glow glow-two"></div>
         </div>
 
-        <!-- AVATAR -->
+        <!-- ===================================================
+             AVATAR
+        ==================================================== -->
         <div class="avatar-section">
 
           <div class="avatar-wrapper">
@@ -74,18 +80,23 @@
 
         </div>
 
-        <!-- NAME -->
+
+        <!-- ===================================================
+             PROFILE NAME / ROLE / VERIFICATION
+        ==================================================== -->
         <div class="profile-heading">
 
           <h1>{{ user.name }}</h1>
 
           <div class="role-row">
 
+            <!-- ROLE -->
             <span class="role-tag">
               <mat-icon>person</mat-icon>
               {{ user.role | titlecase }}
             </span>
 
+            <!-- VERIFICATION -->
             @if (user.is_verified) {
 
               <span class="verified-tag">
@@ -106,10 +117,34 @@
 
         </div>
 
-        <!-- PROFILE INFORMATION -->
+
+        <!-- ===================================================
+             SUCCESS / ERROR MESSAGES
+        ==================================================== -->
+        @if (successMessage) {
+
+          <div class="alert-success">
+            {{ successMessage }}
+          </div>
+
+        }
+
+        @if (errorMessage) {
+
+          <div class="alert-error">
+            {{ errorMessage }}
+          </div>
+
+        }
+
+
+        <!-- ===================================================
+             PERSONAL INFORMATION
+        ==================================================== -->
         <div class="profile-content">
 
           <div class="section-title">
+
             <div class="section-icon">
               <mat-icon>account_circle</mat-icon>
             </div>
@@ -118,8 +153,11 @@
               <h3>Personal Information</h3>
               <p>Your account details</p>
             </div>
+
           </div>
 
+
+          <!-- INFORMATION GRID -->
           <div class="info-grid">
 
             <!-- EMAIL -->
@@ -130,13 +168,55 @@
               </div>
 
               <div class="info-text">
-                <span class="info-label">Email Address</span>
+
+                <span class="info-label">
+                  Email Address
+                </span>
+
                 <span class="info-value">
                   {{ user.email }}
                 </span>
+
+                @if (pendingEmail) {
+
+                  <span class="pending-tag">
+                    Pending confirmation: {{ pendingEmail }}
+                  </span>
+
+                }
+
               </div>
 
+              <!-- EMAIL ACTION -->
+              @if (!showEmailForm && !pendingEmail) {
+
+                <button
+                  mat-stroked-button
+                  class="change-btn"
+                  (click)="showEmailForm = true">
+
+                  Change
+
+                </button>
+
+              }
+
+              @if (pendingEmail) {
+
+                <button
+                  mat-button
+                  color="warn"
+                  class="change-btn"
+                  (click)="cancelEmailChange()">
+
+                  Cancel
+
+                </button>
+
+              }
+
             </div>
+
 
             <!-- PHONE -->
             <div class="info-card">
@@ -146,13 +226,55 @@
               </div>
 
               <div class="info-text">
-                <span class="info-label">Phone Number</span>
+
+                <span class="info-label">
+                  Phone Number
+                </span>
+
                 <span class="info-value">
                   {{ user.phone || 'Not provided' }}
                 </span>
+
+                @if (pendingPhone) {
+
+                  <span class="pending-tag">
+                    Pending: {{ pendingPhone }}
+                  </span>
+
+                }
+
               </div>
 
+              <!-- PHONE ACTION -->
+              @if (!showPhoneForm && !pendingPhone) {
+
+                <button
+                  mat-stroked-button
+                  class="change-btn"
+                  (click)="showPhoneForm = true">
+
+                  Change
+
+                </button>
+
+              }
+
+              @if (pendingPhone) {
+
+                <button
+                  mat-button
+                  color="warn"
+                  class="change-btn"
+                  (click)="cancelPhoneChange()">
+
+                  Cancel
+
+                </button>
+
+              }
+
             </div>
+
 
             <!-- ACCOUNT STATUS -->
             <div class="info-card">
@@ -163,7 +285,10 @@
                 [class.warning-icon]="!user.is_verified">
 
                 <mat-icon>
-                  {{ user.is_verified ? 'verified' : 'error_outline' }}
+                  {{ user.is_verified
+                    ? 'verified'
+                    : 'error_outline'
+                  }}
                 </mat-icon>
 
               </div>
@@ -190,6 +315,7 @@
 
             </div>
 
+
             <!-- ROLE -->
             <div class="info-card">
 
@@ -215,7 +341,320 @@
 
         </div>
 
-        <!-- SECURITY / STATUS -->
+
+        <!-- ===================================================
+             EMAIL CHANGE FORM
+        ==================================================== -->
+        @if (showEmailForm) {
+
+          <div class="settings-card">
+
+            <div class="settings-header">
+
+              <div class="settings-icon">
+                <mat-icon>email</mat-icon>
+              </div>
+
+              <div>
+                <h3>Change Email Address</h3>
+                <p>Update your email securely</p>
+              </div>
+
+            </div>
+
+
+            <form
+              [formGroup]="emailForm"
+              (ngSubmit)="submitEmailChange()"
+              class="inline-form">
+
+              <!-- NEW EMAIL -->
+              <mat-form-field
+                appearance="outline"
+                class="full-width">
+
+                <mat-label>
+                  New Email
+                </mat-label>
+
+                <input
+                  matInput
+                  type="email"
+                  formControlName="new_email">
+
+              </mat-form-field>
+
+
+              <!-- CURRENT PASSWORD -->
+              <mat-form-field
+                appearance="outline"
+                class="full-width">
+
+                <mat-label>
+                  Current Password
+                </mat-label>
+
+                <input
+                  matInput
+                  type="password"
+                  formControlName="current_password">
+
+              </mat-form-field>
+
+
+              <!-- ACTIONS -->
+              <div class="form-actions">
+
+                <button
+                  mat-button
+                  type="button"
+                  (click)="showEmailForm = false">
+
+                  Cancel
+
+                </button>
+
+                <button
+                  mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="emailSubmitting">
+
+                  {{
+                    emailSubmitting
+                      ? 'Sending...'
+                      : 'Send Confirmation Link'
+                  }}
+
+                </button>
+
+              </div>
+
+            </form>
+
+
+            <!-- PENDING EMAIL MESSAGE -->
+            @if (pendingEmail) {
+
+              <p class="pending-note">
+
+                We sent a confirmation link to
+                <strong>{{ pendingEmail }}</strong>.
+
+                Your email won't change until you click it.
+                Check your inbox (and spam folder).
+
+              </p>
+
+            }
+
+          </div>
+
+        }
+
+
+        <!-- ===================================================
+             PHONE CHANGE FORM
+        ==================================================== -->
+        @if (showPhoneForm) {
+
+          <div class="settings-card">
+
+            <div class="settings-header">
+
+              <div class="settings-icon">
+                <mat-icon>phone</mat-icon>
+              </div>
+
+              <div>
+                <h3>Change Phone Number</h3>
+                <p>Update your phone number securely</p>
+              </div>
+
+            </div>
+
+
+            <form
+              [formGroup]="phoneForm"
+              (ngSubmit)="submitPhoneChange()"
+              class="inline-form">
+
+              <!-- NEW PHONE -->
+              <mat-form-field
+                appearance="outline"
+                class="full-width">
+
+                <mat-label>
+                  New Phone Number
+                </mat-label>
+
+                <input
+                  matInput
+                  formControlName="new_phone"
+                  maxlength="10"
+                  placeholder="9876543210">
+
+              </mat-form-field>
+
+
+              <!-- CURRENT PASSWORD -->
+              <mat-form-field
+                appearance="outline"
+                class="full-width">
+
+                <mat-label>
+                  Current Password
+                </mat-label>
+
+                <input
+                  matInput
+                  type="password"
+                  formControlName="current_password">
+
+              </mat-form-field>
+
+
+              <!-- ACTIONS -->
+              <div class="form-actions">
+
+                <button
+                  mat-button
+                  type="button"
+                  (click)="showPhoneForm = false">
+
+                  Cancel
+
+                </button>
+
+                <button
+                  mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="phoneSubmitting">
+
+                  {{
+                    phoneSubmitting
+                      ? 'Sending OTP...'
+                      : 'Send OTP'
+                  }}
+
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        }
+
+
+        <!-- ===================================================
+             PHONE OTP FORM
+        ==================================================== -->
+        @if (showPhoneOtpForm) {
+
+          <div class="settings-card">
+
+            <div class="settings-header">
+
+              <div class="settings-icon">
+                <mat-icon>lock</mat-icon>
+              </div>
+
+              <div>
+                <h3>Verify Phone Number</h3>
+                <p>Enter the OTP sent to your new number</p>
+              </div>
+
+            </div>
+
+
+            <form
+              [formGroup]="phoneOtpForm"
+              (ngSubmit)="submitPhoneOtp()"
+              class="inline-form">
+
+              <!-- OTP INSTRUCTION -->
+              <p class="otp-instruction">
+
+                Enter the 6-digit code sent to
+                <strong>{{ pendingPhone }}</strong>
+
+              </p>
+
+
+              <!-- OTP -->
+              <mat-form-field
+                appearance="outline"
+                class="full-width">
+
+                <mat-label>
+                  OTP Code
+                </mat-label>
+
+                <input
+                  matInput
+                  formControlName="otp_code"
+                  maxlength="6"
+                  placeholder="123456">
+
+              </mat-form-field>
+
+
+              <!-- OTP ACTIONS -->
+              <div class="form-actions">
+
+                <button
+                  mat-button
+                  type="button"
+                  (click)="resendPhoneOtp()">
+
+                  Resend OTP
+
+                </button>
+
+                <button
+                  mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="otpSubmitting">
+
+                  {{
+                    otpSubmitting
+                      ? 'Verifying...'
+                      : 'Verify & Update'
+                  }}
+
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        }
+
+
+        <!-- ===================================================
+             PENDING PHONE MESSAGE
+        ==================================================== -->
+        @if (pendingPhone && !showPhoneOtpForm) {
+
+          <div class="pending-note">
+
+            A verification OTP has been sent to
+            <strong>{{ pendingPhone }}</strong>.
+
+          </div>
+
+        }
+
+
+        <!-- ===================================================
+             SECURITY FOOTER
+        ==================================================== -->
         <div class="account-footer">
 
           <div class="security-info">
@@ -225,10 +664,15 @@
             </div>
 
             <div>
-              <strong>Your account is secure</strong>
+
+              <strong>
+                Your account is secure
+              </strong>
+
               <p>
                 Keep your profile information up to date.
               </p>
+
             </div>
 
           </div>
@@ -239,15 +683,21 @@
 
     </div>
 
+
   } @else {
 
+    <!-- =====================================================
+         PROFILE NOT FOUND
+    ====================================================== -->
     <div class="error-container">
 
       <div class="error-icon">
         <mat-icon>person_off</mat-icon>
       </div>
 
-      <h2>Profile Not Found</h2>
+      <h2>
+        Profile Not Found
+      </h2>
 
       <p>
         We couldn't load your profile information.

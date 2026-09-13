@@ -47,11 +47,15 @@ export class AdminService {
     });
   }
 
-  getAllBookings(status?: string): Observable<any[]> {
-    let url = `${this.apiUrl}/bookings`;
-    if (status) url += `?status=${status}`;
-    return this.http.get<any[]>(url);
-  }
+ getAllBookings(status?: string): Observable<any[]> {
+  let url = `${this.apiUrl}/bookings`;
+  if (status) url += `?status=${status}`;
+  return this.http.get<any[]>(url);
+}
+
+getBookingDetail(bookingId: number): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/bookings/${bookingId}`);
+}
 
   forceCancelBooking(bookingId: number, reason: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/bookings/${bookingId}/force-cancel?reason=${encodeURIComponent(reason)}`, {});

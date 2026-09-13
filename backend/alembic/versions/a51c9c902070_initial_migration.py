@@ -1,8 +1,8 @@
-"""create_all_tables
+"""initial migration
 
-Revision ID: 97ad0412325e
+Revision ID: a51c9c902070
 Revises: 
-Create Date: 2026-06-30 23:02:26.855949
+Create Date: 2026-09-13 13:29:40.027692
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '97ad0412325e'
+revision: str = 'a51c9c902070'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -61,6 +61,9 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('token', sa.Text(), nullable=False),
+    sa.Column('device_info', sa.String(length=255), nullable=True),
+    sa.Column('ip_address', sa.String(length=45), nullable=True),
+    sa.Column('last_used_at', sa.DateTime(), nullable=True),
     sa.Column('expires_at', sa.DateTime(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
@@ -82,6 +85,10 @@ def upgrade() -> None:
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.Column('is_verified', sa.Boolean(), nullable=True),
     sa.Column('profile_photo', sa.String(length=500), nullable=True),
+    sa.Column('deletion_requested_at', sa.DateTime(), nullable=True),
+    sa.Column('deleted_at', sa.DateTime(), nullable=True),
+    sa.Column('pending_email', sa.String(length=150), nullable=True),
+    sa.Column('pending_phone', sa.String(length=15), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
@@ -104,6 +111,30 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['state_id'], ['states.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('data_deletion_requests',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user_email', sa.String(length=150), nullable=False),
+    sa.Column('reason', sa.Text(), nullable=True),
+    sa.Column('status', sa.String(length=20), nullable=True),
+    sa.Column('requested_at', sa.DateTime(), nullable=True),
+    sa.Column('processed_at', sa.DateTime(), nullable=True),
+    sa.Column('processed_by', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['processed_by'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_data_deletion_requests_id'), 'data_deletion_requests', ['id'], unique=False)
+    op.create_table('data_export_requests',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.String(length=20), nullable=True),
+    sa.Column('requested_at', sa.DateTime(), nullable=True),
+    sa.Column('processed_at', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_data_export_requests_id'), 'data_export_requests', ['id'], unique=False)
     op.create_table('email_logs',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
@@ -138,6 +169,27 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('user_id')
     )
+    op.create_table('event_posts',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('customer_id', sa.Integer(), nullable=False),
+    sa.Column('title', sa.String(length=200), nullable=False),
+    sa.Column('description', sa.Text(), nullable=False),
+    sa.Column('event_location', sa.String(length=255), nullable=False),
+    sa.Column('state_id', sa.Integer(), nullable=True),
+    sa.Column('city_id', sa.Integer(), nullable=True),
+    sa.Column('budget_amount', sa.Numeric(precision=10, scale=2), nullable=True),
+    sa.Column('event_date', sa.DateTime(), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('category_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['category_id'], ['vendor_categories.id'], ),
+    sa.ForeignKeyConstraint(['city_id'], ['cities.id'], ),
+    sa.ForeignKeyConstraint(['customer_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['state_id'], ['states.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_event_posts_id'), 'event_posts', ['id'], unique=False)
     op.create_table('vendor_profiles',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
@@ -145,6 +197,7 @@ def upgrade() -> None:
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('city_id', sa.Integer(), nullable=True),
     sa.Column('address', sa.Text(), nullable=True),
+    sa.Column('profile_photo_url', sa.String(length=500), nullable=True),
     sa.Column('gstin', sa.String(length=20), nullable=True),
     sa.Column('pan_number', sa.String(length=20), nullable=True),
     sa.Column('bank_account', sa.String(length=30), nullable=True),
@@ -159,6 +212,7 @@ def upgrade() -> None:
     sa.Column('rank_score', sa.Numeric(precision=5, scale=2), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('show_whatsapp', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['city_id'], ['cities.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
@@ -171,6 +225,7 @@ def upgrade() -> None:
     sa.Column('customer_id', sa.Integer(), nullable=True),
     sa.Column('vendor_id', sa.Integer(), nullable=True),
     sa.Column('event_type_id', sa.Integer(), nullable=True),
+    sa.Column('custom_event_type', sa.String(length=100), nullable=True),
     sa.Column('event_date', sa.Date(), nullable=False),
     sa.Column('event_time', sa.Time(), nullable=True),
     sa.Column('event_location', sa.Text(), nullable=False),
@@ -212,7 +267,8 @@ def upgrade() -> None:
     sa.Column('is_available', sa.Boolean(), nullable=True),
     sa.Column('reason', sa.String(length=200), nullable=True),
     sa.ForeignKeyConstraint(['vendor_id'], ['vendor_profiles.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('vendor_id', 'date', name='uq_vendor_availability_date')
     )
     op.create_table('vendor_category_map',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -265,7 +321,8 @@ def upgrade() -> None:
     sa.Column('close_time', sa.Time(), nullable=True),
     sa.Column('is_off_day', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['vendor_id'], ['vendor_profiles.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('vendor_id', 'day_of_week', name='uq_vendor_working_hours_day')
     )
     op.create_table('booking_services',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -290,6 +347,20 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['changed_by'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('messages',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('booking_id', sa.Integer(), nullable=True),
+    sa.Column('sender_id', sa.Integer(), nullable=False),
+    sa.Column('receiver_id', sa.Integer(), nullable=False),
+    sa.Column('content', sa.Text(), nullable=False),
+    sa.Column('is_read', sa.Boolean(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['booking_id'], ['bookings.id'], ),
+    sa.ForeignKeyConstraint(['receiver_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['sender_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_messages_id'), 'messages', ['id'], unique=False)
     op.create_table('payments',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('booking_id', sa.Integer(), nullable=True),
@@ -370,6 +441,8 @@ def downgrade() -> None:
     op.drop_table('reviews')
     op.drop_index(op.f('ix_payments_id'), table_name='payments')
     op.drop_table('payments')
+    op.drop_index(op.f('ix_messages_id'), table_name='messages')
+    op.drop_table('messages')
     op.drop_table('booking_status_history')
     op.drop_table('booking_services')
     op.drop_table('vendor_working_hours')
@@ -383,9 +456,15 @@ def downgrade() -> None:
     op.drop_table('bookings')
     op.drop_index(op.f('ix_vendor_profiles_id'), table_name='vendor_profiles')
     op.drop_table('vendor_profiles')
+    op.drop_index(op.f('ix_event_posts_id'), table_name='event_posts')
+    op.drop_table('event_posts')
     op.drop_table('customer_profiles')
     op.drop_table('notifications')
     op.drop_table('email_logs')
+    op.drop_index(op.f('ix_data_export_requests_id'), table_name='data_export_requests')
+    op.drop_table('data_export_requests')
+    op.drop_index(op.f('ix_data_deletion_requests_id'), table_name='data_deletion_requests')
+    op.drop_table('data_deletion_requests')
     op.drop_table('cities')
     op.drop_table('vendor_categories')
     op.drop_index(op.f('ix_users_id'), table_name='users')

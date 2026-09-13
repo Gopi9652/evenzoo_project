@@ -9,7 +9,7 @@ from app.routers import event_post
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from app.utils.rate_limiter import limiter
-from app.routers import privacy
+from app.routers import privacy, account
 
 app = FastAPI(
     title="Evenzoo API",
@@ -24,6 +24,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:4200",
+                   "http://localhost:65491",
                     "http://10.239.249.79:4200"],
     allow_credentials=True,
     allow_methods=["*"],
@@ -45,7 +46,9 @@ app.include_router(wishlist.router, prefix="/api/wishlist")
 app.include_router(message.router, prefix="/api/messages")
 app.include_router(event_post.router, prefix="/api/event-posts")
 app.include_router(privacy.router, prefix="/api/privacy")
+app.include_router(account.router, prefix="/api/account")
 Base.metadata.create_all(bind=engine)
+
 
 @app.get("/")
 def root():

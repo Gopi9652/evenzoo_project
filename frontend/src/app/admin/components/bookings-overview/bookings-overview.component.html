@@ -17,23 +17,31 @@
   </div>
 
   @if (loading) {
-    <div class="loading-container">
-      <mat-spinner diameter="40"></mat-spinner>
-    </div>
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
   } @else if (bookings.length === 0) {
     <p class="empty-text">No bookings found</p>
   } @else {
     <div class="booking-table">
       <div class="table-header">
         <span>Reference</span>
+        <span>Customer</span>
+        <span>Vendor</span>
         <span>Date</span>
         <span>Amount</span>
         <span>Status</span>
-        <span>Action</span>
+        <span></span>
       </div>
       @for (booking of bookings; track booking.id) {
-        <div class="table-row">
+        <div class="table-row" (click)="viewDetail(booking.id)">
           <span class="ref">{{ booking.booking_ref }}</span>
+          <div class="party-cell">
+            <span class="party-name">{{ booking.customer_name }}</span>
+            <span class="party-sub">{{ booking.customer_phone }}</span>
+          </div>
+          <div class="party-cell">
+            <span class="party-name">{{ booking.vendor_business_name }}</span>
+            <span class="party-sub">{{ booking.vendor_owner_name }} · {{ booking.vendor_phone }}</span>
+          </div>
           <span>{{ booking.event_date | date:'mediumDate' }}</span>
           <span class="amount">₹{{ booking.total_amount | number }}</span>
           <span class="status-tag" [style.background]="statusColor(booking.status) + '15'"
@@ -42,7 +50,7 @@
           </span>
           <span>
             @if (booking.status === 'pending' || booking.status === 'confirmed') {
-              <button mat-button color="warn" (click)="forceCancel(booking)">
+              <button mat-button color="warn" (click)="$event.stopPropagation(); forceCancel(booking)">
                 Force Cancel
               </button>
             }

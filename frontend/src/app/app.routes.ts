@@ -57,6 +57,10 @@ import { DeletionRequestsComponent } from './admin/components/deletion-requests/
 
 import { VendorCompareComponent } from './customer/components/vendor-compare/vendor-compare.component';
 
+import { AdminBookingDetailComponent } from './admin/components/booking-detail/booking-detail.component';
+import { ConfirmEmailComponent } from './core/components/confirm-email/confirm-email.component';
+
+
 
 export const routes: Routes = [
   { path: '', component: SplashComponent },
@@ -81,6 +85,7 @@ export const routes: Routes = [
   { path: 'settings/privacy', component: PrivacySettingsComponent, canActivate: [authGuard] },
 
   { path: 'admin/deletion-requests', component: DeletionRequestsComponent, canActivate: [authGuard, roleGuard(['admin'])] },
+  { path: 'settings/confirm-email', component: ConfirmEmailComponent },
 
   // Customer routes
   { path: 'customer/home', component: HomeComponent, canActivate: [authGuard, roleGuard(['customer'])] },
@@ -110,4 +115,5 @@ export const routes: Routes = [
   { path: 'admin/vendors', component: VendorApprovalsComponent, canActivate: [authGuard, roleGuard(['admin'])] },
   { path: 'admin/bookings', component: BookingsOverviewComponent, canActivate: [authGuard, roleGuard(['admin'])] },
   { path: 'admin/users', component: UsersManageComponent, canActivate: [authGuard, roleGuard(['admin'])] },
+  { path: 'admin/bookings/:id', component: AdminBookingDetailComponent, canActivate: [authGuard, roleGuard(['admin'])] },
 ];

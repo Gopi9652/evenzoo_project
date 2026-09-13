@@ -8,6 +8,7 @@
   min-height: 100vh;
 }
 
+
 /* =========================================================
    PAGE
    ========================================================= */
@@ -32,6 +33,7 @@
   color: #1f2937;
 }
 
+
 /* =========================================================
    CENTER CONTAINER
    ========================================================= */
@@ -41,6 +43,7 @@
   max-width: 900px;
   margin: 0 auto;
 }
+
 
 /* =========================================================
    PROFILE CARD
@@ -59,6 +62,7 @@
     0 20px 55px rgba(15, 23, 42, 0.10),
     0 5px 18px rgba(15, 23, 42, 0.05);
 }
+
 
 /* =========================================================
    COVER
@@ -98,6 +102,11 @@
   pointer-events: none;
 }
 
+
+/* =========================================================
+   COVER GLOW
+   ========================================================= */
+
 .glow-one {
   position: absolute;
 
@@ -129,6 +138,7 @@
 
   filter: blur(3px);
 }
+
 
 /* =========================================================
    AVATAR
@@ -166,7 +176,10 @@
     0 10px 30px rgba(15, 23, 42, 0.20);
 }
 
-/* PHOTO */
+
+/* =========================================================
+   PROFILE PHOTO
+   ========================================================= */
 
 .avatar-img {
   display: block;
@@ -176,7 +189,10 @@
   background: #f3f4f6;
 }
 
-/* PLACEHOLDER */
+
+/* =========================================================
+   AVATAR PLACEHOLDER
+   ========================================================= */
 
 .avatar-placeholder {
   display: flex;
@@ -199,7 +215,10 @@
   text-transform: uppercase;
 }
 
-/* CAMERA BUTTON */
+
+/* =========================================================
+   CAMERA BUTTON
+   ========================================================= */
 
 .upload-btn {
   position: absolute;
@@ -217,7 +236,6 @@
   border-radius: 50%;
 
   background: #ffffff;
-
   color: #6d28a8;
 
   border: 3px solid #ffffff;
@@ -237,12 +255,12 @@
   transform: scale(1.08);
 
   background: #8a2be2;
-
   color: #ffffff;
 }
 
 .upload-btn mat-icon {
   font-size: 21px;
+
   width: 21px;
   height: 21px;
 }
@@ -250,6 +268,11 @@
 .upload-btn.uploading {
   cursor: wait;
 }
+
+
+/* =========================================================
+   PHOTO HINT
+   ========================================================= */
 
 .photo-hint {
   margin-top: 10px;
@@ -259,6 +282,7 @@
   font-size: 12px;
   font-weight: 500;
 }
+
 
 /* =========================================================
    PROFILE HEADING
@@ -281,6 +305,11 @@
   letter-spacing: -0.5px;
 }
 
+
+/* =========================================================
+   ROLE ROW
+   ========================================================= */
+
 .role-row {
   display: flex;
 
@@ -292,8 +321,9 @@
   gap: 9px;
 }
 
+
 /* =========================================================
-   ROLE TAG
+   ROLE / VERIFICATION TAGS
    ========================================================= */
 
 .role-tag,
@@ -302,6 +332,7 @@
   display: inline-flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 6px;
 
@@ -346,13 +377,51 @@
   border: 1px solid #fde68a;
 }
 
+
 /* =========================================================
-   CONTENT
+   SUCCESS / ERROR ALERTS
+   ========================================================= */
+
+.alert-success,
+.alert-error {
+  margin: 0 40px 20px;
+
+  padding: 13px 16px;
+
+  border-radius: 12px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+}
+
+.alert-success {
+  color: #047857;
+
+  background: #ecfdf5;
+
+  border: 1px solid #a7f3d0;
+}
+
+.alert-error {
+  color: #b91c1c;
+
+  background: #fef2f2;
+
+  border: 1px solid #fecaca;
+}
+
+
+/* =========================================================
+   PROFILE CONTENT
    ========================================================= */
 
 .profile-content {
   padding: 0 40px 35px;
 }
+
 
 /* =========================================================
    SECTION TITLE
@@ -375,6 +444,7 @@
   height: 43px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -406,6 +476,7 @@
   font-size: 13px;
 }
 
+
 /* =========================================================
    INFO GRID
    ========================================================= */
@@ -413,12 +484,14 @@
 .info-grid {
   display: grid;
 
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
 
   gap: 15px;
 
   padding-top: 22px;
 }
+
 
 /* =========================================================
    INFO CARD
@@ -458,6 +531,7 @@
     0 8px 22px rgba(15, 23, 42, 0.07);
 }
 
+
 /* =========================================================
    INFO ICON
    ========================================================= */
@@ -469,6 +543,7 @@
   height: 43px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -481,28 +556,34 @@
 
 .email-icon {
   color: #6d28d9;
+
   background: #ede9fe;
 }
 
 .phone-icon {
   color: #0369a1;
+
   background: #e0f2fe;
 }
 
 .role-icon {
   color: #92400e;
+
   background: #fef3c7;
 }
 
 .verified-icon {
   color: #047857;
+
   background: #d1fae5;
 }
 
 .warning-icon {
   color: #b45309;
+
   background: #fef3c7;
 }
+
 
 /* =========================================================
    INFO TEXT
@@ -514,6 +595,8 @@
   flex-direction: column;
 
   min-width: 0;
+
+  flex: 1;
 }
 
 .info-label {
@@ -549,6 +632,242 @@
 .warning-text {
   color: #b45309;
 }
+
+
+/* =========================================================
+   CHANGE BUTTON
+   ========================================================= */
+
+.change-btn {
+  flex: 0 0 auto;
+
+  min-width: 75px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   SETTINGS CARD
+   ========================================================= */
+
+.settings-card {
+  margin: 0 40px 22px;
+
+  padding: 22px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 5px 18px rgba(15, 23, 42, 0.05);
+
+  animation: settingsAppear 0.25s ease;
+}
+
+@keyframes settingsAppear {
+  from {
+    opacity: 0;
+
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   SETTINGS HEADER
+   ========================================================= */
+
+.settings-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  margin-bottom: 20px;
+
+  padding-bottom: 16px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.settings-icon {
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 auto;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #f3e8ff;
+
+  color: #7e22ce;
+}
+
+.settings-icon mat-icon {
+  font-size: 21px;
+}
+
+.settings-header h3 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.settings-header p {
+  margin: 3px 0 0;
+
+  color: #6b7280;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   INLINE FORM
+   ========================================================= */
+
+.inline-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+/* =========================================================
+   FULL WIDTH
+   ========================================================= */
+
+.full-width {
+  width: 100%;
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+
+.form-actions {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 8px;
+}
+
+.form-actions button {
+  min-height: 40px;
+}
+
+
+/* =========================================================
+   PENDING TAG
+   ========================================================= */
+
+.pending-tag {
+  display: inline-block;
+
+  width: fit-content;
+
+  max-width: 100%;
+
+  margin-top: 6px;
+
+  padding: 4px 8px;
+
+  overflow: hidden;
+
+  color: #92400e;
+
+  background: #fffbeb;
+
+  border: 1px solid #fde68a;
+
+  border-radius: 6px;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   PENDING NOTE
+   ========================================================= */
+
+.pending-note {
+  margin: 15px 0 0;
+
+  padding: 12px 14px;
+
+  color: #92400e;
+
+  background: #fffbeb;
+
+  border: 1px solid #fde68a;
+
+  border-radius: 10px;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+.pending-note strong {
+  color: #78350f;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   OTP INSTRUCTION
+   ========================================================= */
+
+.otp-instruction {
+  margin: 0 0 8px;
+
+  color: #6b7280;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+.otp-instruction strong {
+  color: #111827;
+
+  font-weight: 700;
+}
+
 
 /* =========================================================
    ACCOUNT FOOTER
@@ -586,6 +905,7 @@
   height: 42px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -595,7 +915,8 @@
 
   color: #7e22ce;
 
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.07);
+  box-shadow:
+    0 3px 10px rgba(15, 23, 42, 0.07);
 }
 
 .security-icon mat-icon {
@@ -618,6 +939,7 @@
   font-size: 12px;
 }
 
+
 /* =========================================================
    LOADING
    ========================================================= */
@@ -626,6 +948,7 @@
   min-height: 60vh;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
@@ -643,6 +966,7 @@
 
   font-size: 14px;
 }
+
 
 /* =========================================================
    ERROR
@@ -674,6 +998,7 @@
   margin: 0 auto 18px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -707,8 +1032,19 @@
   font-size: 14px;
 }
 
+
 /* =========================================================
-   RESPONSIVE
+   MATERIAL FORM FIELD
+   ========================================================= */
+
+.settings-card
+.mat-mdc-form-field {
+  margin-bottom: 2px;
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
    ========================================================= */
 
 @media (max-width: 700px) {
@@ -756,7 +1092,22 @@
     margin: 0 20px 25px;
   }
 
+  .settings-card {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .alert-success,
+  .alert-error {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 }
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
 
 @media (max-width: 430px) {
 
@@ -802,6 +1153,19 @@
     margin-right: 15px;
   }
 
+  .settings-card {
+    margin-left: 15px;
+    margin-right: 15px;
+
+    padding: 17px;
+  }
+
+  .alert-success,
+  .alert-error {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
   .info-card {
     padding: 15px;
   }
@@ -810,4 +1174,28 @@
     font-size: 13px;
   }
 
+  .change-btn {
+    min-width: 65px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+
+    align-items: stretch;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .settings-header {
+    align-items: flex-start;
+  }
+
+  .pending-note {
+    font-size: 11px;
+  }
 }

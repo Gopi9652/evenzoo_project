@@ -1,0 +1,91 @@
+<app-navbar></app-navbar>
+
+<div class="detail-container">
+  <button mat-button class="back-btn" (click)="router.navigate(['/admin/bookings'])">
+    <mat-icon>arrow_back</mat-icon> Back to All Bookings
+  </button>
+
+  @if (loading) {
+    <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (data) {
+
+    <div class="status-banner" [style.background]="statusColor(data.booking.status) + '12'"
+         [style.color]="statusColor(data.booking.status)">
+      {{ data.booking.status | titlecase }}
+    </div>
+
+    <h1>{{ data.booking.booking_ref }}</h1>
+
+    <div class="parties-grid">
+      <div class="party-card">
+        <div class="party-label">Customer</div>
+        <div class="party-name">{{ data.customer?.name }}</div>
+        <div class="party-detail">📧 {{ data.customer?.email }}</div>
+        <div class="party-detail">📱 {{ data.customer?.phone }}</div>
+      </div>
+
+      <div class="party-arrow">→</div>
+
+      <div class="party-card">
+        <div class="party-label">Vendor</div>
+        <div class="party-name">{{ data.vendor?.business_name }}</div>
+        <div class="party-detail">👤 {{ data.vendor?.owner_name }}</div>
+        <div class="party-detail">📧 {{ data.vendor?.email }}</div>
+        <div class="party-detail">📱 {{ data.vendor?.phone }}</div>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="label">Event Date</span>
+        <span class="value">{{ data.booking.event_date | date:'fullDate' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Location</span>
+        <span class="value">{{ data.booking.event_location }}</span>
+      </div>
+      @if (data.booking.guests_count) {
+        <div class="info-item">
+          <span class="label">Guests</span>
+          <span class="value">{{ data.booking.guests_count }}</span>
+        </div>
+      }
+    </div>
+
+    @if (data.booking.special_requests) {
+      <div class="special-requests">
+        <h4>Special Requests</h4>
+        <p>{{ data.booking.special_requests }}</p>
+      </div>
+    }
+
+    <div class="amount-breakdown">
+      <h4>Payment Breakdown</h4>
+      <div class="breakdown-row"><span>Total Amount</span><span>₹{{ data.booking.total_amount | number }}</span></div>
+      @if (data.booking.platform_fee) {
+        <div class="breakdown-row muted"><span>Platform Commission (6%)</span><span>₹{{ data.booking.platform_fee | number }}</span></div>
+        <div class="breakdown-row muted"><span>Vendor Payout (94%)</span><span>₹{{ data.booking.vendor_amount | number }}</span></div>
+      }
+      @if (data.payment) {
+        <div class="breakdown-row muted"><span>Payment Status</span><span>{{ data.payment.status | titlecase }}</span></div>
+      }
+    </div>
+
+    <div class="timeline-card">
+      <h4>Status Timeline</h4>
+      @for (item of data.history; track $index) {
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div>
+            <div class="tl-action">{{ item.new_status | titlecase }}</div>
+            @if (item.reason) {
+              <div class="tl-reason">{{ item.reason }}</div>
+            }
+            <div class="tl-time">{{ item.created_at | date:'medium' }}</div>
+          </div>
+        </div>
+      }
+    </div>
+
+  }
+</div>
