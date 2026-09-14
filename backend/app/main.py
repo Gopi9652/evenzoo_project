@@ -25,7 +25,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:4200",
                    "http://localhost:65491",
-                    "http://10.239.249.79:4200"],
+                    "http://10.239.249.79:4200", "https://evenzoo-frontend.gopithagulla0.workers.dev"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -13,7 +13,7 @@ from app.utils.security import (
     decode_token
 )
 from app.utils.otp import generate_otp, otp_expiry
-
+from datetime import timedelta
 from app.utils.sms import send_otp_sms
 class AuthService:
 
