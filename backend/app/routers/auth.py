@@ -36,7 +36,6 @@ def register(
 
 
 @router.post("/login", response_model=LoginResponse)
-@limiter.limit("24/hours")
 def login(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
     user_agent = request.headers.get("user-agent")
     ip_address = request.client.host if request.client else None
