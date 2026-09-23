@@ -380,7 +380,7 @@
 
                   @for (photo of photos; track photo.id) {
 
-                    <div class="photo-item">
+                    <div class="photo-item" (click)="openLightbox($index)">
 
                       <img
                         [src]="photo.photo_url"
@@ -844,4 +844,12 @@
 
   </div>
 
+}
+
+@if (lightboxOpen) {
+  <app-photo-lightbox
+    [photos]="photos"
+    [startIndex]="lightboxStartIndex"
+    (closed)="closeLightbox()">
+  </app-photo-lightbox>
 }

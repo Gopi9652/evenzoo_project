@@ -13,13 +13,14 @@ import { VendorProfile, VendorService as VendorServiceModel } from '../../../cor
 import { BookingFormComponent } from '../booking-form/booking-form.component';
 import { environment } from '../../../../environments/environment';
 import { CompareService } from '../../../core/services/compare.service';
+import { PhotoLightboxComponent } from '../../../shared/components/photo-lightbox/photo-lightbox.component';
 
 @Component({
   selector: 'app-vendor-detail',
   standalone: true,
   imports: [
     CommonModule, MatIconModule, MatButtonModule, MatTabsModule,
-    MatProgressSpinnerModule, MatDialogModule, NavbarComponent
+    MatProgressSpinnerModule, MatDialogModule, NavbarComponent, PhotoLightboxComponent
   ],
   templateUrl: './vendor-detail.component.html',
   styleUrl: './vendor-detail.component.scss'
@@ -32,6 +33,10 @@ export class VendorDetailComponent implements OnInit {
   reviewsLoading = true;
   loading = true;
   vendorId!: number;
+  lightboxOpen = false;
+  lightboxStartIndex = 0;
+
+
   paymentsEnabled = environment.paymentsEnabled;
 
   constructor(
@@ -142,5 +147,14 @@ export class VendorDetailComponent implements OnInit {
     if (!added && this.compareService.count() === 4) {
       alert('You can compare up to 4 vendors at a time.');
     }
+  }
+
+  openLightbox(index: number) {
+    this.lightboxStartIndex = index;
+    this.lightboxOpen = true;
+  }
+
+  closeLightbox() {
+    this.lightboxOpen = false;
   }
 }

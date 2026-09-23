@@ -111,7 +111,7 @@
             } @else {
               <div class="mini-photo-grid">
                 @for (photo of vendor.photos.slice(0, 4); track photo.id) {
-                  <img [src]="photo.photo_url" [alt]="vendor.business_name">
+                  <img [src]="photo.photo_url" [alt]="vendor.business_name" (click)="openLightbox(vendor, $index)">
                 }
               </div>
             }
@@ -153,3 +153,10 @@
     </div>
   }
 </div>
+@if (lightboxOpen) {
+  <app-photo-lightbox
+    [photos]="lightboxPhotos"
+    [startIndex]="lightboxStartIndex"
+    (closed)="closeLightbox()">
+  </app-photo-lightbox>
+}

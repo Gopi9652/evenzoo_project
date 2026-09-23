@@ -751,3 +751,9 @@
     font-size: 13px;
   }
 }
+.photos-cell .mini-photo-grid img {
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.85; }
+}

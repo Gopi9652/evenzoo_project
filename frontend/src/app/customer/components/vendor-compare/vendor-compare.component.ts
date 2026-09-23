@@ -6,11 +6,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CompareService, VendorCompareData } from '../../../core/services/compare.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { PhotoLightboxComponent } from '../../../shared/components/photo-lightbox/photo-lightbox.component';
 
 @Component({
   selector: 'app-vendor-compare',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule, MatButtonModule, MatProgressSpinnerModule, NavbarComponent],
+  imports: [CommonModule, RouterLink, MatIconModule, MatButtonModule, MatProgressSpinnerModule, NavbarComponent, PhotoLightboxComponent],
   templateUrl: './vendor-compare.component.html',
   styleUrl: './vendor-compare.component.scss'
 })
@@ -18,6 +19,12 @@ export class VendorCompareComponent implements OnInit {
   vendors: VendorCompareData[] = [];
   loading = true;
   errorMessage = '';
+   // ...existing properties
+  lightboxOpen = false;
+  lightboxPhotos: { photo_url: string }[] = [];
+  lightboxStartIndex = 0;
+
+  
 
   // Union of every service name across all compared vendors, used to build
   // aligned comparison rows even when vendors offer different service sets
@@ -79,5 +86,14 @@ export class VendorCompareComponent implements OnInit {
 
   get gridColumns(): string {
     return `220px repeat(${this.vendors.length}, minmax(220px, 1fr))`;
+  }
+  openLightbox(vendor: VendorCompareData, index: number) {
+    this.lightboxPhotos = vendor.photos;
+    this.lightboxStartIndex = index;
+    this.lightboxOpen = true;
+  }
+
+  closeLightbox() {
+    this.lightboxOpen = false;
   }
 }

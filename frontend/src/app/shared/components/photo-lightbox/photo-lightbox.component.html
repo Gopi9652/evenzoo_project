@@ -1,0 +1,33 @@
+<div class="lightbox-overlay" (click)="close()">
+  <button class="lightbox-close" (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <button class="lightbox-nav prev" (click)="prev($event)" [disabled]="currentIndex === 0">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <div class="lightbox-image-wrap" (click)="$event.stopPropagation()">
+    <img [src]="photos[currentIndex].photo_url" [alt]="photos[currentIndex].caption || 'Vendor photo'">
+    @if (photos[currentIndex].caption) {
+      <p class="lightbox-caption">{{ photos[currentIndex].caption }}</p>
+    }
+    <span class="lightbox-counter">{{ currentIndex + 1 }} / {{ photos.length }}</span>
+  </div>
+
+  <button class="lightbox-nav next" (click)="next($event)" [disabled]="currentIndex === photos.length - 1">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+
+  @if (photos.length > 1) {
+    <div class="lightbox-thumbs" (click)="$event.stopPropagation()">
+      @for (photo of photos; track $index) {
+        <img
+          [src]="photo.photo_url"
+          class="thumb"
+          [class.active]="$index === currentIndex"
+          (click)="goTo($index)">
+      }
+    </div>
+  }
+</div>
