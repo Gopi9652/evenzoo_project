@@ -612,23 +612,17 @@
             [disabled]="payingNow">
 
             @if (payingNow) {
-
-              <mat-spinner diameter="20"></mat-spinner>
-
-              <span>
-                Processing...
-              </span>
-
+              <ng-container>
+                <mat-spinner diameter="20"></mat-spinner>
+                <span>Processing...</span>
+              </ng-container>
             } @else {
-
-              <mat-icon>
-                payments
-              </mat-icon>
-
-              <span>
-                Pay ₹{{ booking.total_amount | number }} Now
-              </span>
-
+              <ng-container>
+                <mat-icon>payments</mat-icon>
+                <span>
+                  Pay ₹{{ booking.total_amount | number }} Now
+                </span>
+              </ng-container>
             }
 
           </button>

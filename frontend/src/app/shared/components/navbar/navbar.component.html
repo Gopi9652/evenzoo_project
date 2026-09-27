@@ -4,7 +4,9 @@
       <span></span><span></span><span></span>
     </button>
 
-    <a routerLink="/" class="brand">
+    <a
+      [routerLink]="authService.getRole() === 'customer' ? '/customer/home' : '/'"
+      class="brand">
       <div class="brand-mark">
         <img
           src="https://res.cloudinary.com/elm5helo/image/upload/v1786033804/evenzoo_logo-removebg-preview_txcijg.png"

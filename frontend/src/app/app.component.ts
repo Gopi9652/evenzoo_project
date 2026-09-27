@@ -4,14 +4,13 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from './core/services/auth.service';
 import { WebsocketService } from './core/services/websocket.service';
 import { CookieConsentComponent } from './shared/components/cookie-consent/cookie-consent.component';
-import { IntroSplashComponent } from './shared/components/intro-splash/intro-splash.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule, RouterOutlet,
-    CookieConsentComponent, IntroSplashComponent
+    CookieConsentComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

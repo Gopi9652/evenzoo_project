@@ -14,6 +14,7 @@ import { BookingFormComponent } from '../booking-form/booking-form.component';
 import { environment } from '../../../../environments/environment';
 import { CompareService } from '../../../core/services/compare.service';
 import { PhotoLightboxComponent } from '../../../shared/components/photo-lightbox/photo-lightbox.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-vendor-detail',
@@ -45,7 +46,8 @@ export class VendorDetailComponent implements OnInit {
     private vendorService: VendorService,
     private reviewService: ReviewService,
     private dialog: MatDialog,
-    public compareService: CompareService
+    public compareService: CompareService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -157,4 +159,9 @@ export class VendorDetailComponent implements OnInit {
   closeLightbox() {
     this.lightboxOpen = false;
   }
+
+  goBack(): void {
+    this.router.navigate(['/customer/home']);
+  }
+  
 }

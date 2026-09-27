@@ -24,7 +24,22 @@
 
     <section class="vendor-hero">
 
-      <div class="hero-background"></div>
+      <div class="hero-background">
+        <button
+          type="button"
+          class="back-navigation d-inline-flex align-items-center gap-2 mt-3 ms-4"
+          (click)="goBack()">
+
+          <mat-icon class="back-icon">
+            arrow_back
+          </mat-icon>
+
+          <span class="back-text">
+            Back to Vendors
+          </span>
+
+        </button>
+      </div>
 
       <div class="hero-content">
 
@@ -738,7 +753,8 @@
               ['/chat/user', vendor.user_id],
               {
                 queryParams: {
-                  name: vendor.business_name
+                  name: vendor.business_name,
+                  vendorId: vendor.id
                 }
               }
             )">

@@ -9,11 +9,13 @@
     <button
       mat-button
       class="back-btn"
-      (click)="router.navigate(['/messages'])">
+      (click)="goBack()">
 
       <mat-icon>arrow_back</mat-icon>
 
-      <span>Back to Messages</span>
+       <span>
+        {{ vendorId ? 'Back to Vendor Profile' : 'Back to Messages' }}
+      </span>
 
     </button>
 

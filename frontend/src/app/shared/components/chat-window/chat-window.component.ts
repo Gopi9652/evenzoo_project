@@ -24,7 +24,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked 
   bookingId: number | null = null;
   receiverId!: number;   // known immediately from the route — never depends on message history
   otherPartyName = '';
-
+  vendorId: number | null = null;
   messages: any[] = [];
   newMessage = '';
   loading = true;
@@ -51,6 +51,9 @@ ngOnInit() {
 
     this.route.queryParams.subscribe(queryParams => {
       this.otherPartyName = queryParams['name'] || 'Chat';
+      this.vendorId = queryParams['vendorId']
+        ? Number(queryParams['vendorId'])
+        : null;
 
       if (bookingIdParam) {
         this.mode = 'booking';
@@ -136,5 +139,22 @@ ngOnInit() {
 
   isMine(msg: any): boolean {
     return msg.sender_id === this.currentUserId;
+  }
+
+  goBack(): void {
+
+    if (this.vendorId) {
+
+      this.router.navigate([
+        '/customer/vendor',
+        this.vendorId
+      ]);
+
+    } else {
+
+      this.router.navigate(['/messages']);
+
+    }
+
   }
 }
