@@ -28,7 +28,11 @@ export class SplashComponent implements OnInit, OnDestroy {
         round: Math.random() > 0.5
       });
     }
-    this.timer = setTimeout(() => this.router.navigate(['/login']), 4200);
+    this.router.navigate(['/customer/home']);
+   // this.timer = setTimeout(() => this.router.navigate(['/browse']), 4200);
+     setTimeout(() => {
+      this.router.navigate(['/customer/home']);
+    }, 1000);
   }
 
   ngOnDestroy() {

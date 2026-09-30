@@ -94,17 +94,131 @@
         </div>
 
 
-        <!-- BOOKING REFERENCE -->
+       <!-- =================================================
+     BOOKING / VENDOR HEADER
+     ================================================= -->
 
-        <div class="booking-heading">
+<div class="booking-heading">
 
-          <span class="section-label">
-            BOOKING REFERENCE
-          </span>
+  <h1>
+    {{ booking.vendor_business_name }}
+  </h1>
 
-          <h1>
-            {{ booking.booking_ref }}
-          </h1>
+  <span class="ref-line">
+    Booking {{ booking.booking_ref }}
+
+    @if (booking.event_type_name) {
+      · {{ booking.event_type_name }}
+    }
+  </span>
+
+</div>
+
+
+<!-- =================================================
+     VENDOR CONTACT
+     ================================================= -->
+
+<div class="vendor-contact-card">
+
+  <!--<div class="vc-avatar">
+    {{ booking.vendor_business_name.charAt(0).toUpperCase() }}
+  </div>-->
+
+  <div class="vc-info">
+
+    <span class="vc-label">
+      Your vendor
+    </span>
+
+    <span class="vc-name">
+      {{ booking.vendor_business_name }}
+    </span>
+
+    @if (booking.vendor_phone) {
+
+      <a
+        class="vc-phone"
+        [href]="'tel:' + booking.vendor_phone">
+
+        📞 {{ booking.vendor_phone }}
+
+      </a>
+
+    }
+
+  </div>
+
+  <button
+    mat-stroked-button
+    class="vendor-message-btn"
+    (click)="router.navigate(
+      ['/chat/booking', booking.id],
+      {
+        queryParams: {
+          receiverId: booking.vendor_user_id,
+          name: booking.vendor_business_name
+        }
+      }
+    )">
+
+    <mat-icon>
+      chat
+    </mat-icon>
+
+    Message
+
+  </button>
+
+</div>
+
+
+        <!-- =================================================
+            SERVICES BOOKED
+            ================================================= -->
+
+        <div class="services-booked">
+
+          <h4>
+            Services you booked
+          </h4>
+
+          @for (
+            svc of booking.services;
+            track svc.service_id
+          ) {
+
+            <div class="svc-row">
+
+              <div>
+
+                <span class="svc-name">
+                  {{ svc.name }}
+                </span>
+
+                @if (svc.quantity > 1) {
+
+                  <span class="svc-qty">
+                    × {{ svc.quantity }}
+                  </span>
+
+                }
+
+              </div>
+
+              <span class="svc-total">
+                ₹{{ svc.total | number }}
+              </span>
+
+            </div>
+
+          } @empty {
+
+            <p class="no-svc">
+              No specific services were selected for this booking.
+            </p>
+
+          }
 
         </div>
 

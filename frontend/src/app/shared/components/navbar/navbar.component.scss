@@ -252,3 +252,26 @@
     margin: 0;
   }
 }
+.nav-login-btn {
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border: 1.5px solid var(--sand);
+  transition: 0.2s;
+
+  &:hover { background: var(--cream); }
+}
+
+.nav-register-btn {
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(155deg, var(--saffron), var(--saffron-deep));
+  box-shadow: 0 4px 14px -3px rgba(232, 101, 10, .5);
+}

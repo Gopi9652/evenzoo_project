@@ -1,4 +1,6 @@
+
 <app-navbar></app-navbar>
+
 <app-approval-banner></app-approval-banner>
 
 <div class="page-header">
@@ -13,63 +15,234 @@
     </div>
   } @else {
     <mat-tab-group>
+
+      <!-- NEW REQUESTS -->
       <mat-tab [label]="'New Requests (' + pendingBookings.length + ')'">
         <div class="booking-list">
           @for (booking of pendingBookings; track booking.id) {
             <div class="booking-row">
-              <div class="booking-info">
-                <span class="ref">{{ booking.booking_ref }}</span>
-                <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
-                <span class="detail">📍 {{ booking.event_location }}</span>
-                @if (booking.guests_count) {
-                  <span class="detail">👥 {{ booking.guests_count }} guests</span>
-                }
+
+              <div class="booking-main">
+                <div class="booking-topline">
+                  <span class="ref">{{ booking.booking_ref }}</span><br>
+
+                  @if (booking.event_type_name) {
+                    <span class="event-type-chip">
+                      {{ booking.event_type_name }}
+                    </span>
+                  }
+                </div>
+
+                <div class="customer-block">
+                  <!--<div class="customer-avatar">
+                    {{ booking.customer_name.charAt(0).toUpperCase() }}
+                  </div>-->
+
+                  <div class="customer-info">
+                    <span class="customer-name">
+                      {{ booking.customer_name }}
+                    </span>
+
+                    <span class="customer-contact">
+                      @if (booking.customer_phone) {
+                        📱 {{ booking.customer_phone }}
+                      }
+
+                      @if (booking.customer_email) {
+                        · ✉️ {{ booking.customer_email }}
+                      }
+                    </span>
+                  </div>
+                </div>
+
+                <div class="booked-services">
+                  <span class="section-label">Booked services</span>
+
+                  @for (svc of booking.services; track svc.service_id) {
+                    <div class="service-line">
+                      <span>{{ svc.name }}</span>
+                      <span class="service-price">
+                        ₹{{ svc.total | number }}
+                      </span>
+                    </div>
+                  } @empty {
+                    <span class="no-services">
+                      No specific services selected
+                    </span>
+                  }
+                </div>
+
+                <div class="booking-meta-row">
+                  <span>
+                    📅 {{ booking.event_date | date:'mediumDate' }}
+                  </span>
+
+                  <span>
+                    📍 {{ booking.event_location }}
+                  </span>
+
+                  @if (booking.guests_count) {
+                    <span>
+                      👥 {{ booking.guests_count }} guests
+                    </span>
+                  }
+                </div>
+
                 @if (booking.special_requests) {
-                  <span class="requests">"{{ booking.special_requests }}"</span>
+                  <span class="requests">
+                    "{{ booking.special_requests }}"
+                  </span>
                 }
               </div>
-              <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
-              <div class="booking-actions">
-                <button mat-raised-button color="primary"
-                        [disabled]="processingId === booking.id"
-                        (click)="acceptBooking(booking)">
-                  Accept
-                </button>
-                <button mat-stroked-button color="warn"
-                        [disabled]="processingId === booking.id"
-                        (click)="rejectBooking(booking)">
-                  Decline
-                </button>
+
+              <div class="booking-side">
+                <div class="booking-amount">
+                  ₹{{ booking.total_amount | number }}
+                </div>
+
+                <div class="booking-actions">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    [disabled]="processingId === booking.id"
+                    (click)="acceptBooking(booking)">
+                    Accept
+                  </button>
+
+                  <button
+                    mat-stroked-button
+                    color="warn"
+                    [disabled]="processingId === booking.id"
+                    (click)="rejectBooking(booking)">
+                    Decline
+                  </button>
+
+                  <button
+                    mat-stroked-button
+                    [disabled]="processingId === booking.id"
+                    (click)="messageCustomer(booking)">
+                    💬 Message
+                  </button>
+                </div>
               </div>
+
             </div>
           } @empty {
-           @if (isApproved !== false) {
+            @if (isApproved !== false) {
               <p class="empty-text">No new booking requests</p>
             }
           }
         </div>
       </mat-tab>
 
+      <!-- CONFIRMED -->
       <mat-tab [label]="'Confirmed (' + confirmedBookings.length + ')'">
         <div class="booking-list">
           @for (booking of confirmedBookings; track booking.id) {
             <div class="booking-row">
-              <div class="booking-info">
-                <span class="ref">{{ booking.booking_ref }}</span>
-                <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
-                <span class="detail">📍 {{ booking.event_location }}</span>
+
+              <div class="booking-main">
+                <div class="booking-topline">
+                  <span class="ref">{{ booking.booking_ref }}</span>
+
+                  @if (booking.event_type_name) {
+                    <span class="event-type-chip">
+                      {{ booking.event_type_name }}
+                    </span>
+                  }
+                </div>
+
+                <div class="customer-block">
+                  <div class="customer-avatar">
+                    {{ booking.customer_name.charAt(0).toUpperCase() }}
+                  </div>
+
+                  <div class="customer-info">
+                    <span class="customer-name">
+                      {{ booking.customer_name }}
+                    </span>
+
+                    <span class="customer-contact">
+                      @if (booking.customer_phone) {
+                        📱 {{ booking.customer_phone }}
+                      }
+
+                      @if (booking.customer_email) {
+                        · ✉️ {{ booking.customer_email }}
+                      }
+                    </span>
+                  </div>
+                </div>
+
+                <div class="booked-services">
+                  <span class="section-label">Booked services</span>
+
+                  @for (svc of booking.services; track svc.service_id) {
+                    <div class="service-line">
+                      <span>{{ svc.name }}</span>
+                      <span class="service-price">
+                        ₹{{ svc.total | number }}
+                      </span>
+                    </div>
+                  } @empty {
+                    <span class="no-services">
+                      No specific services selected
+                    </span>
+                  }
+                </div>
+
+                <div class="booking-meta-row">
+                  <span>
+                    📅 {{ booking.event_date | date:'mediumDate' }}
+                  </span>
+
+                  <span>
+                    📍 {{ booking.event_location }}
+                  </span>
+
+                  @if (booking.guests_count) {
+                    <span>
+                      👥 {{ booking.guests_count }} guests
+                    </span>
+                  }
+                </div>
+
+                @if (booking.special_requests) {
+                  <span class="requests">
+                    "{{ booking.special_requests }}"
+                  </span>
+                }
               </div>
-              <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
-              @if (!paymentsEnabled) {
-                <span class="phase-one-tag">Arrange payment directly</span>
-              }
-              <div class="booking-actions">
-                <button mat-raised-button color="primary"
-                        [disabled]="processingId === booking.id"
-                        (click)="markCompleted(booking)">
-                  Mark Completed
-                </button>
+
+              <div class="booking-side">
+                <div class="booking-amount">
+                  ₹{{ booking.total_amount | number }}
+                </div>
+
+                @if (!paymentsEnabled) {
+                  <span class="phase-one-tag">
+                    Arrange payment directly
+                  </span>
+                }
+
+                <div class="booking-actions">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    [disabled]="processingId === booking.id"
+                    (click)="markCompleted(booking)">
+                    Mark Completed
+                  </button>
+
+                  <button
+                    mat-stroked-button
+                    [disabled]="processingId === booking.id"
+                    (click)="messageCustomer(booking)">
+                    💬 Message
+                  </button>
+                </div>
               </div>
+
             </div>
           } @empty {
             <p class="empty-text">No confirmed bookings</p>
@@ -77,18 +250,106 @@
         </div>
       </mat-tab>
 
+      <!-- COMPLETED -->
       <mat-tab [label]="'Completed (' + completedBookings.length + ')'">
         <div class="booking-list">
           @for (booking of completedBookings; track booking.id) {
             <div class="booking-row">
-              <div class="booking-info">
-                <span class="ref">{{ booking.booking_ref }}</span>
-                <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
+
+              <div class="booking-main">
+                <div class="booking-topline">
+                  <span class="ref">{{ booking.booking_ref }}</span>
+
+                  @if (booking.event_type_name) {
+                    <span class="event-type-chip">
+                      {{ booking.event_type_name }}
+                    </span>
+                  }
+                </div>
+
+                <div class="customer-block">
+                  <div class="customer-avatar">
+                    {{ booking.customer_name.charAt(0).toUpperCase() }}
+                  </div>
+
+                  <div class="customer-info">
+                    <span class="customer-name">
+                      {{ booking.customer_name }}
+                    </span>
+
+                    <span class="customer-contact">
+                      @if (booking.customer_phone) {
+                        📱 {{ booking.customer_phone }}
+                      }
+
+                      @if (booking.customer_email) {
+                        · ✉️ {{ booking.customer_email }}
+                      }
+                    </span>
+                  </div>
+                </div>
+
+                <div class="booked-services">
+                  <span class="section-label">Booked services</span>
+
+                  @for (svc of booking.services; track svc.service_id) {
+                    <div class="service-line">
+                      <span>{{ svc.name }}</span>
+                      <span class="service-price">
+                        ₹{{ svc.total | number }}
+                      </span>
+                    </div>
+                  } @empty {
+                    <span class="no-services">
+                      No specific services selected
+                    </span>
+                  }
+                </div>
+
+                <div class="booking-meta-row">
+                  <span>
+                    📅 {{ booking.event_date | date:'mediumDate' }}
+                  </span>
+
+                  <span>
+                    📍 {{ booking.event_location }}
+                  </span>
+
+                  @if (booking.guests_count) {
+                    <span>
+                      👥 {{ booking.guests_count }} guests
+                    </span>
+                  }
+                </div>
+
+                @if (booking.special_requests) {
+                  <span class="requests">
+                    "{{ booking.special_requests }}"
+                  </span>
+                }
               </div>
-              <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
-              @if (!paymentsEnabled) {
-                <span class="phase-one-tag">Arrange payment directly</span>
-              }
+
+              <div class="booking-side">
+                <div class="booking-amount">
+                  ₹{{ booking.total_amount | number }}
+                </div>
+
+                @if (!paymentsEnabled) {
+                  <span class="phase-one-tag">
+                    Arrange payment directly
+                  </span>
+                }
+
+                <div class="booking-actions">
+                  <button
+                    mat-stroked-button
+                    [disabled]="processingId === booking.id"
+                    (click)="messageCustomer(booking)">
+                    💬 Message
+                  </button>
+                </div>
+              </div>
+
             </div>
           } @empty {
             <p class="empty-text">No completed bookings yet</p>
@@ -96,24 +357,113 @@
         </div>
       </mat-tab>
 
+      <!-- DECLINED -->
       <mat-tab [label]="'Declined (' + cancelledBookings.length + ')'">
         <div class="booking-list">
           @for (booking of cancelledBookings; track booking.id) {
             <div class="booking-row cancelled">
-              <div class="booking-info">
-                <span class="ref">{{ booking.booking_ref }}</span>
-                <span class="detail">📅 {{ booking.event_date | date:'mediumDate' }}</span>
+
+              <div class="booking-main">
+                <div class="booking-topline">
+                  <span class="ref">{{ booking.booking_ref }}</span>
+
+                  @if (booking.event_type_name) {
+                    <span class="event-type-chip">
+                      {{ booking.event_type_name }}
+                    </span>
+                  }
+                </div>
+
+                <div class="customer-block">
+                  <div class="customer-avatar">
+                    {{ booking.customer_name.charAt(0).toUpperCase() }}
+                  </div>
+
+                  <div class="customer-info">
+                    <span class="customer-name">
+                      {{ booking.customer_name }}
+                    </span>
+
+                    <span class="customer-contact">
+                      @if (booking.customer_phone) {
+                        📱 {{ booking.customer_phone }}
+                      }
+
+                      @if (booking.customer_email) {
+                        · ✉️ {{ booking.customer_email }}
+                      }
+                    </span>
+                  </div>
+                </div>
+
+                <div class="booked-services">
+                  <span class="section-label">Booked services</span>
+
+                  @for (svc of booking.services; track svc.service_id) {
+                    <div class="service-line">
+                      <span>{{ svc.name }}</span>
+                      <span class="service-price">
+                        ₹{{ svc.total | number }}
+                      </span>
+                    </div>
+                  } @empty {
+                    <span class="no-services">
+                      No specific services selected
+                    </span>
+                  }
+                </div>
+
+                <div class="booking-meta-row">
+                  <span>
+                    📅 {{ booking.event_date | date:'mediumDate' }}
+                  </span>
+
+                  <span>
+                    📍 {{ booking.event_location }}
+                  </span>
+
+                  @if (booking.guests_count) {
+                    <span>
+                      👥 {{ booking.guests_count }} guests
+                    </span>
+                  }
+                </div>
+
+                @if (booking.special_requests) {
+                  <span class="requests">
+                    "{{ booking.special_requests }}"
+                  </span>
+                }
               </div>
-              <div class="booking-amount">₹{{ booking.total_amount | number }}</div>
-              @if (!paymentsEnabled) {
-                <span class="phase-one-tag">Arrange payment directly</span>
-              }
+
+              <div class="booking-side">
+                <div class="booking-amount">
+                  ₹{{ booking.total_amount | number }}
+                </div>
+
+                @if (!paymentsEnabled) {
+                  <span class="phase-one-tag">
+                    Arrange payment directly
+                  </span>
+                }
+
+                <div class="booking-actions">
+                  <button
+                    mat-stroked-button
+                    [disabled]="processingId === booking.id"
+                    (click)="messageCustomer(booking)">
+                    💬 Message
+                  </button>
+                </div>
+              </div>
+
             </div>
           } @empty {
             <p class="empty-text">No declined bookings</p>
           }
         </div>
       </mat-tab>
+
     </mat-tab-group>
   }
 </div>

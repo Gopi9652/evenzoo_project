@@ -13,6 +13,7 @@ from app.schemas.booking import (
     BookingListResponse, BookingStatusUpdate,
     EventTypeResponse, StatusHistoryResponse
 )
+from app.schemas.booking import BookingRichResponse
 
 router = APIRouter(tags=["Bookings"])
 
@@ -39,42 +40,6 @@ def create_booking(
         db, current_user.id, data
     )
 
-
-@router.get("/my", response_model=List[BookingListResponse])
-def get_my_bookings(
-    status: Optional[str] = Query(None),
-    current_user: User    = Depends(get_current_user),
-    db: Session           = Depends(get_db)
-):
-    return booking_service.get_customer_bookings(
-        db, current_user.id, status
-    )
-
-
-# ── VENDOR ROUTES ──
-@router.get("/vendor", response_model=List[BookingListResponse])
-def get_vendor_bookings(
-    status: Optional[str] = Query(None),
-    current_user: User    = Depends(get_vendor),
-    db: Session           = Depends(get_db)
-):
-    return booking_service.get_vendor_bookings(
-        db, current_user.id, status
-    )
-
-
-# ── SHARED ROUTES ──
-@router.get("/{booking_id}", response_model=BookingResponse)
-def get_booking(
-    booking_id:   int,
-    current_user: User    = Depends(get_current_user),
-    db: Session           = Depends(get_db)
-):
-    return booking_service.get_booking(
-        db, booking_id, current_user.id
-    )
-
-
 @router.put("/{booking_id}/status",
             response_model=BookingResponse)
 def update_booking_status(
@@ -96,3 +61,31 @@ def get_booking_history(
     db: Session           = Depends(get_db)
 ):
     return booking_service.get_booking_history(db, booking_id)
+
+
+
+@router.get("/my", response_model=List[BookingRichResponse])
+def get_my_bookings(
+    status: Optional[str] = Query(None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    return booking_service.get_customer_bookings_rich(db, current_user.id, status)
+
+
+@router.get("/vendor", response_model=List[BookingRichResponse])
+def get_vendor_bookings(
+    status: Optional[str] = Query(None),
+    current_user: User = Depends(get_vendor),
+    db: Session = Depends(get_db)
+):
+    return booking_service.get_vendor_bookings_rich(db, current_user.id, status)
+
+
+@router.get("/{booking_id}", response_model=BookingRichResponse)
+def get_booking(
+    booking_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    return booking_service.get_booking_rich(db, booking_id, current_user.id)

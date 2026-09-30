@@ -113,7 +113,9 @@
                 {{ booking.status | titlecase }}
               </div>
               <div class="recent-info">
+                <span class="recent-ref">{{ booking.customer_name }}</span>
                 <span class="recent-ref">{{ booking.booking_ref }}</span>
+                 @if (booking.services.length > 0) { · {{ booking.services[0].name }}@if (booking.services.length > 1) { +{{ booking.services.length - 1 }} } }
                 <span class="recent-date">{{ booking.event_date | date:'mediumDate' }}</span>
               </div>
               <span class="recent-amount">₹{{ booking.total_amount | number }}</span>

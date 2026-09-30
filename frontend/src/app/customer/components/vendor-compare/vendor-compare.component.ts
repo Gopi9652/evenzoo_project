@@ -75,14 +75,6 @@ export class VendorCompareComponent implements OnInit {
     return Array(5).fill(0).map((_, i) => i < r ? 1 : 0);
   }
 
-  removeVendor(vendorId: number) {
-    const remaining = this.vendors.filter(v => v.id !== vendorId).map(v => v.id);
-    if (remaining.length < 2) {
-      this.router.navigate(['/customer/home']);
-      return;
-    }
-    this.router.navigate(['/customer/compare'], { queryParams: { ids: remaining.join(',') } });
-  }
 
   get gridColumns(): string {
     return `220px repeat(${this.vendors.length}, minmax(220px, 1fr))`;
@@ -95,5 +87,13 @@ export class VendorCompareComponent implements OnInit {
 
   closeLightbox() {
     this.lightboxOpen = false;
+  }
+  removeVendor(vendorId: number) {
+    const remaining = this.vendors.filter(v => v.id !== vendorId).map(v => v.id);
+    if (remaining.length < 2) {
+      this.router.navigate(['/browse']);
+      return;
+    }
+    this.router.navigate(['/browse/compare'], { queryParams: { ids: remaining.join(',') } });
   }
 }

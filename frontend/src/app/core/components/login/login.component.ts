@@ -9,7 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/auth.service';
-
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -37,7 +37,13 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
+  showGateMessage = false;
 
+ngOnInit() {
+  this.router.routerState.root.queryParams.subscribe(params =>  {
+    this.showGateMessage = params['reason'] === 'required';
+  });
+}
 onSubmit() {
   if (this.loginForm.invalid) {
     this.loginForm.markAllAsTouched();
@@ -64,12 +70,19 @@ onSubmit() {
 }
 
   redirectByRole(role: string) {
+    const savedRedirect = sessionStorage.getItem('post_login_redirect');
+    if (savedRedirect) {
+      sessionStorage.removeItem('post_login_redirect');
+      this.router.navigateByUrl(savedRedirect);
+      return;
+    }
+
     if (role === 'vendor') {
       this.router.navigate(['/vendor/dashboard']);
     } else if (role === 'admin') {
       this.router.navigate(['/admin/dashboard']);
     } else {
-      this.router.navigate(['/customer/home']);
+      this.router.navigate(['/browse']);
     }
   }
 

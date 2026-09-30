@@ -66,7 +66,8 @@ export class HomeComponent implements OnInit {
       alert('Select at least 2 vendors to compare');
       return;
     }
-    this.router.navigate(['/customer/compare'], { queryParams: { ids: ids.join(',') } });
+    //this.router.navigate(['/customer/compare'], { queryParams: { ids: ids.join(',') } });
+    this.router.navigate(['/browse/compare'], { queryParams: { ids: ids.join(',') } });
   }
   loadCategories() {
     this.vendorService.getCategories().subscribe({

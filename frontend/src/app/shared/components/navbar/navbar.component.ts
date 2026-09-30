@@ -29,16 +29,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService
   ) {}
 
-  ngOnInit() {
-    this.loadNotifications();
+ ngOnInit() {
+  if (!this.authService.isLoggedIn()) return;
 
-    this.wsSubscription = this.ws.onMessage().subscribe((msg) => {
-      if (msg.type === 'notification') {
-        this.notifications = [msg.data, ...this.notifications].slice(0, 10);  // new array
-        this.unreadCount++;
-      }
-    });
-  }
+  this.loadNotifications();
+  this.wsSubscription = this.ws.onMessage().subscribe((msg) => {
+    if (msg.type === 'notification') {
+      this.notifications = [msg.data, ...this.notifications].slice(0, 10);
+      this.unreadCount++;
+    }
+  });
+}
 
   ngOnDestroy() {
     this.wsSubscription?.unsubscribe();

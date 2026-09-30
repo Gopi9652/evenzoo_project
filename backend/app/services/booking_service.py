@@ -16,6 +16,9 @@ from app.utils.booking_ref import generate_booking_ref
 from app.config import settings
 from app.services.notification_service import notification_service
 from app.utils.vendor_scoring import calculate_rank_score
+from app.models.booking import Booking, BookingService, EventType
+from app.models.vendor import VendorService as VendorServiceModel
+
 class BookingService_:
 
     # ── CREATE BOOKING ──
@@ -157,13 +160,16 @@ class BookingService_:
         # Keep rank_score fresh even when no new review has come in
         #vendor.rank_score = calculate_rank_score(avg, vendor.total_bookings)
         # Notify vendor of new booking
+        customer = db.query(User).filter(User.id == customer_id).first()
+        service_names = ", ".join(s.name for s in selected_services) if selected_services else "no specific services"
+
         notification_service.create(
             db,
             user_id=vendor.user_id,
             title="New Booking Request",
-            message=f"You have a new booking request for {data.event_date}",
+            message=f"{customer.name if customer else 'A customer'} requested {service_names} on {data.event_date}.",
             type="booking",
-            link=f"/vendor/bookings/{booking.id}"
+            link=f"/vendor/bookings"
         )
         db.commit()
         db.refresh(booking)
@@ -316,13 +322,16 @@ class BookingService_:
         }
 
         if data.status in status_messages:
+            customer = db.query(User).filter(User.id == customer_id).first()
+            service_names = ", ".join(s.name for s in selected_services) if selected_services else "no specific services"
+
             notification_service.create(
                 db,
-                user_id=notify_user_id,
-                title=f"Booking {data.status.capitalize()}",
-                message=status_messages[data.status],
+                user_id=vendor.user_id,
+                title="New Booking Request",
+                message=f"{customer.name if customer else 'A customer'} requested {service_names} on {data.event_date}.",
                 type="booking",
-                link=f"/bookings/{booking.id}"
+                link=f"/vendor/bookings"
             )
         db.commit()
         db.refresh(booking)
@@ -372,6 +381,84 @@ class BookingService_:
                 db.add(EventType(name=name))
         db.commit()
         return {"message": "Event types seeded"}
+
+
+
+    def _build_rich_booking(self, db: Session, booking: Booking, viewer_role: str) -> dict:
+        """
+        Builds a fully populated booking. Contact details are included only for
+        the counterparty: a customer sees the vendor's phone, a vendor sees the
+        customer's phone and email, and neither sees more than they need.
+        """
+        customer = db.query(User).filter(User.id == booking.customer_id).first()
+        vendor_profile = db.query(VendorProfile).filter(VendorProfile.id == booking.vendor_id).first()
+        vendor_owner = db.query(User).filter(User.id == vendor_profile.user_id).first() if vendor_profile else None
+        event_type = db.query(EventType).filter(EventType.id == booking.event_type_id).first() if booking.event_type_id else None
+
+        booked_items = db.query(BookingService).filter(BookingService.booking_id == booking.id).all()
+        services = []
+        for item in booked_items:
+            svc = db.query(VendorServiceModel).filter(VendorServiceModel.id == item.service_id).first()
+            services.append({
+                "service_id": item.service_id,
+                "name": svc.name if svc else "Service no longer available",
+                "quantity": item.quantity,
+                "unit_price": item.unit_price,
+                "total": item.total,
+            })
+
+        return {
+            "id": booking.id,
+            "booking_ref": booking.booking_ref,
+            "status": booking.status,
+            "event_date": booking.event_date,
+            "event_time": booking.event_time,
+            "event_location": booking.event_location,
+            "guests_count": booking.guests_count,
+            "special_requests": booking.special_requests,
+            "total_amount": booking.total_amount,
+            "platform_fee": booking.platform_fee,
+            "vendor_amount": booking.vendor_amount,
+            "event_type_name": event_type.name if event_type else None,
+            "created_at": booking.created_at,
+            "cancellation_reason": booking.cancellation_reason,
+            "customer_id": booking.customer_id,
+            "customer_name": customer.name if customer else "Customer",
+            "customer_phone": customer.phone if (customer and viewer_role == "vendor") else None,
+            "customer_email": customer.email if (customer and viewer_role == "vendor") else None,
+            "vendor_id": booking.vendor_id,
+            "vendor_user_id": vendor_profile.user_id if vendor_profile else 0,
+            "vendor_business_name": vendor_profile.business_name if vendor_profile else "Vendor",
+            "vendor_phone": vendor_owner.phone if (vendor_owner and viewer_role == "customer") else None,
+            "services": services,
+        }
+
+
+    def get_customer_bookings_rich(self, db: Session, customer_id: int, status_filter: Optional[str] = None):
+        query = db.query(Booking).filter(Booking.customer_id == customer_id)
+        if status_filter:
+            query = query.filter(Booking.status == status_filter)
+        bookings = query.order_by(Booking.created_at.desc()).all()
+        return [self._build_rich_booking(db, b, "customer") for b in bookings]
+
+
+    def get_vendor_bookings_rich(self, db: Session, user_id: int, status_filter: Optional[str] = None):
+        vendor = db.query(VendorProfile).filter(VendorProfile.user_id == user_id).first()
+        if not vendor:
+            raise HTTPException(status_code=404, detail="Vendor profile not found")
+
+        query = db.query(Booking).filter(Booking.vendor_id == vendor.id)
+        if status_filter:
+            query = query.filter(Booking.status == status_filter)
+        bookings = query.order_by(Booking.created_at.desc()).all()
+        return [self._build_rich_booking(db, b, "vendor") for b in bookings]
+
+
+    def get_booking_rich(self, db: Session, booking_id: int, user_id: int):
+        booking = self.get_booking(db, booking_id, user_id)  # existing permission check
+        vendor = db.query(VendorProfile).filter(VendorProfile.user_id == user_id).first()
+        viewer_role = "vendor" if (vendor and booking.vendor_id == vendor.id) else "customer"
+        return self._build_rich_booking(db, booking, viewer_role)
 
 
 booking_service = BookingService_()

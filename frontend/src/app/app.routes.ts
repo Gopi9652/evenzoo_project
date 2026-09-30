@@ -61,15 +61,25 @@ import { AdminBookingDetailComponent } from './admin/components/booking-detail/b
 import { ConfirmEmailComponent } from './core/components/confirm-email/confirm-email.component';
 
 
-
 export const routes: Routes = [
-  { path: '', component: SplashComponent },
+  // Public entry
+{ path: '', component: SplashComponent },
+{ path: 'browse', component: HomeComponent },
+{ path: 'browse/vendor/:id', component: VendorDetailComponent },
+{ path: 'browse/compare', component: VendorCompareComponent },
+
+  // Old paths kept working via redirect
+  { path: 'customer/home', redirectTo: 'browse', pathMatch: 'full' },
+  { path: 'customer/vendor/:id', redirectTo: 'browse/vendor/:id', pathMatch: 'full' },
+  { path: 'customer/compare', redirectTo: 'browse/compare', pathMatch: 'full' },
+
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'verify-otp', component: OtpVerifyComponent },
-  { path: 'vendor/photos', component: PhotosManageComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
+
+  { path: 'vendor/photos', component: PhotosManageComponent, canActivate: [authGuard, roleGuard(['vendor'])] },
   { path: 'settings/change-password', component: ChangePasswordComponent, canActivate: [authGuard] },
   { path: 'sessions', component: SessionsManageComponent, canActivate: [authGuard] },
   { path: 'profile', component: MyProfileComponent, canActivate: [authGuard] },
@@ -83,20 +93,16 @@ export const routes: Routes = [
   { path: 'cookie-policy', component: CookiePolicyComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'settings/privacy', component: PrivacySettingsComponent, canActivate: [authGuard] },
-
   { path: 'admin/deletion-requests', component: DeletionRequestsComponent, canActivate: [authGuard, roleGuard(['admin'])] },
   { path: 'settings/confirm-email', component: ConfirmEmailComponent },
 
   // Customer routes
-  { path: 'customer/home', component: HomeComponent, canActivate: [authGuard, roleGuard(['customer'])] },
-  { path: 'customer/vendor/:id', component: VendorDetailComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/bookings', component: MyBookingsComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/booking/:id', component: BookingDetailComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/wishlist', component: MyWishlistComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/reviews', component: MyReviewsComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/post/create', component: CreateEventPostComponent, canActivate: [authGuard, roleGuard(['customer'])] },
   { path: 'customer/my-posts', component: MyEventPostsComponent, canActivate: [authGuard, roleGuard(['customer'])] },
-  { path: 'customer/compare', component: VendorCompareComponent, canActivate: [authGuard, roleGuard(['customer'])] },
 
   // Vendor routes
   { path: 'vendor/dashboard', component: VendorDashboardComponent, canActivate: [authGuard, roleGuard(['vendor'])] },

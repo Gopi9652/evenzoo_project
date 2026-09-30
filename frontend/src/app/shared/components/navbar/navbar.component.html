@@ -20,6 +20,7 @@
   </div>
 
   <div class="right-section">
+  @if (authService.isLoggedIn()) {
     <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="icon-btn">
       <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeColor="warn" matBadgeSize="small">
         notifications
@@ -73,9 +74,14 @@
         <span>Privacy & Data</span>
       </button>
     </mat-menu>
+  }
+   @else {
+      <a routerLink="/login" class="nav-login-btn">Login</a>
+      <a routerLink="/register" class="nav-register-btn">Register</a>
+    }
   </div>
 </nav>
-
+@if (authService.isLoggedIn()) {
 @if (menuOpen) {
   <div class="overlay" (click)="menuOpen = false"></div>
 }
@@ -167,3 +173,4 @@
 
   </div>
 </div>
+}

@@ -117,3 +117,41 @@ class AdminBookingDetailResponse(BaseModel):
 
     class Config:
         from_attributes = True
+class BookedServiceItem(BaseModel):
+    service_id: int
+    name: str
+    quantity: int
+    unit_price: Decimal
+    total: Decimal
+
+
+class BookingRichResponse(BaseModel):
+    id:                int
+    booking_ref:       str
+    status:            str
+    event_date:        date
+    event_time:        Optional[time] = None
+    event_location:    str
+    guests_count:      Optional[int] = None
+    special_requests:  Optional[str] = None
+    total_amount:      Decimal
+    platform_fee:      Optional[Decimal] = None
+    vendor_amount:     Optional[Decimal] = None
+    event_type_name:   Optional[str] = None
+    created_at:        datetime
+    cancellation_reason: Optional[str] = None
+
+    # The other party, shaped for whoever is asking
+    customer_id:       int
+    customer_name:     str
+    customer_phone:    Optional[str] = None
+    customer_email:    Optional[str] = None
+    vendor_id:         int
+    vendor_user_id:    int
+    vendor_business_name: str
+    vendor_phone:      Optional[str] = None
+
+    services:          List[BookedServiceItem] = []
+
+    class Config:
+        from_attributes = True

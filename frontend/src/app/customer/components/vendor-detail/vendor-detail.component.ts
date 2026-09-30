@@ -15,7 +15,7 @@ import { environment } from '../../../../environments/environment';
 import { CompareService } from '../../../core/services/compare.service';
 import { PhotoLightboxComponent } from '../../../shared/components/photo-lightbox/photo-lightbox.component';
 import { Location } from '@angular/common';
-
+import { LoginGateService } from '../../../core/services/login-gate.service';
 @Component({
   selector: 'app-vendor-detail',
   standalone: true,
@@ -47,7 +47,8 @@ export class VendorDetailComponent implements OnInit {
     private reviewService: ReviewService,
     private dialog: MatDialog,
     public compareService: CompareService,
-    private location: Location
+    private location: Location,
+    private loginGate: LoginGateService
   ) {}
 
   ngOnInit() {
@@ -107,23 +108,23 @@ export class VendorDetailComponent implements OnInit {
     return breakdown;
   }
 
-  openBookingDialog() {
-    const dialogRef = this.dialog.open(BookingFormComponent, {
-      width: '520px',
-      maxWidth: '95vw',
-      data: {
-        vendorId: this.vendorId,
-        vendorName: this.vendor?.business_name,
-        services: this.services
-      }
-    });
+ //openBookingDialog() {
+   // const dialogRef = this.dialog.open(BookingFormComponent, {
+     // width: '520px',
+      //maxWidth: '95vw',
+      //data: {
+        //vendorId: this.vendorId,
+        //vendorName: this.vendor?.business_name,
+        //services: this.services
+      //}
+   // });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'success') {
-        this.router.navigate(['/customer/bookings']);
-      }
-    });
-  }
+    //dialogRef.afterClosed().subscribe(result => {
+    //  if (result === 'success') {
+    //    this.router.navigate(['/customer/bookings']);
+    //  }
+   // });
+  //}
   get whatsappLink(): string {
     if (!this.vendor?.whatsapp_number) return '';
 
@@ -164,4 +165,31 @@ export class VendorDetailComponent implements OnInit {
     this.router.navigate(['/customer/home']);
   }
   
+  openBookingDialog() {
+  this.loginGate.requireCustomer(() => {
+    const dialogRef = this.dialog.open(BookingFormComponent, {
+      width: '520px',
+      maxWidth: '95vw',
+      data: {
+        vendorId: this.vendorId,
+        vendorName: this.vendor?.business_name,
+        services: this.services
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'success') {
+        this.router.navigate(['/customer/bookings']);
+      }
+    });
+  });
+}
+
+messageVendor() {
+  this.loginGate.requireLogin(() => {
+    this.router.navigate(['/chat/user', this.vendor?.user_id], {
+      queryParams: { name: this.vendor?.business_name }
+    });
+  });
+}
 }

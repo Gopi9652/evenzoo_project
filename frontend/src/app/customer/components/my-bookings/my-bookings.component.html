@@ -1,26 +1,23 @@
-
 <app-navbar></app-navbar>
 
 <div class="bookings-page">
 
-  <!-- =========================
+  <!-- ================================
        PAGE HEADER
-       ========================= -->
+       ================================ -->
 
   <div class="page-header">
-
     <h1>My Bookings</h1>
 
     <p>
       Track all your event bookings in one place
     </p>
-
   </div>
 
 
-  <!-- =========================
+  <!-- ================================
        MAIN CONTENT
-       ========================= -->
+       ================================ -->
 
   <div class="bookings-container">
 
@@ -68,9 +65,9 @@
 
     } @else {
 
-      <!-- =========================
+      <!-- ================================
            BOOKING TABS
-           ========================= -->
+           ================================ -->
 
       <mat-tab-group class="bookings-tabs">
 
@@ -94,14 +91,12 @@
                 (click)="viewBooking(booking.id)">
 
 
+                <!-- STATUS -->
+
                 <div
                   class="booking-status"
-                  [style.background]="
-                    statusColor(booking.status) + '15'
-                  "
-                  [style.color]="
-                    statusColor(booking.status)
-                  ">
+                  [style.background]="statusColor(booking.status) + '15'"
+                  [style.color]="statusColor(booking.status)">
 
                   <mat-icon>
                     {{ statusIcon(booking.status) }}
@@ -112,14 +107,60 @@
                 </div>
 
 
-                <h4>
-                  {{ booking.booking_ref }}
+                <!-- VENDOR -->
+
+                <h4 class="vendor-title">
+                  {{ booking.vendor_business_name }}
                 </h4>
 
 
+                <!-- BOOKING REFERENCE -->
+
+                <span class="booking-ref">
+                  {{ booking.booking_ref }}
+                </span>
+
+
+                <!-- SERVICES -->
+
+                @if (
+                  booking.services &&
+                  booking.services.length > 0
+                ) {
+
+                  <div class="service-chips">
+
+                    @for (
+                      svc of booking.services.slice(0, 3);
+                      track svc.service_id
+                    ) {
+
+                      <span class="svc-chip">
+                        {{ svc.name }}
+                      </span>
+
+                    }
+
+                    @if (booking.services.length > 3) {
+
+                      <span class="svc-chip more">
+                        +{{ booking.services.length - 3 }}
+                      </span>
+
+                    }
+
+                  </div>
+
+                }
+
+
+                <!-- EVENT DATE -->
+
                 <p class="booking-meta">
 
-                  <mat-icon>event</mat-icon>
+                  <mat-icon>
+                    event
+                  </mat-icon>
 
                   <span>
                     {{ booking.event_date | date:'mediumDate' }}
@@ -128,9 +169,13 @@
                 </p>
 
 
+                <!-- EVENT LOCATION -->
+
                 <p class="booking-meta">
 
-                  <mat-icon>place</mat-icon>
+                  <mat-icon>
+                    place
+                  </mat-icon>
 
                   <span>
                     {{ booking.event_location }}
@@ -138,6 +183,8 @@
 
                 </p>
 
+
+                <!-- FOOTER -->
 
                 <div class="booking-footer">
 
@@ -153,15 +200,22 @@
 
               </div>
 
+
             } @empty {
+
+              <!-- EMPTY PENDING -->
 
               <div class="empty-tab">
 
                 <div class="empty-tab-icon">
-                  <mat-icon>schedule</mat-icon>
+                  <mat-icon>
+                    schedule
+                  </mat-icon>
                 </div>
 
-                <h3>No pending bookings</h3>
+                <h3>
+                  No pending bookings
+                </h3>
 
                 <p>
                   You don't have any bookings waiting for confirmation.
@@ -174,6 +228,7 @@
           </div>
 
         </mat-tab>
+
 
 
         <!-- =================================================
@@ -195,14 +250,12 @@
                 (click)="viewBooking(booking.id)">
 
 
+                <!-- STATUS -->
+
                 <div
                   class="booking-status"
-                  [style.background]="
-                    statusColor(booking.status) + '15'
-                  "
-                  [style.color]="
-                    statusColor(booking.status)
-                  ">
+                  [style.background]="statusColor(booking.status) + '15'"
+                  [style.color]="statusColor(booking.status)">
 
                   <mat-icon>
                     {{ statusIcon(booking.status) }}
@@ -213,14 +266,60 @@
                 </div>
 
 
-                <h4>
-                  {{ booking.booking_ref }}
+                <!-- VENDOR -->
+
+                <h4 class="vendor-title">
+                  {{ booking.vendor_business_name }}
                 </h4>
 
 
+                <!-- BOOKING REFERENCE -->
+
+                <span class="booking-ref">
+                  {{ booking.booking_ref }}
+                </span>
+
+
+                <!-- SERVICES -->
+
+                @if (
+                  booking.services &&
+                  booking.services.length > 0
+                ) {
+
+                  <div class="service-chips">
+
+                    @for (
+                      svc of booking.services.slice(0, 3);
+                      track svc.service_id
+                    ) {
+
+                      <span class="svc-chip">
+                        {{ svc.name }}
+                      </span>
+
+                    }
+
+                    @if (booking.services.length > 3) {
+
+                      <span class="svc-chip more">
+                        +{{ booking.services.length - 3 }}
+                      </span>
+
+                    }
+
+                  </div>
+
+                }
+
+
+                <!-- EVENT DATE -->
+
                 <p class="booking-meta">
 
-                  <mat-icon>event</mat-icon>
+                  <mat-icon>
+                    event
+                  </mat-icon>
 
                   <span>
                     {{ booking.event_date | date:'mediumDate' }}
@@ -229,9 +328,13 @@
                 </p>
 
 
+                <!-- EVENT LOCATION -->
+
                 <p class="booking-meta">
 
-                  <mat-icon>place</mat-icon>
+                  <mat-icon>
+                    place
+                  </mat-icon>
 
                   <span>
                     {{ booking.event_location }}
@@ -239,6 +342,8 @@
 
                 </p>
 
+
+                <!-- FOOTER -->
 
                 <div class="booking-footer">
 
@@ -254,15 +359,22 @@
 
               </div>
 
+
             } @empty {
+
+              <!-- EMPTY CONFIRMED -->
 
               <div class="empty-tab">
 
                 <div class="empty-tab-icon">
-                  <mat-icon>verified</mat-icon>
+                  <mat-icon>
+                    verified
+                  </mat-icon>
                 </div>
 
-                <h3>No confirmed bookings</h3>
+                <h3>
+                  No confirmed bookings
+                </h3>
 
                 <p>
                   Confirmed bookings will appear here.
@@ -275,6 +387,7 @@
           </div>
 
         </mat-tab>
+
 
 
         <!-- =================================================
@@ -296,14 +409,12 @@
                 (click)="viewBooking(booking.id)">
 
 
+                <!-- STATUS -->
+
                 <div
                   class="booking-status"
-                  [style.background]="
-                    statusColor(booking.status) + '15'
-                  "
-                  [style.color]="
-                    statusColor(booking.status)
-                  ">
+                  [style.background]="statusColor(booking.status) + '15'"
+                  [style.color]="statusColor(booking.status)">
 
                   <mat-icon>
                     {{ statusIcon(booking.status) }}
@@ -314,14 +425,60 @@
                 </div>
 
 
-                <h4>
-                  {{ booking.booking_ref }}
+                <!-- VENDOR -->
+
+                <h4 class="vendor-title">
+                  {{ booking.vendor_business_name }}
                 </h4>
 
 
+                <!-- BOOKING REFERENCE -->
+
+                <span class="booking-ref">
+                  {{ booking.booking_ref }}
+                </span>
+
+
+                <!-- SERVICES -->
+
+                @if (
+                  booking.services &&
+                  booking.services.length > 0
+                ) {
+
+                  <div class="service-chips">
+
+                    @for (
+                      svc of booking.services.slice(0, 3);
+                      track svc.service_id
+                    ) {
+
+                      <span class="svc-chip">
+                        {{ svc.name }}
+                      </span>
+
+                    }
+
+                    @if (booking.services.length > 3) {
+
+                      <span class="svc-chip more">
+                        +{{ booking.services.length - 3 }}
+                      </span>
+
+                    }
+
+                  </div>
+
+                }
+
+
+                <!-- EVENT DATE -->
+
                 <p class="booking-meta">
 
-                  <mat-icon>event</mat-icon>
+                  <mat-icon>
+                    event
+                  </mat-icon>
 
                   <span>
                     {{ booking.event_date | date:'mediumDate' }}
@@ -329,6 +486,23 @@
 
                 </p>
 
+
+                <!-- EVENT LOCATION -->
+
+                <p class="booking-meta">
+
+                  <mat-icon>
+                    place
+                  </mat-icon>
+
+                  <span>
+                    {{ booking.event_location }}
+                  </span>
+
+                </p>
+
+
+                <!-- FOOTER -->
 
                 <div class="booking-footer">
 
@@ -344,15 +518,22 @@
 
               </div>
 
+
             } @empty {
+
+              <!-- EMPTY COMPLETED -->
 
               <div class="empty-tab">
 
                 <div class="empty-tab-icon">
-                  <mat-icon>task_alt</mat-icon>
+                  <mat-icon>
+                    task_alt
+                  </mat-icon>
                 </div>
 
-                <h3>No completed bookings</h3>
+                <h3>
+                  No completed bookings
+                </h3>
 
                 <p>
                   Your completed bookings will appear here.
@@ -365,6 +546,7 @@
           </div>
 
         </mat-tab>
+
 
 
         <!-- =================================================
@@ -386,14 +568,12 @@
                 (click)="viewBooking(booking.id)">
 
 
+                <!-- STATUS -->
+
                 <div
                   class="booking-status"
-                  [style.background]="
-                    statusColor(booking.status) + '15'
-                  "
-                  [style.color]="
-                    statusColor(booking.status)
-                  ">
+                  [style.background]="statusColor(booking.status) + '15'"
+                  [style.color]="statusColor(booking.status)">
 
                   <mat-icon>
                     {{ statusIcon(booking.status) }}
@@ -404,14 +584,60 @@
                 </div>
 
 
-                <h4>
-                  {{ booking.booking_ref }}
+                <!-- VENDOR -->
+
+                <h4 class="vendor-title">
+                  {{ booking.vendor_business_name }}
                 </h4>
 
 
+                <!-- BOOKING REFERENCE -->
+
+                <span class="booking-ref">
+                  {{ booking.booking_ref }}
+                </span>
+
+
+                <!-- SERVICES -->
+
+                @if (
+                  booking.services &&
+                  booking.services.length > 0
+                ) {
+
+                  <div class="service-chips">
+
+                    @for (
+                      svc of booking.services.slice(0, 3);
+                      track svc.service_id
+                    ) {
+
+                      <span class="svc-chip">
+                        {{ svc.name }}
+                      </span>
+
+                    }
+
+                    @if (booking.services.length > 3) {
+
+                      <span class="svc-chip more">
+                        +{{ booking.services.length - 3 }}
+                      </span>
+
+                    }
+
+                  </div>
+
+                }
+
+
+                <!-- EVENT DATE -->
+
                 <p class="booking-meta">
 
-                  <mat-icon>event</mat-icon>
+                  <mat-icon>
+                    event
+                  </mat-icon>
 
                   <span>
                     {{ booking.event_date | date:'mediumDate' }}
@@ -419,17 +645,50 @@
 
                 </p>
 
+
+                <!-- EVENT LOCATION -->
+
+                <p class="booking-meta">
+
+                  <mat-icon>
+                    place
+                  </mat-icon>
+
+                  <span>
+                    {{ booking.event_location }}
+                  </span>
+
+                </p>
+
+
+                <!-- FOOTER -->
+
+                <div class="booking-footer">
+
+                  <span class="amount">
+                    ₹{{ booking.total_amount | number }}
+                  </span>
+
+                </div>
+
               </div>
 
+
             } @empty {
+
+              <!-- EMPTY CANCELLED -->
 
               <div class="empty-tab">
 
                 <div class="empty-tab-icon">
-                  <mat-icon>event_busy</mat-icon>
+                  <mat-icon>
+                    event_busy
+                  </mat-icon>
                 </div>
 
-                <h3>No cancelled bookings</h3>
+                <h3>
+                  No cancelled bookings
+                </h3>
 
                 <p>
                   You don't have any cancelled bookings.

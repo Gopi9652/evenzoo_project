@@ -10,6 +10,7 @@ import { Booking } from '../../../core/models/booking.model';
 import { ApprovalBannerComponent } from '../../../shared/components/approval-banner/approval-banner.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-bookings-manage',
   standalone: true,
@@ -27,7 +28,7 @@ export class BookingsManageComponent implements OnInit {
   isApproved: boolean | null = null;
   paymentsEnabled = environment.paymentsEnabled;
 
-  constructor(private bookingService: BookingService,  private authService: AuthService) {}
+  constructor(private bookingService: BookingService,  private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.loadBookings();
@@ -49,6 +50,11 @@ export class BookingsManageComponent implements OnInit {
 
   get pendingBookings(): Booking[] {
     return this.allBookings.filter(b => b.status === 'pending');
+  }
+  messageCustomer(booking: Booking) {
+    this.router.navigate(['/chat/booking', booking.id], {
+      queryParams: { receiverId: booking.customer_id, name: booking.customer_name }
+    });
   }
 
   get confirmedBookings(): Booking[] {
