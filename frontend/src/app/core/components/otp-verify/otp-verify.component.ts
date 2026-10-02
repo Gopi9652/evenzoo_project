@@ -25,7 +25,7 @@ export class OtpVerifyComponent implements OnInit {
   loading = false;
   errorMessage = '';
   successMessage = '';
-  phone = '';
+  email = '';
   purpose = '';
 
   constructor(
@@ -41,7 +41,7 @@ export class OtpVerifyComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.phone = params['phone'];
+      this.email = params['email'];
       this.purpose = params['purpose'];
     });
   }
@@ -55,14 +55,10 @@ export class OtpVerifyComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    this.authService.verifyOtp(
-      this.phone,
-      this.otpForm.value.otp_code,
-      this.purpose
-    ).subscribe({
+    this.authService.verifyOtp(this.email, this.otpForm.value.otp_code, this.purpose).subscribe({
       next: () => {
         this.loading = false;
-        this.successMessage = 'Phone verified successfully! Redirecting to login...';
+        this.successMessage = 'Email verified successfully! Redirecting to login...';
         setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
@@ -73,7 +69,7 @@ export class OtpVerifyComponent implements OnInit {
   }
 
   resendOtp() {
-    this.authService.sendOtp(this.phone, this.purpose).subscribe({
+    this.authService.sendOtp(this.email, this.purpose).subscribe({
       next: () => {
         this.errorMessage = '';
         this.successMessage = 'OTP resent successfully!';
@@ -82,3 +78,66 @@ export class OtpVerifyComponent implements OnInit {
     });
   }
 }
+
+// export class OtpVerifyComponent implements OnInit {
+//   otpForm: FormGroup;
+//   loading = false;
+//   errorMessage = '';
+//   successMessage = '';
+//   phone = '';
+//   purpose = '';
+
+//   constructor(
+//     private fb: FormBuilder,
+//     private authService: AuthService,
+//     private route: ActivatedRoute,
+//     private router: Router
+//   ) {
+//     this.otpForm = this.fb.group({
+//       otp_code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]]
+//     });
+//   }
+
+//   ngOnInit() {
+//     this.route.queryParams.subscribe(params => {
+//       this.phone = params['phone'];
+//       this.purpose = params['purpose'];
+//     });
+//   }
+
+//   onSubmit() {
+//     if (this.otpForm.invalid) {
+//       this.otpForm.markAllAsTouched();
+//       return;
+//     }
+
+//     this.loading = true;
+//     this.errorMessage = '';
+
+//     this.authService.verifyOtp(
+//       this.phone,
+//       this.otpForm.value.otp_code,
+//       this.purpose
+//     ).subscribe({
+//       next: () => {
+//         this.loading = false;
+//         this.successMessage = 'Phone verified successfully! Redirecting to login...';
+//         setTimeout(() => this.router.navigate(['/login']), 2000);
+//       },
+//       error: (err) => {
+//         this.loading = false;
+//         this.errorMessage = err.error?.detail || 'OTP verification failed.';
+//       }
+//     });
+//   }
+
+//   resendOtp() {
+//     this.authService.sendOtp(this.phone, this.purpose).subscribe({
+//       next: () => {
+//         this.errorMessage = '';
+//         this.successMessage = 'OTP resent successfully!';
+//         setTimeout(() => this.successMessage = '', 3000);
+//       }
+//     });
+//   }
+// }

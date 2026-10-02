@@ -15,6 +15,13 @@ class Settings(BaseSettings):
     CLOUDINARY_API_KEY: str = "916785571475724"
     CLOUDINARY_API_SECRET: str = "NihIvJC0ko43X0r2SRHqIDRAXDg"
     MESSAGE_ENCRYPTION_KEY: str = "tExog41sk102t-cbRQjk8its7M7V6mebksBSC8wcXnM="
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str = "placeholder"
+    SMTP_PASSWORD: str = "placeholder"
+    SMTP_FROM_EMAIL: str = "noreply@evenzoo.in"
+    SMTP_FROM_NAME: str = "Evenzoo"
+    OTP_CHANNEL: str = "email"   # "email" | "sms" | "both"
     class Config:
         env_file = ".env"
 

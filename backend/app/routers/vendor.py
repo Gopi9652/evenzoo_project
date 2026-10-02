@@ -20,7 +20,7 @@ from fastapi import UploadFile, File
 from app.utils.cloudinary_client import upload_image
 from typing import List
 from app.schemas.compare import VendorCompareData
-
+from app.models.customer import CustomerProfile
 router = APIRouter(tags=["Vendors"])
 
 

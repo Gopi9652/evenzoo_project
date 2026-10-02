@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
@@ -26,17 +26,17 @@ class User(Base):
     bookings_made    = relationship("Booking", foreign_keys="Booking.customer_id", back_populates="customer")
     notifications    = relationship("Notification", back_populates="user")
     reviews          = relationship("Review", foreign_keys="Review.customer_id", back_populates="customer")
-
 class OTPVerification(Base):
     __tablename__ = "otp_verifications"
 
-    id         = Column(Integer, primary_key=True, index=True)
-    user_id    = Column(Integer, nullable=False)
-    otp_code   = Column(String(6), nullable=False)
-    purpose    = Column(String(30))
-    expires_at = Column(DateTime, nullable=False)
-    is_used    = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    id          = Column(Integer, primary_key=True, index=True)
+    user_id     = Column(Integer, ForeignKey("users.id"), nullable=True)   # ← now nullable
+    email       = Column(String(150), nullable=True)                       # ← new, for pre-registration OTPs
+    otp_code    = Column(String(10), nullable=False)
+    purpose     = Column(String(30), nullable=False)
+    is_used     = Column(Boolean, default=False)
+    expires_at  = Column(DateTime, nullable=False)
+    created_at  = Column(DateTime, default=datetime.utcnow)
 
 
 

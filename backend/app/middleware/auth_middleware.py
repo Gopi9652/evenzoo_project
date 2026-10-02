@@ -4,8 +4,33 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
 from app.utils.security import decode_token
+from fastapi import Request
+from fastapi.security.utils import get_authorization_scheme_param
 
 bearer = HTTPBearer()
+
+def get_current_user_optional(request: Request, db: Session = Depends(get_db)):
+    """
+    Same as get_current_user, but returns None instead of raising 401
+    when no valid token is present — lets a route behave differently
+    for logged-in vs anonymous visitors without blocking either.
+    """
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        return None
+
+    scheme, token = get_authorization_scheme_param(auth_header)
+    if scheme.lower() != "bearer" or not token:
+        return None
+
+    payload = decode_token(token)
+    if not payload or payload.get("type") != "access":
+        return None
+
+    user_id = payload.get("sub")
+    user = db.query(User).filter(User.id == int(user_id)).first()
+    return user
+
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(bearer),

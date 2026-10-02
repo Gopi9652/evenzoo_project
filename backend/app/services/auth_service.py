@@ -15,6 +15,8 @@ from app.utils.security import (
 from app.utils.otp import generate_otp, otp_expiry
 from datetime import timedelta
 from app.utils.sms import send_otp_sms
+from app.utils.email_sender import send_email_sync, otp_email_template
+from app.config import settings
 class AuthService:
 
     def register(self, db: Session, data: RegisterRequest):
@@ -128,7 +130,51 @@ class AuthService:
         else:
             return "Unknown Device"
 
+    def send_otp(self, db: Session, email: str, purpose: str):
+        """
+        OTP is now sent via email instead of SMS, since SMS gateways in India
+        require business KYC documents that aren't available yet. Email works
+        with just SMTP credentials — no business verification required.
+        
+        user = db.query(User).filter(User.email == email).first()
 
+        if purpose == "register" and user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+
+        if purpose in ("login", "reset_password", "phone_change") and not user:
+            raise HTTPException(status_code=404, detail="No account found with this email")
+        """
+        user = db.query(User).filter(User.email == email).first()
+        # Invalidate any previous unused OTPs for this purpose
+        db.query(OTPVerification).filter(
+            OTPVerification.user_id == (user.id if user else None),
+            OTPVerification.purpose == purpose,
+            OTPVerification.is_used == False
+        ).update({"is_used": True})
+
+        code = generate_otp()
+        db.add(OTPVerification(
+            user_id=user.id if user else None,
+            otp_code=code,
+            purpose=purpose,
+            expires_at=otp_expiry(10)
+        ))
+        db.commit()
+        # Channel is decided by a setting, not hardcoded — flip OTP_CHANNEL to "sms"
+        # or "both" later once SMS KYC is complete, with zero other code changes needed.
+        if settings.OTP_CHANNEL in ("email", "both"):
+            html = otp_email_template(code, purpose)
+            send_email_sync(email, "Your Evenzoo Verification Code", html)
+
+        if settings.OTP_CHANNEL in ("sms", "both") and user and user.phone:
+            from app.utils.sms import send_otp_sms
+            send_otp_sms(user.phone, code)
+
+        html = otp_email_template(code, purpose)
+        send_email_sync(email, "Your Evenzoo Verification Code", html)
+
+        return {"message": f"A verification code has been sent to {email}"}
+    """
     def send_otp(self, db: Session, phone: str, purpose: str):
         user = db.query(User).filter(User.phone == phone).first()
         '''
@@ -167,7 +213,7 @@ class AuthService:
         send_otp_sms(phone, code)
 
         return {"message": f"OTP sent to {phone}"}
-
+    
 
     def verify_otp(
         self, db: Session,
@@ -202,6 +248,28 @@ class AuthService:
         db.commit()
 
         return {"message": "OTP verified successfully", "verified": True}
+    """
+    def verify_otp(self, db: Session, email: str, otp_code: str, purpose: str):
+        record = db.query(OTPVerification).filter(
+            OTPVerification.email == email,
+            OTPVerification.otp_code == otp_code,
+            OTPVerification.purpose == purpose,
+            OTPVerification.is_used == False,
+            OTPVerification.expires_at > datetime.utcnow()
+        ).first()
+
+        if not record:
+            raise HTTPException(status_code=400, detail="Invalid or expired OTP")
+
+        record.is_used = True
+
+        if purpose == "register":
+            user = db.query(User).filter(User.email == email).first()
+            if user:
+                user.is_verified = True
+
+        db.commit()
+        return {"message": "OTP verified successfully"}
 
 
     def refresh_token(self, db: Session, token: str):

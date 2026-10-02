@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Depends
 from typing import Optional
 
 from app.models.vendor import (
@@ -20,6 +20,8 @@ from app.models.review import Review
 from typing import List
 from app.models.vendor import VendorProfile, VendorPhoto, VendorService, VendorCategoryMap
 from app.models.location import City
+from app.middleware.auth_middleware import get_current_user_optional  # see Step 4 below
+
 class VendorService_:
 
     # ── GET VENDOR PROFILE ──
@@ -89,7 +91,8 @@ class VendorService_:
         city_id: Optional[int] = None,
         category_id: Optional[int] = None,
         skip: int = 0,
-        limit: int = 20
+        limit: int = 20,
+        current_user = Depends(get_current_user_optional),
     ):
         # =========================================================
         # 1. BASE VENDOR QUERY
@@ -102,6 +105,12 @@ class VendorService_:
         # =========================================================
         # 2. STATE FILTER
         # =========================================================
+        if not city_id and not state_id and current_user and current_user.role == "customer":
+            customer_profile = db.query(CustomerProfile).filter(
+                CustomerProfile.user_id == current_user.id
+            ).first()
+            if customer_profile and customer_profile.city_id:
+                city_id = customer_profile.city_id
 
         if state_id:
             city_ids_in_state = (

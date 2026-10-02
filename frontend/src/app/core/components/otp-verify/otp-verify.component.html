@@ -2,8 +2,8 @@
   <mat-card class="auth-card">
     <div class="auth-header">
       <div class="logo-icon">📱</div>
-      <h1>Verify Your Phone</h1>
-      <p>We sent a 6-digit code to +91 {{ phone }}</p>
+      <h1>Verify Here</h1>
+      <p>We sent a 6-digit code to {{ email }}</p>
     </div>
 
     <form [formGroup]="otpForm" (ngSubmit)="onSubmit()">

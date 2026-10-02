@@ -23,13 +23,24 @@ class LoginResponse(BaseModel):
     role: str
     user_id: int
     name: str
-
+'''
 class SendOTPRequest(BaseModel):
     phone: str
     purpose: str  # register / login / reset_password
 
 class VerifyOTPRequest(BaseModel):
     phone: str
+    otp_code: str
+    purpose: str
+
+'''
+class SendOTPRequest(BaseModel):
+    email: EmailStr
+    purpose: str
+
+
+class VerifyOTPRequest(BaseModel):
+    email: EmailStr
     otp_code: str
     purpose: str
 

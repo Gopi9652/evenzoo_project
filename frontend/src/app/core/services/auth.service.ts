@@ -28,12 +28,20 @@ export class AuthService {
     return this.http.get<User>(`${this.apiUrl}/me`);
   }
 
-  sendOtp(phone: string, purpose: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/send-otp`, { phone, purpose });
+  // //sendOtp(phone: string, purpose: string): Observable<any> {
+  //   return this.http.post(`${this.apiUrl}/send-otp`, { phone, purpose });
+  // }
+
+  // verifyOtp(phone: string, otp_code: string, purpose: string): Observable<any> {
+  //   return this.http.post(`${this.apiUrl}/verify-otp`, { phone, otp_code, purpose });
+  // }
+
+  sendOtp(email: string, purpose: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/send-otp`, { email, purpose });
   }
 
-  verifyOtp(phone: string, otp_code: string, purpose: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/verify-otp`, { phone, otp_code, purpose });
+  verifyOtp(email: string, otpCode: string, purpose: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/verify-otp`, { email, otp_code: otpCode, purpose });
   }
 
   isLoggedIn(): boolean {

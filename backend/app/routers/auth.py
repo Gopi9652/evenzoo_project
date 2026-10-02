@@ -41,7 +41,7 @@ def login(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
     ip_address = request.client.host if request.client else None
     return auth_service.login(db, data, user_agent, ip_address)
 
-
+'''
 @router.post("/send-otp")
 @limiter.limit("5/hour")
 def send_otp(
@@ -62,7 +62,17 @@ def verify_otp(
     return auth_service.verify_otp(
         db, data.phone, data.otp_code, data.purpose
     )
+'''
+@router.post("/send-otp")
+@limiter.limit("5/hour")
+def send_otp(request: Request, data: SendOTPRequest, db: Session = Depends(get_db)):
+    return auth_service.send_otp(db, data.email, data.purpose)
 
+
+@router.post("/verify-otp", response_model=OTPResponse)
+@limiter.limit("10/hour")
+def verify_otp(request: Request, data: VerifyOTPRequest, db: Session = Depends(get_db)):
+    return auth_service.verify_otp(db, data.email, data.otp_code, data.purpose)
 
 @router.post("/refresh", response_model=RefreshResponse)
 def refresh(

@@ -45,27 +45,56 @@ export class RegisterComponent {
     });
   }
 
+  // onSubmit() {
+  //   if (this.registerForm.invalid) {
+  //     this.registerForm.markAllAsTouched();
+  //     return;
+  //   }
+    
+
+  //   this.loading = true;
+  //   this.errorMessage = '';
+  //   const { agreeToTerms, ...registerPayload } = this.registerForm.value;
+    
+
+  //   this.authService.register(this.registerForm.value).subscribe({
+  //     next: () => {
+  //       this.loading = false;
+  //       // Send OTP then redirect to verify page
+  //       const phone = this.registerForm.value.phone;
+  //       this.authService.sendOtp(phone, 'register').subscribe({
+  //         next: () => {
+  //           this.router.navigate(['/verify-otp'], {
+  //             queryParams: { phone, purpose: 'register' }
+  //           });
+  //         }
+  //       });
+  //     },
+  //     error: (err) => {
+  //       this.loading = false;
+  //       this.errorMessage = err.error?.detail || 'Registration failed.';
+  //     }
+  //   });
+  // }
   onSubmit() {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
     }
-    
 
     this.loading = true;
     this.errorMessage = '';
-    const { agreeToTerms, ...registerPayload } = this.registerForm.value;
-    
 
-    this.authService.register(this.registerForm.value).subscribe({
+    const { agreeToTerms, ...registerPayload } = this.registerForm.value;
+
+    this.authService.register(registerPayload).subscribe({
       next: () => {
         this.loading = false;
-        // Send OTP then redirect to verify page
-        const phone = this.registerForm.value.phone;
-        this.authService.sendOtp(phone, 'register').subscribe({
+        const email = this.registerForm.value.email;
+        this.authService.sendOtp(email, 'register').subscribe({
           next: () => {
             this.router.navigate(['/verify-otp'], {
-              queryParams: { phone, purpose: 'register' }
+              queryParams: { email, purpose: 'register' }
             });
           }
         });
