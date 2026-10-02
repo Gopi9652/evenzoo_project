@@ -15,6 +15,7 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
 import { CompareService } from '../../../core/services/compare.service';
 import { Router } from '@angular/router';
 import { GeolocationService } from '../../../core/services/geolocation.service';
+import { WishlistService } from '../../../core/services/wishlist.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -28,6 +29,7 @@ import { GeolocationService } from '../../../core/services/geolocation.service';
 })
 export class HomeComponent implements OnInit {
   vendors: VendorProfile[] = [];
+  wishlistedVendorIds = new Set<number>();
   categories: Category[] = [];
   states: State[] = [];
   cities: City[] = [];
@@ -51,6 +53,7 @@ export class HomeComponent implements OnInit {
     private locationService: LocationService,
     public compareService: CompareService,
     private router: Router,
+    private wishlistService: WishlistService,
     private geolocationService: GeolocationService   // ← new
   ) {}
 
@@ -59,7 +62,26 @@ export class HomeComponent implements OnInit {
     this.loadStates();
     this.loadCities();
     this.loadVendors();
+    this.loadWishlistStatus();
   }
+  loadWishlistStatus(): void {
+
+  this.wishlistService.getWishlistedVendorIds().subscribe({
+    next: (res) => {
+
+      this.wishlistedVendorIds = new Set(
+        res.vendor_ids || []
+      );
+
+    },
+
+    error: () => {
+
+      this.wishlistedVendorIds = new Set<number>();
+
+    }
+  });
+}
   goToCompare() {
     const ids = this.compareService.getSelected();
     if (ids.length < 2) {

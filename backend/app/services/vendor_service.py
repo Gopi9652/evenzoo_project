@@ -18,6 +18,8 @@ from app.schemas.vendor import (
 from app.models.location import City
 from app.models.review import Review
 from typing import List
+from app.models.vendor import VendorProfile, VendorPhoto, VendorService, VendorCategoryMap
+from app.models.location import City
 class VendorService_:
 
     # ── GET VENDOR PROFILE ──
@@ -80,35 +82,202 @@ class VendorService_:
         db.refresh(vendor)
         return vendor
 
-
     def list_vendors(
-        self, db: Session,
-        state_id:    Optional[int] = None,
-        city_id:     Optional[int] = None,
+        self,
+        db: Session,
+        state_id: Optional[int] = None,
+        city_id: Optional[int] = None,
         category_id: Optional[int] = None,
         skip: int = 0,
         limit: int = 20
     ):
+        # =========================================================
+        # 1. BASE VENDOR QUERY
+        # =========================================================
+
         query = db.query(VendorProfile).filter(
             VendorProfile.is_approved == True
         )
 
+        # =========================================================
+        # 2. STATE FILTER
+        # =========================================================
+
         if state_id:
-            city_ids_in_state = db.query(City.id).filter(City.state_id == state_id).subquery()
-            query = query.filter(VendorProfile.city_id.in_(city_ids_in_state))
+            city_ids_in_state = (
+                db.query(City.id)
+                .filter(City.state_id == state_id)
+                .subquery()
+            )
+
+            query = query.filter(
+                VendorProfile.city_id.in_(city_ids_in_state)
+            )
+
+        # =========================================================
+        # 3. CITY FILTER
+        # =========================================================
 
         if city_id:
-            query = query.filter(VendorProfile.city_id == city_id)
+            query = query.filter(
+                VendorProfile.city_id == city_id
+            )
+
+        # =========================================================
+        # 4. CATEGORY FILTER
+        # =========================================================
 
         if category_id:
-            vendor_ids = db.query(VendorCategoryMap.vendor_id).filter(
-                VendorCategoryMap.category_id == category_id
-            ).subquery()
-            query = query.filter(VendorProfile.id.in_(vendor_ids))
+            vendor_ids_subquery = (
+                db.query(VendorCategoryMap.vendor_id)
+                .filter(
+                    VendorCategoryMap.category_id == category_id
+                )
+                .subquery()
+            )
 
-        query = query.order_by(VendorProfile.rank_score.desc())
+            query = query.filter(
+                VendorProfile.id.in_(vendor_ids_subquery)
+            )
 
-        return query.offset(skip).limit(limit).all()
+        # =========================================================
+        # 5. SORT + PAGINATION
+        # =========================================================
+
+        query = query.order_by(
+            VendorProfile.rank_score.desc()
+        )
+
+        vendors = (
+            query
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+
+        # No vendors found
+        if not vendors:
+            return []
+
+        # =========================================================
+        # 6. GET ALL VENDOR IDS
+        # =========================================================
+
+        vendor_ids = [
+            vendor.id
+            for vendor in vendors
+        ]
+
+        # =========================================================
+        # 7. GET ALL PHOTOS IN ONE QUERY
+        #
+        # Priority:
+        #   1. is_cover = True
+        #   2. lowest sort_order
+        #
+        # Therefore the first photo for each vendor becomes
+        # the cover/fallback photo.
+        # =========================================================
+
+        photos = (
+            db.query(VendorPhoto)
+            .filter(
+                VendorPhoto.vendor_id.in_(vendor_ids)
+            )
+            .order_by(
+                VendorPhoto.vendor_id.asc(),
+                VendorPhoto.is_cover.desc(),
+                VendorPhoto.sort_order.asc()
+            )
+            .all()
+        )
+
+        # =========================================================
+        # 8. GET ALL ACTIVE SERVICES IN ONE QUERY
+        # =========================================================
+
+        services = (
+            db.query(VendorService)
+            .filter(
+                VendorService.vendor_id.in_(vendor_ids),
+                VendorService.is_active == True
+            )
+            .order_by(
+                VendorService.vendor_id.asc(),
+                VendorService.price.asc()
+            )
+            .all()
+        )
+
+        # vendor_id -> list of services
+        services_by_vendor = {}
+
+        for service in services:
+
+            if service.vendor_id not in services_by_vendor:
+                services_by_vendor[service.vendor_id] = []
+
+            services_by_vendor[service.vendor_id].append(
+                service
+            )
+
+        # =========================================================
+        # 9. BUILD RESPONSE DATA
+        #
+        # IMPORTANT:
+        # No database queries happen inside this loop.
+        # =========================================================
+
+        for vendor in vendors:
+
+
+            # -----------------------------------------------------
+            # Get services already loaded into memory
+            # -----------------------------------------------------
+
+            vendor_services = services_by_vendor.get(
+                vendor.id,
+                []
+            )
+
+            # -----------------------------------------------------
+            # First 4 services for hover preview
+            # -----------------------------------------------------
+
+            vendor.services_preview = [
+                {
+                    "name": service.name,
+                    "price": service.price
+                }
+                for service in vendor_services[:4]
+            ]
+
+            # -----------------------------------------------------
+            # Total number of active services
+            # -----------------------------------------------------
+
+            vendor.service_count = len(
+                vendor_services
+            )
+
+            # -----------------------------------------------------
+            # Cheapest service
+            #
+            # Services were ordered by price ASC,
+            # so the first service is the cheapest.
+            # -----------------------------------------------------
+
+            vendor.min_price = (
+                vendor_services[0].price
+                if vendor_services
+                else None
+            )
+
+        # =========================================================
+        # 10. RETURN VENDORS
+        # =========================================================
+
+        return vendors
     # ── ADD SERVICE ──
     def add_service(
         self, db: Session,

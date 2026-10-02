@@ -295,7 +295,8 @@
         @for (vendor of filteredVendors; track vendor.id) {
 
           <app-vendor-card
-            [vendor]="vendor">
+            [vendor]="vendor"
+            [initialWishlisted]="wishlistedVendorIds.has(vendor.id)">
           </app-vendor-card>
 
         }

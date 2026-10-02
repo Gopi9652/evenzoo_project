@@ -80,5 +80,22 @@ class WishlistService_:
             CustomerWishlist.vendor_id == vendor_id
         ).first() is not None
 
+    def get_wishlisted_vendor_ids(
+        self,
+        db: Session,
+        user_id: int
+    ) -> list[int]:
 
+        rows = (
+            db.query(CustomerWishlist.vendor_id)
+            .filter(
+                CustomerWishlist.user_id == user_id
+            )
+            .all()
+        )
+
+        return [
+            vendor_id
+            for (vendor_id,) in rows
+        ]
 wishlist_service = WishlistService_()

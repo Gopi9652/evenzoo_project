@@ -123,4 +123,19 @@
 
   </div>
 
+  @if (vendor.services_preview && vendor.services_preview.length > 0) {
+      <div class="services-hover-panel">
+        <div class="hover-title">Services & Pricing</div>
+        @for (service of vendor.services_preview; track service.name) {
+          <div class="hover-row">
+            <span class="hover-name">{{ service.name }}</span>
+            <span class="hover-price">₹{{ service.price | number }}</span>
+          </div>
+        }
+        @if ((vendor.service_count || 0) > 4) {
+          <div class="hover-more">+ {{ (vendor.service_count || 0) - 4 }} more services on profile</div>
+        }
+      </div>
+    }
+
 </a>

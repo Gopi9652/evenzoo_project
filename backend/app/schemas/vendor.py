@@ -154,7 +154,9 @@ class WorkingHoursResponse(BaseModel):
 
     class Config:
         from_attributes = True
-
+class ServicePreview(BaseModel):
+    name: str
+    price: Decimal
 
 # ── VENDOR LIST (for customer browsing) ──
 class VendorListResponse(BaseModel):
@@ -167,6 +169,9 @@ class VendorListResponse(BaseModel):
     city_id:       Optional[int]    = None
     is_approved:   bool
     profile_photo_url: Optional[str] = None
+    services_preview: List[ServicePreview] = []
+    service_count: int = 0
+    min_price: Optional[Decimal] = None
 
     class Config:
         from_attributes = True

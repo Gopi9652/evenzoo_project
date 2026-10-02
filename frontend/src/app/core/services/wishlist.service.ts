@@ -35,4 +35,9 @@ export class WishlistService {
   checkWishlisted(vendorId: number): Observable<{ is_wishlisted: boolean }> {
     return this.http.get<{ is_wishlisted: boolean }>(`${this.apiUrl}/check/${vendorId}`);
   }
+  getWishlistedVendorIds() {
+    return this.http.get<{ vendor_ids: number[] }>(
+      `${this.apiUrl}/vendor-ids`
+    );
+  }
 }

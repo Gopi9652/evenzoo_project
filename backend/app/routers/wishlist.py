@@ -39,6 +39,20 @@ def get_my_wishlist(
     return wishlist_service.get_my_wishlist(db, current_user.id)
 
 
+@router.get("/vendor-ids")
+def get_wishlisted_vendor_ids(
+    current_user: User = Depends(get_customer),
+    db: Session = Depends(get_db)
+):
+    vendor_ids = wishlist_service.get_wishlisted_vendor_ids(
+        db,
+        current_user.id
+    )
+
+    return {
+        "vendor_ids": vendor_ids
+    }
+
 @router.get("/check/{vendor_id}")
 def check_wishlisted(
     vendor_id: int,

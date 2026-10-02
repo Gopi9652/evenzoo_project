@@ -11,6 +11,14 @@ export interface VendorProfile {
   total_bookings: number;
   profile_photo_url?: string;
   whatsapp_number?: string; 
+  services_preview?: ServicePreview[];
+  min_price?: number;
+  service_count?: number;
+}
+export interface ServicePreview {
+  name: string;
+  price: number;
+  price_type: string;
 }
 
 export interface VendorService {

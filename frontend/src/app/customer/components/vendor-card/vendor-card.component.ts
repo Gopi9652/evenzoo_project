@@ -19,14 +19,21 @@ export class VendorCardComponent {
   @Input() vendor!: VendorProfile;
   isWishlisted = false;
   toggling = false;
+  @Input() initialWishlisted = false;
 
   constructor(private wishlistService: WishlistService, public compareService: CompareService) {}
   ngOnInit() {
-    this.wishlistService.checkWishlisted(this.vendor.id).subscribe({
+    `this.wishlistService.checkWishlisted(this.vendor.id).subscribe({
       next: (res) => this.isWishlisted = res.is_wishlisted,
       error: () => this.isWishlisted = false
-    });
+    });`
   }
+  ngOnChanges(): void {
+
+    this.isWishlisted =
+      this.initialWishlisted;
+  }
+
   get ratingStars(): number[] {
     const rating = Math.round(this.vendor.avg_rating || 0);
     return Array(5).fill(0).map((_, i) => i < rating ? 1 : 0);
