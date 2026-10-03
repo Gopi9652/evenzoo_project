@@ -420,6 +420,32 @@
             </div>
 
           </mat-tab>
+      <!-- Video sction -->
+      <mat-tab [label]="'Videos' + (videos.length > 0 ? ' (' + videos.length + ')' : '')">
+        <div class="tab-content">
+          @if (videos.length === 0) {
+            <p class="empty-text">No videos uploaded yet.</p>
+          } @else {
+            <div class="video-grid">
+              @for (video of videos; track video.id) {
+                <div class="video-card">
+                  <video
+                    [src]="video.video_url"
+                    [poster]="video.thumbnail_url"
+                    controls
+                    preload="metadata"
+                    playsinline>
+                  </video>
+                  @if (video.caption) {
+                    <p class="video-caption">{{ video.caption }}</p>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </mat-tab>
+
 
 
           <!-- ===============================================

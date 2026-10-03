@@ -65,7 +65,8 @@ export const routes: Routes = [
   // Public entry
 { path: '', component: SplashComponent },
 { path: 'browse', component: HomeComponent },
-{ path: 'browse/vendor/:id', component: VendorDetailComponent },
+//{ path: 'browse/vendor/:id', component: VendorDetailComponent },
+{ path: 'browse/vendor/:slug', component: VendorDetailComponent },
 { path: 'browse/compare', component: VendorCompareComponent },
 
   // Old paths kept working via redirect

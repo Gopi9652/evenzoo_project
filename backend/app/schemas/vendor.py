@@ -58,6 +58,7 @@ class VendorProfileResponse(BaseModel):
     total_bookings:   int
     profile_photo_url: Optional[str] = None
     whatsapp_number:  Optional[str] = True 
+    slug:             Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -172,6 +173,7 @@ class VendorListResponse(BaseModel):
     services_preview: List[ServicePreview] = []
     service_count: int = 0
     min_price: Optional[Decimal] = None
+    slug:             Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -202,4 +204,12 @@ class VendorDocumentResponse(BaseModel):
 
     class Config:
         from_attributes = True
+class VendorVideoResponse(BaseModel):
+    id: int
+    video_url: str
+    thumbnail_url: Optional[str] = None
+    caption: Optional[str] = None
+    created_at: datetime
 
+    class Config:
+        from_attributes = True

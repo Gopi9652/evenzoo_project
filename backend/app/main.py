@@ -11,10 +11,17 @@ from slowapi.errors import RateLimitExceeded
 from app.utils.rate_limiter import limiter
 from app.routers import privacy, account
 
+from app.config import settings
+
+docs_enabled = settings.ENVIRONMENT != "production"
+
 app = FastAPI(
     title="Evenzoo API",
     description="Event Vendor Marketplace",
-    version="1.0.0"
+    version="1.0.0",
+    docs_url="/docs" if docs_enabled else None,
+    redoc_url="/redoc" if docs_enabled else None,
+    openapi_url="/openapi.json" if docs_enabled else None,
 )
 
 # ── Rate Limiting Setup ──

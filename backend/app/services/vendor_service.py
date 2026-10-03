@@ -20,6 +20,8 @@ from app.models.review import Review
 from typing import List
 from app.models.vendor import VendorProfile, VendorPhoto, VendorService, VendorCategoryMap
 from app.models.location import City
+from app.utils.slug import generate_unique_slug
+from app.models.vendor import VendorVideo
 class VendorService_:
 
     # ── GET VENDOR PROFILE ──
@@ -67,21 +69,24 @@ class VendorService_:
 
 
     # ── UPDATE VENDOR PROFILE ──
-    def update_profile(
-        self, db: Session,
-        user_id: int,
-        data: VendorProfileUpdate
-    ):
-        vendor = self.get_profile(db, user_id)
+    def update_profile(self, db: Session, user_id: int, data: VendorProfileUpdate):
+        vendor = db.query(VendorProfile).filter(VendorProfile.user_id == user_id).first()
+        if not vendor:
+            raise HTTPException(status_code=404, detail="Vendor profile not found")
 
         update_data = data.model_dump(exclude_unset=True)
+        old_name = vendor.business_name
+
         for field, value in update_data.items():
             setattr(vendor, field, value)
+
+        # Regenerate slug only if the business name actually changed
+        if "business_name" in update_data and update_data["business_name"] != old_name:
+            vendor.slug = generate_unique_slug(db, vendor.business_name)
 
         db.commit()
         db.refresh(vendor)
         return vendor
-
     def list_vendors(
         self,
         db: Session,
@@ -412,7 +417,22 @@ class VendorService_:
             VendorPhoto.vendor_id == vendor_id
         ).order_by(VendorPhoto.sort_order).all()
 
+    def get_profile_by_slug(self, db: Session, slug: str):
+        vendor = db.query(VendorProfile).filter(VendorProfile.slug == slug).first()
+        if not vendor:
+            raise HTTPException(status_code=404, detail="Vendor not found")
 
+        cover = db.query(VendorPhoto).filter(
+            VendorPhoto.vendor_id == vendor.id, VendorPhoto.is_cover == True
+        ).first()
+        if not cover:
+            cover = db.query(VendorPhoto).filter(VendorPhoto.vendor_id == vendor.id).order_by(VendorPhoto.sort_order.asc()).first()
+        vendor.cover_photo_url = cover.photo_url if cover else None
+
+        user = db.query(User).filter(User.id == vendor.user_id).first()
+        vendor.whatsapp_number = user.phone if (user and vendor.show_whatsapp) else None
+
+        return vendor
     # ── SET AVAILABILITY ──
     def set_availability(
         self, db: Session,
@@ -638,6 +658,8 @@ class VendorService_:
             VendorProfile.id.in_(vendor_ids),
             VendorProfile.is_approved == True
         ).all()
+        
+
 
         if len(vendors) != len(set(vendor_ids)):
             raise HTTPException(
@@ -661,6 +683,7 @@ class VendorService_:
             ).order_by(VendorPhoto.sort_order.asc()).limit(6).all()
 
             cover = next((p for p in photos if p.is_cover), photos[0] if photos else None)
+            video_count = db.query(VendorVideo).filter(VendorVideo.vendor_id == vendor.id).count()
 
             recent_reviews = db.query(Review).filter(
                 Review.vendor_id == vendor.id
@@ -683,6 +706,8 @@ class VendorService_:
                 "recent_reviews": recent_reviews,
                 "min_price": min(prices) if prices else None,
                 "max_price": max(prices) if prices else None,
+                "has_videos": video_count > 0,
+                "video_count": video_count,
             })
 
         return results

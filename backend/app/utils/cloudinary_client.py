@@ -26,3 +26,11 @@ def delete_image(url: str):
     public_id = public_id.rsplit(".", 1)[0]
     result = cloudinary.uploader.destroy(public_id)
     return result
+
+def upload_video(file_path: str, folder: str = "evenzoo/videos") -> str:
+    result = cloudinary.uploader.upload(
+        file_path,
+        folder=folder,
+        resource_type="video"
+    )
+    return result["secure_url"]

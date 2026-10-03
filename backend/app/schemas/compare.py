@@ -48,6 +48,8 @@ class VendorCompareData(BaseModel):
     recent_reviews:   List[CompareReviewSnippet] = []
     min_price:        Optional[Decimal] = None
     max_price:        Optional[Decimal] = None
+    has_videos: bool = False
+    video_count: int = 0
 
     class Config:
         from_attributes = True

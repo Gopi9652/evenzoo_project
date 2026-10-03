@@ -42,6 +42,7 @@ class VendorProfile(Base):
                                 back_populates="vendor")
     reviews      = relationship("Review", foreign_keys="Review.vendor_id",
                                 back_populates="vendor")
+    slug = Column(String(250), unique=True, index=True, nullable=True)
 
 
 class VendorCategory(Base):
@@ -137,3 +138,12 @@ class VendorWorkingHours(Base):
     __table_args__ = (
         UniqueConstraint('vendor_id', 'day_of_week', name='uq_vendor_working_hours_day'),
     )
+class VendorVideo(Base):
+    __tablename__ = "vendor_videos"
+
+    id          = Column(Integer, primary_key=True, index=True)
+    vendor_id   = Column(Integer, ForeignKey("vendor_profiles.id"), nullable=False)
+    video_url   = Column(String(500), nullable=False)
+    thumbnail_url = Column(String(500), nullable=True)
+    caption     = Column(String(255), nullable=True)
+    created_at  = Column(DateTime, default=datetime.utcnow)

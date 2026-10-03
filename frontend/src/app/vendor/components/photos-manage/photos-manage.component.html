@@ -46,3 +46,32 @@
     </div>
   }
 </div>
+<div class="videos-section">
+  <h3>Portfolio Videos</h3>
+
+  <input type="file" id="videoUpload" accept="video/*" (change)="onVideoSelected($event)" hidden>
+  <label for="videoUpload" class="upload-btn">
+    @if (uploadingVideo) {
+      <mat-spinner diameter="20"></mat-spinner>
+      <span>Processing & Uploading...</span>
+    } @else {
+      <mat-icon>videocam</mat-icon>
+      <span>Upload Video</span>
+    }
+  </label>
+
+  @if (videos.length === 0) {
+    <p class="empty-note">No videos yet. Show your work in motion.</p>
+  } @else {
+    <div class="video-grid">
+      @for (video of videos; track video.id) {
+        <div class="video-item">
+          <video [src]="video.video_url" [poster]="video.thumbnail_url" controls></video>
+          <button mat-icon-button class="delete-video-btn" (click)="deleteVideo(video.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

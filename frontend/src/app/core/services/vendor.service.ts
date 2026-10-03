@@ -106,4 +106,21 @@ getWorkingHours(): Observable<any[]> {
 setWorkingHours(data: { day_of_week: number; open_time?: string; close_time?: string; is_off_day: boolean }): Observable<any> {
   return this.http.post(`${this.apiUrl}/me/working-hours`, data);
 }
+getVendorBySlug(slug: string): Observable<VendorProfile> {
+  return this.http.get<VendorProfile>(`${this.apiUrl}/by-slug/${slug}`);
+}
+uploadVideo(file: File, caption?: string): Observable<any> {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (caption) formData.append('caption', caption);
+  return this.http.post(`${this.apiUrl}/me/upload-video`, formData);
+}
+
+getVendorVideos(vendorId: number): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/${vendorId}/videos`);
+}
+
+deleteVideo(videoId: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/me/videos/${videoId}`);
+}
 }

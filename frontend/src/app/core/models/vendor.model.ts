@@ -1,6 +1,7 @@
 export interface VendorProfile {
   id: number;
   user_id: number;
+  slug?: string;
   business_name: string;
   description?: string;
   city_id?: number;

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from typing import Optional, List
 
@@ -21,6 +21,21 @@ from app.utils.cloudinary_client import upload_image
 from typing import List
 from app.schemas.compare import VendorCompareData
 from app.models.customer import CustomerProfile
+from app.utils.image_processing import process_image, MAX_SIZE_BYTES
+import io
+
+import tempfile
+import os
+from app.utils.video_processing import process_video, generate_thumbnail, ABSOLUTE_MAX_VIDEO_SIZE
+from app.utils.cloudinary_client import upload_video, upload_image
+from app.models.vendor import VendorVideo, VendorProfile
+from app.schemas.vendor import VendorVideoResponse
+
+ALLOWED_VIDEO_TYPES = {"video/mp4", "video/quicktime", "video/webm"}
+
+
+ABSOLUTE_MAX_SIZE = 25 * 1024 * 1024  # hard reject anything above this, even before compression
+
 router = APIRouter(tags=["Vendors"])
 
 
@@ -54,6 +69,9 @@ def compare_vendors(
 def get_categories(db: Session = Depends(get_db)):
     return vendor_service.get_categories(db)
 
+@router.get("/by-slug/{slug}", response_model=VendorProfileResponse)
+def get_vendor_by_slug(slug: str, db: Session = Depends(get_db)):
+    return vendor_service.get_profile_by_slug(db, slug)
 
 @router.get("/{vendor_id}", response_model=VendorProfileResponse)
 def get_vendor_detail(
@@ -208,15 +226,33 @@ def assign_category(
 
 
 
+
 @router.post("/me/upload-photo")
 async def upload_photo_file(
     file: UploadFile = File(...),
     current_user: User = Depends(get_vendor),
     db: Session = Depends(get_db)
 ):
-    photo_url = upload_image(file.file)
-    return {"photo_url": photo_url}
+    allowed_types = {"image/jpeg", "image/png", "image/webp"}
+    if file.content_type not in allowed_types:
+        raise HTTPException(
+            status_code=400,
+            detail="Only JPEG, PNG, or WEBP images are allowed"
+        )
 
+    file_bytes = await file.read()
+
+    if len(file_bytes) > ABSOLUTE_MAX_SIZE:
+        raise HTTPException(
+            status_code=400,
+            detail="Image is too large. Please choose a file under 25MB."
+        )
+
+    # Auto-compress if over 10MB, otherwise pass through unchanged
+    processed_bytes = process_image(file_bytes, file.filename)
+
+    photo_url = upload_image(io.BytesIO(processed_bytes))
+    return {"photo_url": photo_url}
 @router.post("/me/categories/custom")
 def request_custom_category(
     data: CustomCategoryRequest,
@@ -295,6 +331,74 @@ def get_my_analytics(
     vendor = vendor_service.get_profile(db, current_user.id)
     return analytics_service.get_vendor_analytics(db, vendor.id)
 
+@router.post("/me/upload-video", response_model=VendorVideoResponse)
+async def upload_vendor_video(
+    file: UploadFile = File(...),
+    caption: Optional[str] = None,
+    current_user: User = Depends(get_vendor),
+    db: Session = Depends(get_db)
+):
+    if file.content_type not in ALLOWED_VIDEO_TYPES:
+        raise HTTPException(status_code=400, detail="Only MP4, MOV, or WEBM videos are allowed")
 
+    vendor = db.query(VendorProfile).filter(VendorProfile.user_id == current_user.id).first()
+
+    file_bytes = await file.read()
+    if len(file_bytes) > ABSOLUTE_MAX_VIDEO_SIZE:
+        raise HTTPException(status_code=400, detail="Video is too large. Please choose a file under 50MB.")
+
+    # Write to a temp file since moviepy needs a real file path, not bytes in memory
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
+        tmp.write(file_bytes)
+        tmp_path = tmp.name
+
+    try:
+        processed_path = process_video(tmp_path)
+        thumb_path = generate_thumbnail(processed_path)
+
+        video_url = upload_video(processed_path)
+        thumbnail_url = upload_image(open(thumb_path, "rb"))
+
+        video_record = VendorVideo(
+            vendor_id=vendor.id,
+            video_url=video_url,
+            thumbnail_url=thumbnail_url,
+            caption=caption
+        )
+        db.add(video_record)
+        db.commit()
+        db.refresh(video_record)
+
+        return video_record
+    finally:
+        # Clean up every temp file, whether processing succeeded or failed
+        for path in {tmp_path, processed_path if 'processed_path' in dir() else None, thumb_path if 'thumb_path' in dir() else None}:
+            if path and os.path.exists(path):
+                os.remove(path)
+
+
+@router.get("/{vendor_id}/videos", response_model=List[VendorVideoResponse])
+def get_vendor_videos(vendor_id: int, db: Session = Depends(get_db)):
+    return db.query(VendorVideo).filter(VendorVideo.vendor_id == vendor_id).order_by(VendorVideo.created_at.desc()).all()
+
+
+@router.delete("/me/videos/{video_id}")
+def delete_vendor_video(
+    video_id: int,
+    current_user: User = Depends(get_vendor),
+    db: Session = Depends(get_db)
+):
+    vendor = db.query(VendorProfile).filter(VendorProfile.user_id == current_user.id).first()
+    video = db.query(VendorVideo).filter(
+        VendorVideo.id == video_id,
+        VendorVideo.vendor_id == vendor.id   # ← ownership check, this is the IDOR fix pattern applied here
+    ).first()
+
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+
+    db.delete(video)
+    db.commit()
+    return {"message": "Video deleted"}
 
     

@@ -18,6 +18,7 @@ export interface VendorCompareData {
   recent_reviews: { id: number; overall_rating?: number; title?: string; body?: string }[];
   min_price?: number;
   max_price?: number;
+  slug?:string;
 }
 
 @Injectable({ providedIn: 'root' })

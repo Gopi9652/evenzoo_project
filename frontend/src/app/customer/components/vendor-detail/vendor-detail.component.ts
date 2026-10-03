@@ -30,6 +30,7 @@ export class VendorDetailComponent implements OnInit {
   vendor: VendorProfile | null = null;
   services: VendorServiceModel[] = [];
   photos: any[] = [];
+  videos: any[] = [];
   reviews: any[] = [];
   reviewsLoading = true;
   loading = true;
@@ -52,8 +53,24 @@ export class VendorDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.vendorId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadVendorData();
+    const slug = this.route.snapshot.paramMap.get('slug');
+    if (!slug) {
+      this.loading = false;
+      return;
+    }
+
+    this.loading = true;
+    this.vendorService.getVendorBySlug(slug).subscribe({
+      next: (data) => {
+        this.vendor = data;
+        this.vendorId = data.id;   // keep the numeric ID for all internal calls (services, photos, booking)
+        this.loadVendorData();     // your existing method that fetches services/photos using vendorId
+      },
+      error: (err) => {
+        console.error('Vendor not found', err);
+        this.loading = false;
+      }
+    });
   }
 
   loadVendorData() {
@@ -76,6 +93,9 @@ export class VendorDetailComponent implements OnInit {
 
     this.vendorService.getVendorPhotos(this.vendorId).subscribe({
       next: (data) => this.photos = data
+    });
+    this.vendorService.getVendorVideos(this.vendorId).subscribe({
+      next: (data) => this.videos = data
     });
 
     this.reviewsLoading = true;

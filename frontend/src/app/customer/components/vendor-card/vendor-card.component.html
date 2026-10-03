@@ -1,7 +1,5 @@
 
-<a
-  [routerLink]="['/customer/vendor', vendor.id]"
-  class="vendor-card">
+<a [routerLink]="['/browse/vendor', vendor.slug || vendor.id]"  class="vendor-card">
 
   <!-- Vendor Image -->
   <div class="vendor-image-wrapper">

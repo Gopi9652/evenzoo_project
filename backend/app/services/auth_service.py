@@ -17,6 +17,7 @@ from datetime import timedelta
 from app.utils.sms import send_otp_sms
 from app.utils.email_sender import send_email_sync, otp_email_template
 from app.config import settings
+from app.utils.slug import generate_unique_slug
 class AuthService:
 
     def register(self, db: Session, data: RegisterRequest):
@@ -53,10 +54,15 @@ class AuthService:
 
         # Create profile
         if data.role == "vendor":
-            db.add(VendorProfile(
+            # Wherever VendorProfile(...) is instantiated on signup:
+            vendor_profile = VendorProfile(
                 user_id=user.id,
-                business_name=data.name
-            ))
+                business_name=data.business_name if hasattr(data, 'business_name') else f"{data.name}'s Business",
+            )
+            db.add(vendor_profile)
+            db.flush()  # get the vendor_profile.id if needed, though slug doesn't need it
+            vendor_profile.slug = generate_unique_slug(db, vendor_profile.business_name)
+            db.commit()
         else:
             db.add(CustomerProfile(user_id=user.id))
 

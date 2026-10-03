@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     SMTP_FROM_EMAIL: str = "noreply@evenzoo.in"
     SMTP_FROM_NAME: str = "Evenzoo"
     OTP_CHANNEL: str = "email"   # "email" | "sms" | "both"
+    ENVIRONMENT: str = "development"   # set to "production" in Render's env vars
     class Config:
         env_file = ".env"
 

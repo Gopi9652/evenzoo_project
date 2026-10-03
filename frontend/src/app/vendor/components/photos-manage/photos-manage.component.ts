@@ -21,6 +21,8 @@ export class PhotosManageComponent implements OnInit {
   uploading = false;
   loading = true;
   vendorId!: number;
+  videos: any[] = [];
+  uploadingVideo = false;
 
   constructor(
     private vendorService: VendorService,
@@ -32,6 +34,7 @@ export class PhotosManageComponent implements OnInit {
       next: (profile) => {
         this.vendorId = profile.id;
         this.loadPhotos();
+        this.loadVideos();
       }
     });
   }
@@ -88,4 +91,43 @@ export class PhotosManageComponent implements OnInit {
       error: (err) => alert(err.error?.detail || 'Failed to delete photo')
     });
   }
+  loadVideos() {
+  this.vendorService.getVendorVideos(this.vendorId).subscribe({
+    next: (data) => this.videos = data
+  });
+}
+
+onVideoSelected(event: any) {
+  const file: File = event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('video/')) {
+    alert('Please select a video file');
+    return;
+  }
+  if (file.size > 50 * 1024 * 1024) {
+    alert('Video must be under 50MB — larger files will be automatically compressed, but we cap uploads at 50MB.');
+    return;
+  }
+
+  this.uploadingVideo = true;
+  this.vendorService.uploadVideo(file).subscribe({
+    next: () => {
+      this.uploadingVideo = false;
+      this.loadVideos();
+    },
+    error: (err) => {
+      this.uploadingVideo = false;
+      alert(err.error?.detail || 'Video upload failed');
+    }
+  });
+}
+
+deleteVideo(videoId: number) {
+  if (!confirm('Delete this video?')) return;
+  this.vendorService.deleteVideo(videoId).subscribe({
+    next: () => this.loadVideos(),
+    error: (err) => alert(err.error?.detail || 'Failed to delete video')
+  });
+}
 }
