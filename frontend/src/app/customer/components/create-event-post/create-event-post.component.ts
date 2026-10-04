@@ -13,13 +13,14 @@ import { LocationService, State, City } from '../../../core/services/location.se
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { VendorService } from '../../../core/services/vendor.service';
 import { Category } from '../../../core/models/vendor.model';
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-create-event-post',
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatSelectModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule,
-    NavbarComponent, FormsModule
+    NavbarComponent, FormsModule, MatIconModule
   ],
   templateUrl: './create-event-post.component.html',
   styleUrl: './create-event-post.component.scss'

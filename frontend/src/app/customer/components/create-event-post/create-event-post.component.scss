@@ -1,237 +1,230 @@
 /* =========================================
-   EVENT POST PAGE
+   CREATE EVENT POST PAGE  (same theme as Home)
+   Layout: header on top, form left, info right
 ========================================= */
 
 :host {
   display: block;
   min-height: 100vh;
-  background: #f6f7fb;
-  color: #1f2937;
-}
-
-.event-post-page {
-  width: 100%;
-  min-height: calc(100vh - 70px);
-
-  padding: 100px 20px 60px;
-
-  box-sizing: border-box;
-
-  background: #f6f7fb;
+  background: #160b24;
+  color: #fff;
 }
 
 /* =========================================
-   PAGE HEADER
+   PAGE + SIDE-BY-SIDE GRID
 ========================================= */
 
-.page-header {
+.event-post-page {
+  position: relative;
+  overflow: clip;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  padding: 100px 20px 70px;
+  box-sizing: border-box;
+
+  display: grid;
+  grid-template-columns: minmax(0, 700px) minmax(0, 420px);
+  justify-content: center;
+  align-items: start;
+  column-gap: 32px;
+  row-gap: 24px;
+
+  /* same background as the Home page */
+  background:
+    radial-gradient(circle 650px at 12% 6%,  rgba(181, 109, 255, 0.22), transparent),
+    radial-gradient(circle 600px at 90% 30%, rgba(212, 175, 55, 0.10),  transparent),
+    radial-gradient(circle 700px at 10% 62%, rgba(181, 109, 255, 0.16), transparent),
+    radial-gradient(circle 600px at 88% 90%, rgba(212, 175, 55, 0.12),  transparent),
+    linear-gradient(180deg, #160b24 0%, #25103a 50%, #160d25 100%);
+}
+
+/* =========================================
+   PAGE HEADER (spans both columns)
+========================================= */
+
+.event-post-page .page-header {
+  grid-column: 1 / -1;
+  position: relative;
+  z-index: 2;
   width: 100%;
   max-width: 850px;
-
-  margin: 0 auto 28px;
-
+  margin: 0 auto 6px;
   text-align: center;
+}
+
+.post-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 16px;
+  padding: 7px 14px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #f3d879;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  backdrop-filter: blur(10px);
+
+  mat-icon { width: 17px; height: 17px; font-size: 17px; }
 }
 
 .page-header h1 {
   margin: 0;
-
-  color: #1f2937;
-
-  font-size: 32px;
-  font-weight: 700;
-
-  line-height: 1.3;
-  letter-spacing: -0.5px;
+  color: #fff;
+  font-size: clamp(30px, 4.4vw, 44px);
+  font-weight: 850;
+  line-height: 1.15;
+  letter-spacing: -1.2px;
+  text-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
 }
 
 .page-header p {
   max-width: 650px;
-
-  margin: 10px auto 0;
-
-  color: #6b7280;
-
-  font-size: 15px;
-  line-height: 1.6;
+  margin: 12px auto 0;
+  color: #e0d6ee;
+  font-size: 16px;
+  line-height: 1.7;
 }
 
 /* =========================================
-   FORM CARD
+   FORM CARD (left column)
 ========================================= */
 
-.event-form {
+.event-post-page .event-form {
+  position: relative;
+  z-index: 2;
   width: 100%;
-  max-width: 850px;
-
-  margin: 0 auto;
-
-  padding: 32px;
-
+  max-width: none;
+  margin: 0;
+  padding: 34px;
   box-sizing: border-box;
-
-  background: #ffffff;
-
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-
-  box-shadow:
-    0 4px 20px rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
 }
 
-/* =========================================
-   FORM
-========================================= */
-
-.event-form form {
-  width: 100%;
-}
-
-/* =========================================
-   FULL WIDTH
-========================================= */
-
-.full-width {
-  width: 100%;
-}
-
-/* =========================================
-   ANGULAR MATERIAL FORM FIELDS
-========================================= */
-
-.event-form mat-form-field {
-  margin-bottom: 6px;
-}
-
-/*
-   Angular Material MDC field text
-*/
-
-.event-form
-.mat-mdc-form-field {
-  width: 100%;
-}
-
-/* Labels */
-
-.event-form
-.mat-mdc-form-field
-.mdc-floating-label {
-  color: #6b7280 !important;
-}
-
-/* Label when focused */
-
-.event-form
-.mat-mdc-form-field.mat-focused
-.mdc-floating-label {
-  color: #7c3aed !important;
-}
-
-
-
-
-
-/* =========================================
-   SELECT
-========================================= */
-
-.event-form
-.mat-mdc-select {
-  color: #1f2937 !important;
-}
-
-.event-form
-.mat-mdc-select-value {
-  color: #1f2937 !important;
-}
-
-.event-form
-.mat-mdc-select-placeholder {
-  color: #9ca3af !important;
-}
-
-.event-form
-.mat-mdc-select-arrow {
-  color: #6b7280 !important;
-}
-
-/* =========================================
-   STATE + CITY / BUDGET + DATE
-========================================= */
+.event-form form { width: 100%; }
+.full-width { width: 100%; }
 
 .form-row {
-  width: 100%;
-
   display: grid;
-
   grid-template-columns: repeat(2, minmax(0, 1fr));
-
   gap: 18px;
-
   margin-top: 4px;
-}
 
-.form-row mat-form-field {
-  width: 100%;
+  mat-form-field { width: 100%; }
 }
-
 
 /* =========================================
-   DATE PICKER
+   MATERIAL FIELDS ON DARK
+   (::ng-deep so styles reach Material's inner elements)
 ========================================= */
 
-::ng-deep .mat-datepicker-content {
-  background: #ffffff !important;
+:host ::ng-deep .event-form {
+
+  .mat-mdc-form-field { width: 100%; margin-bottom: 6px; }
+
+  .mat-mdc-input-element,
+  .mat-mdc-select-value,
+  .mat-mdc-select-value-text {
+    color: #fff !important;
+    caret-color: #d4af37;
+  }
+
+  .mat-mdc-input-element::placeholder,
+  .mat-mdc-select-placeholder {
+    color: rgba(255, 255, 255, 0.45) !important;
+  }
+
+  .mdc-floating-label,
+  .mat-mdc-floating-label { color: #cfc3e3 !important; }
+
+  .mat-focused .mdc-floating-label,
+  .mat-focused .mat-mdc-floating-label { color: #f3d879 !important; }
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: rgba(255, 255, 255, 0.22) !important;
+  }
+
+  .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+  .mat-mdc-form-field:hover .mdc-notched-outline__notch,
+  .mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+    border-color: rgba(255, 255, 255, 0.45) !important;
+  }
+
+  .mat-focused .mdc-notched-outline__leading,
+  .mat-focused .mdc-notched-outline__notch,
+  .mat-focused .mdc-notched-outline__trailing {
+    border-color: #d4af37 !important;
+  }
+
+  .mat-mdc-select-arrow,
+  .mat-mdc-select-arrow svg,
+  .mat-datepicker-toggle,
+  .mat-datepicker-toggle .mat-mdc-icon-button { color: #cfc3e3 !important; }
+
+  .mat-mdc-form-field-error { color: #fca5a5 !important; }
+
+  .mat-form-field-invalid .mdc-notched-outline__leading,
+  .mat-form-field-invalid .mdc-notched-outline__notch,
+  .mat-form-field-invalid .mdc-notched-outline__trailing {
+    border-color: #fca5a5 !important;
+  }
+
+  input:-webkit-autofill {
+    -webkit-text-fill-color: #fff;
+    transition: background-color 9999s ease-in-out 0s;
+  }
 }
 
-::ng-deep .mat-calendar {
-  background: #ffffff !important;
-}
+/* =========================================
+   DATE PICKER + SELECT POPUPS (light panels)
+========================================= */
 
-::ng-deep .mat-calendar-body-cell-content {
-  color: #1f2937 !important;
-}
+::ng-deep .mat-datepicker-content,
+::ng-deep .mat-calendar { background: #ffffff !important; }
+
+::ng-deep .mat-calendar-body-cell-content { color: #1f2937 !important; }
 
 ::ng-deep .mat-calendar-body-label,
-::ng-deep .mat-calendar-table-header {
-  color: #6b7280 !important;
-}
+::ng-deep .mat-calendar-table-header { color: #6b7280 !important; }
 
 ::ng-deep .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
-.mat-calendar-body-cell-content {
-  background: #f3e8ff !important;
-}
+.mat-calendar-body-cell-content { background: #f3e8ff !important; }
 
 ::ng-deep .mat-calendar-body-selected {
-  background: #7c3aed !important;
+  background: #7e22ce !important;
   color: #ffffff !important;
 }
 
-::ng-deep .mat-datepicker-toggle {
-  color: #6b7280 !important;
-}
-
 /* =========================================
-   ERROR BANNER
+   NOTICE + ERROR
 ========================================= */
 
+.location-notice {
+  margin: 14px 0 6px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+
+  p { margin: 0; color: #ebd9b0; font-size: 13.5px; line-height: 1.55; }
+}
+
 .error-banner {
-  width: 100%;
-
   margin: 10px 0 18px;
-
   padding: 13px 15px;
-
   box-sizing: border-box;
-
-  color: #b91c1c;
-
-  background: #fef2f2;
-
-  border: 1px solid #fecaca;
-  border-radius: 8px;
-
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(252, 165, 165, 0.45);
+  border-radius: 12px;
   font-size: 14px;
   line-height: 1.5;
 }
@@ -242,106 +235,187 @@
 
 .submit-btn {
   width: 100%;
-
-  min-height: 48px;
-
-  margin-top: 8px;
-
+  min-height: 52px;
+  margin-top: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  color: #ffffff !important;
-
-  background: #7c3aed !important;
-
-  border-radius: 8px !important;
-
+  color: #fff !important;
+  background: linear-gradient(135deg, #7e22ce, #9333ea) !important;
+  border-radius: 13px !important;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
+  box-shadow: 0 10px 28px rgba(126, 34, 206, 0.4);
+  transition: transform .25s ease, box-shadow .25s ease;
 
-  box-shadow:
-    0 4px 12px rgba(124, 58, 237, 0.20);
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(126, 34, 206, 0.55);
+  }
 
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.submit-btn:hover:not(:disabled) {
-  background: #6d28d9 !important;
-
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 6px 16px rgba(124, 58, 237, 0.25);
-}
-
-.submit-btn:disabled {
-  opacity: 0.65;
-
-  cursor: not-allowed;
+  &:disabled { opacity: 0.65; cursor: not-allowed; }
 }
 
 /* =========================================
-   RESPONSIVE TABLET
+   INFO PANEL (right column)
 ========================================= */
+
+.event-post-page .info-col {
+  position: sticky;
+  top: 96px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
+}
+
+.info-card {
+  padding: 26px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+
+  h2 {
+    margin: 0 0 18px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -.3px;
+  }
+}
+
+/* vertical timeline */
+.flow {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 24px;
+    bottom: 24px;
+    width: 2px;
+    background: linear-gradient(180deg, #d4af37, rgba(181, 109, 255, 0.4));
+  }
+
+  li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 46px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding-bottom: 20px;
+    opacity: 0;
+    animation: flowIn .6s ease forwards;
+    animation-delay: calc(var(--i) * 140ms + 200ms);
+
+    &:last-child { padding-bottom: 0; }
+  }
+
+  h3 { margin: 2px 0 3px; color: #fff; font-size: 16px; font-weight: 700; }
+  p  { margin: 0; color: #cfc3e3; font-size: 14px; line-height: 1.55; }
+}
+
+.flow-icon {
+  position: relative;
+  z-index: 1;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  color: #f3d879;
+  background: #2a1450;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  animation: pulse 3.2s ease-in-out infinite;
+
+  mat-icon { width: 22px; height: 22px; font-size: 22px; }
+}
+
+.tips-mini {
+  background: linear-gradient(135deg, rgba(126, 34, 206, 0.3), rgba(212, 175, 55, 0.1));
+
+  h2 { margin-bottom: 14px; }
+
+  ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+
+  li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    color: #e0d6ee;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  mat-icon { flex: 0 0 auto; width: 20px; height: 20px; font-size: 20px; color: #d4af37; }
+}
+
+.info-note {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #ebd9b0;
+  font-size: 13.5px;
+  line-height: 1.5;
+
+  mat-icon { flex: 0 0 auto; color: #d4af37; }
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes flowIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.25); }
+  50%      { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+/* tablet + mobile: one column, info goes under the form */
+@media (max-width: 960px) {
+  .event-post-page {
+    grid-template-columns: minmax(0, 700px);
+  }
+
+  .event-post-page .info-col {
+    position: static;
+  }
+}
 
 @media (max-width: 768px) {
-
-  .event-post-page {
-    padding: 95px 16px 45px;
-  }
-
-  .page-header h1 {
-    font-size: 28px;
-  }
-
-  .page-header p {
-    font-size: 14px;
-  }
-
-  .event-form {
-    padding: 25px;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-
-    gap: 0;
-  }
+  .event-post-page { padding: 95px 16px 50px; }
+  .page-header p { font-size: 14px; }
+  .event-post-page .event-form { padding: 24px; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
 }
 
-/* =========================================
-   MOBILE
-========================================= */
-
 @media (max-width: 480px) {
+  .event-post-page { padding: 90px 12px 40px; }
+  .event-post-page .event-form { padding: 18px; border-radius: 18px; }
+  .submit-btn { min-height: 48px; }
+}
 
-  .event-post-page {
-    padding: 90px 12px 35px;
-  }
-
-  .page-header {
-    margin-bottom: 22px;
-  }
-
-  .page-header h1 {
-    font-size: 24px;
-  }
-
-  .page-header p {
-    font-size: 13px;
-  }
-
-  .event-form {
-    padding: 18px;
-
-    border-radius: 12px;
-  }
-
-  .submit-btn {
-    min-height: 46px;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .flow li { animation: none; opacity: 1; }
+  .flow-icon { animation: none; }
 }

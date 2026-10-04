@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { BookingService } from '../../../core/services/booking.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -21,18 +22,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
   unreadCount = 0;
   menuOpen = false;
   private wsSubscription?: Subscription;
+  userData: any = null;
+  upcomingBookingsCount = 0;
 
   constructor(
     public authService: AuthService,
     private router: Router,
     private ws: WebsocketService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private bookingService: BookingService
   ) {}
 
- ngOnInit() {
-  if (!this.authService.isLoggedIn()) return;
+  ngOnInit() {
+    if (!this.authService.isLoggedIn()) return;
+    this.loadNotifications();
+    this.loadUserData();
+    this.loadBookingStats();
 
-  this.loadNotifications();
   this.wsSubscription = this.ws.onMessage().subscribe((msg) => {
     if (msg.type === 'notification') {
       this.notifications = [msg.data, ...this.notifications].slice(0, 10);
@@ -93,13 +99,70 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
   notifIcon(type: string): string {
-  const icons: Record<string, string> = {
-    booking: 'event_available',
-    review: 'star_rate',
-    event_post: 'campaign',
-    system: 'notifications',
-    message: 'chat_bubble'
-  };
-  return icons[type] || 'notifications';
-}
+    const icons: Record<string, string> = {
+      booking: 'event_available',
+      review: 'star_rate',
+      event_post: 'campaign',
+      system: 'notifications',
+      message: 'chat_bubble'
+    };
+    return icons[type] || 'notifications';
+  }
+
+  loadUserData() {
+    this.authService.getMe().subscribe({
+      next: (data) => {
+        this.userData = data;
+        console.log('USER DATA:', this.userData);
+      },
+      error: (error) => {
+        console.error('Failed to load user data:', error);
+      }
+    });
+  }
+
+  get userEmail(): string {
+    return this.userData?.email || '';
+  }
+
+  get bookingsLink(): string {
+    const role = this.authService.getRole();
+    if (role === 'vendor') return '/vendor/bookings';
+    if (role === 'admin') return '/admin/bookings';
+    return '/customer/bookings';
+  }
+
+  loadBookingStats() {
+    this.bookingService.getMyBookings().subscribe({
+      next: (data) => {
+        const bookings = data || [];
+
+        const today = new Date().toISOString().split('T')[0];
+
+        const upcomingBookings = bookings
+          .filter(booking =>
+            booking.status === 'pending' ||
+            booking.status === 'confirmed'
+          )
+          .filter(booking =>
+            booking.event_date >= today
+          )
+          .sort((a, b) =>
+            a.event_date.localeCompare(b.event_date)
+          );
+
+        // Total upcoming bookings
+        this.upcomingBookingsCount = upcomingBookings.length;
+
+        // console.log('Upcoming bookings:', upcomingBookings);
+        // console.log('Upcoming count:', this.upcomingBookingsCount);
+      },
+
+      error: (error) => {
+        console.error('Failed to load booking stats:', error);
+        this.upcomingBookingsCount = 0;
+      }
+    });
+  }
+
 }

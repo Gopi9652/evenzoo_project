@@ -74,9 +74,9 @@
 
           </div>
 
-          <span class="photo-hint">
+          <!-- <span class="photo-hint">
             Change profile photo
-          </span>
+          </span> -->
 
         </div>
 
@@ -136,6 +136,149 @@
           </div>
 
         }
+
+        <!-- Customer Booking Stats snapshot -->
+        <div class="stats">
+          <div class="stat"><div class="num">{{ bookingStats.totalBookings }}</div><div class="lbl">Bookings</div></div>
+          <div class="stat"><div class="num">{{ bookingStats.pendingBookings }}</div><div class="lbl">Upcoming</div></div>
+          <div class="stat"><div class="num">₹{{ bookingStats.totalAmount | number:'1.0-2' }}</div><div class="lbl">{{ isVendor ? 'Earned': 'Spent' }}</div></div>
+          <div class="stat"><div class="num">{{ user.created_at | date:'MMM d, y' }}</div><div class="lbl">Member since</div></div>
+        </div>
+
+          <!-- Upcoming booking -->
+          @if (upcomingBooking) {
+            <div class="section">
+              <div class="sec-head">
+                <div class="sec-icon" style="background:#f2ebfd;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                </div>
+                <div><div class="sec-title">Upcoming event</div><div class="sec-sub">Your next confirmed booking</div></div>
+              </div>
+              <div class="booking-card">
+                <div class="booking-thumb">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                </div>
+                <div class="booking-info">
+                  <div class="vname">{{ upcomingBooking.vendor?.business_name }}</div>
+                  <div class="vdate">{{ upcomingBooking.event_date | date:'d MMM y' }}</div>
+                </div>
+                <div class="booking-status">Awaiting vendor</div>
+              </div>
+            </div>
+          } @else {
+
+            <div class="section no-upcoming">
+              <div class="no-upcoming-content">
+
+                <div class="no-upcoming-icon">
+                  <svg viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <path d="M16 2v4M8 2v4M3 10h18"/>
+                  </svg>
+                </div>
+
+                <div class="no-upcoming-title">
+                  No upcoming events
+                </div>
+
+                <div class="no-upcoming-text">
+                  You don't have any upcoming bookings yet.
+                </div>
+
+              </div>
+            </div>
+
+          }
+
+
+          @if (!isVendor) {
+
+            <!-- Saved vendors -->
+            <div class="section">
+
+              <div class="sec-head">
+                <div class="sec-icon" style="background:#fdf3dd;">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#b8850a"
+                    stroke-width="2">
+                    <path d="M12 21s-7-4.35-9.5-8.5C.5 8.5 3 5 6.5 5c1.9 0 3.3 1 4 2 .7-1 2.1-2 4-2 3.5 0 6 3.5 3.5 7.5C19 16.65 12 21 12 21z"/>
+                  </svg>
+                </div>
+
+                <div>
+                  <div class="sec-title">Saved vendors</div>
+                  <div class="sec-sub">Quick access to your favorites</div>
+                </div>
+              </div>
+
+
+              @if (wishList.length > 0) {
+
+                <div class="fav-scroll">
+
+                  @for (vendor of wishList; track vendor.wishlist_id) {
+
+                    <div class="fav-card">
+
+                      <div class="fav-thumb">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2">
+                          <path d="M4 21V7l8-4 8 4v14"/>
+                          <path d="M9 21v-6h6v6"/>
+                        </svg>
+                      </div>
+
+                      <div class="fav-name">
+                        {{ vendor.business_name }}
+                      </div>
+
+                      <div class="fav-cat">
+                        ⭐ {{ vendor.avg_rating }} · {{ vendor.total_reviews }} reviews
+                      </div>
+
+                    </div>
+
+                  }
+
+                </div>
+
+              } @else {
+
+                <div class="no-wishlist">
+
+                  <div class="no-wishlist-icon">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8">
+                      <path d="M12 21s-7-4.35-9.5-8.5C.5 8.5 3 5 6.5 5c1.9 0 3.3 1 4 2 .7-1 2.1-2 4-2 3.5 0 6 3.5 3.5 7.5C19 16.65 12 21 12 21z"/>
+                    </svg>
+                  </div>
+
+                  <div class="no-wishlist-title">
+                    No saved vendors
+                  </div>
+
+                  <div class="no-wishlist-text">
+                    Vendors you save will appear here.
+                  </div>
+
+                </div>
+
+              }
+
+            </div>
+            
+          }
 
 
         <!-- ===================================================

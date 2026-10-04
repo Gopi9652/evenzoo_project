@@ -1,16 +1,15 @@
-
 <app-navbar></app-navbar>
 
+<!-- one shared background for hero + tips + why (no partitions) -->
+<div class="page-bg">
+
 <!-- =====================================================
-     HERO SECTION
+     HERO SECTION  (picture left, planner right)
 ===================================================== -->
-
 <section class="hero-section">
-
   <div class="hero-overlay"></div>
 
   <div class="hero-content">
-
     <div class="hero-badge">
       <mat-icon>verified</mat-icon>
       Verified Event Vendors
@@ -27,330 +26,306 @@
       and more for your special day.
     </p>
 
+    <div class="hero-grid">
 
-    <!-- SEARCH -->
+      <!-- LEFT: event picture -->
+      <div class="art" aria-hidden="true">
+        <svg viewBox="0 0 500 560" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="artBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2088"/><stop offset="1" stop-color="#1c0f33"/></linearGradient>
+            <radialGradient id="artGlow"><stop offset="0" stop-color="#d4af37" stop-opacity=".35"/><stop offset="1" stop-color="#d4af37" stop-opacity="0"/></radialGradient>
+            <radialGradient id="artBulb"><stop offset="0" stop-color="#fff6c8"/><stop offset="1" stop-color="#d4af37"/></radialGradient>
+          </defs>
+          <rect width="500" height="560" fill="url(#artBg)"/>
+          <circle cx="250" cy="320" r="230" fill="url(#artGlow)"/>
+          <path d="M20 60 Q250 170 480 60" stroke="#8a6d2f" stroke-width="2" fill="none"/>
+          <g fill="url(#artBulb)">
+            <circle cx="66" cy="80" r="7"/><circle cx="112" cy="95" r="7"/><circle cx="158" cy="106" r="7"/><circle cx="204" cy="113" r="7"/><circle cx="250" cy="115" r="7"/><circle cx="296" cy="113" r="7"/><circle cx="342" cy="106" r="7"/><circle cx="388" cy="95" r="7"/><circle cx="434" cy="80" r="7"/>
+          </g>
+          <path d="M62 300 Q80 380 70 470" stroke="#d9c9f2" stroke-width="1.5" fill="none"/>
+          <ellipse cx="62" cy="262" rx="30" ry="38" fill="#8b2be2"/><ellipse cx="52" cy="248" rx="7" ry="11" fill="#fff" opacity=".35"/>
+          <path d="M40 330 Q60 400 90 470" stroke="#d9c9f2" stroke-width="1.5" fill="none"/>
+          <ellipse cx="40" cy="298" rx="24" ry="31" fill="#d4af37"/>
+          <path d="M438 280 Q420 380 430 470" stroke="#d9c9f2" stroke-width="1.5" fill="none"/>
+          <ellipse cx="438" cy="244" rx="30" ry="38" fill="#f06aa8"/><ellipse cx="428" cy="230" rx="7" ry="11" fill="#fff" opacity=".35"/>
+          <path d="M464 330 Q450 400 410 470" stroke="#d9c9f2" stroke-width="1.5" fill="none"/>
+          <ellipse cx="462" cy="298" rx="22" ry="29" fill="#8b2be2"/>
+          <path d="M120 520 V300 A130 130 0 0 1 380 300 V520" stroke="#5a2f99" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <g fill="#f7a8cf"><circle cx="120" cy="500" r="16"/><circle cx="122" cy="400" r="17"/><circle cx="137" cy="235" r="17"/><circle cx="250" cy="170" r="18"/><circle cx="362" cy="235" r="17"/><circle cx="378" cy="400" r="17"/><circle cx="380" cy="500" r="16"/></g>
+          <g fill="#d4af37"><circle cx="112" cy="450" r="13"/><circle cx="124" cy="305" r="14"/><circle cx="185" cy="187" r="14"/><circle cx="315" cy="187" r="14"/><circle cx="380" cy="305" r="14"/><circle cx="388" cy="450" r="13"/></g>
+          <g fill="#fff"><circle cx="112" cy="350" r="12"/><circle cx="215" cy="176" r="11"/><circle cx="285" cy="176" r="11"/><circle cx="388" cy="350" r="12"/></g>
+          <g fill="#7ad39a"><circle cx="150" cy="212" r="7"/><circle cx="350" cy="212" r="7"/><circle cx="130" cy="375" r="7"/><circle cx="370" cy="375" r="7"/></g>
+          <rect x="150" y="508" width="200" height="12" rx="6" fill="#d4af37"/>
+          <rect x="165" y="520" width="170" height="40" fill="#2a1650"/>
+          <rect x="205" y="472" width="90" height="38" rx="8" fill="#f4e3b2"/>
+          <rect x="225" y="440" width="50" height="34" rx="8" fill="#f7a8cf"/>
+          <rect x="248" y="418" width="4" height="24" fill="#fff"/>
+          <path d="M250 400 Q258 412 250 418 Q242 412 250 400Z" fill="#ffb02e"/>
+          <g transform="translate(24 456)">
+            <rect width="104" height="66" rx="12" fill="#17142b" stroke="#d4af37" stroke-width="2"/>
+            <rect x="14" y="-9" width="30" height="12" rx="4" fill="#17142b" stroke="#d4af37" stroke-width="2"/>
+            <circle cx="52" cy="36" r="24" fill="#0e0b1c" stroke="#d4af37" stroke-width="3"/>
+            <circle cx="52" cy="36" r="14" fill="#8b2be2"/><circle cx="47" cy="31" r="4" fill="#fff" opacity=".6"/>
+            <circle cx="88" cy="16" r="4" fill="#f06aa8"/>
+          </g>
+          <g stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round">
+            <path d="M375 462 L393 462 L388 495 Q384 504 380 495 Z" fill="#d4af37" fill-opacity=".45"/>
+            <path d="M384 504 V528 M374 528 H394"/>
+            <path d="M408 470 L426 470 L421 503 Q417 512 413 503 Z" fill="#d4af37" fill-opacity=".45" transform="rotate(12 417 490)"/>
+            <path d="M417 512 V532 M407 532 H427" transform="rotate(12 417 490)"/>
+          </g>
+          <g fill="#fff6c8">
+            <path d="M200 40 l4 14 14 4 -14 4 -4 14 -4 -14 -14 -4 14 -4z"/>
+            <path d="M410 170 l3 10 10 3 -10 3 -3 10 -3 -10 -10 -3 10 -3z"/>
+            <path d="M90 170 l3 10 10 3 -10 3 -3 10 -3 -10 -10 -3 10 -3z"/>
+          </g>
+        </svg>
+        <span class="tag t1">📸 Photographers</span>
+        <span class="tag t2">💐 Decorators</span>
+        <span class="tag t3">🍽️ Caterers</span>
+      </div>
 
-    <div class="search-row">
+      <!-- RIGHT: planner (replaces search + State/City) -->
+      <div class="planner">
+        <span class="planner-lbl">What are you planning?</span>
 
-      <div class="search-bar">
+        <div class="chips">
+          @for (t of eventTypes; track t.name) {
+            <button
+              type="button"
+              [class.on]="selectedEventType === t.name"
+              (click)="selectEventType(t.name)">
+              {{ t.icon }} {{ t.name }}
+            </button>
+          }
+        </div>
 
-        <mat-icon>search</mat-icon>
+        <label class="planner-lbl" for="evdate">When is your event?</label>
+        <div class="planner-row">
+          <input
+            id="evdate"
+            type="date"
+            [min]="minDate"
+            [(ngModel)]="eventDate">
 
-        <input
-          type="text"
-          placeholder="Search vendors by name or service..."
-          [(ngModel)]="searchTerm">
-
-        @if (searchTerm) {
-
-          <button
-            type="button"
-            class="search-clear"
-            (click)="searchTerm = ''">
-
-            <mat-icon>close</mat-icon>
-
+          <button type="button" class="btn-primary" (click)="checkAvailability()">
+            Check who is free
           </button>
+          <button type="button" class="btn-outline" (click)="postRequirement()">
+            Post what you need
+          </button>
+        </div>
 
-        }
-
+        <p class="planner-msg" role="status" [class.err]="planError">
+          {{ planMessage }}
+        </p>
       </div>
 
     </div>
 
-
-    <!-- LOCATION FILTERS -->
-
-    <div class="location-filter-row">
-
-      <mat-form-field
-        class="location-select">
-
-        <mat-label>State</mat-label>
-
-        <mat-select
-          [(ngModel)]="selectedStateId"
-          (selectionChange)="onStateChange()">
-
-          <mat-option [value]="null">
-            All States
-          </mat-option>
-
-          @for (state of states; track state.id) {
-
-            <mat-option [value]="state.id">
-              {{ state.name }}
-            </mat-option>
-
-          }
-
-        </mat-select>
-
-      </mat-form-field>
-
-
-      <mat-form-field
-        class="location-select">
-
-        <mat-label>City</mat-label>
-
-        <mat-select
-          [(ngModel)]="selectedCityId"
-          (selectionChange)="onCityChange()">
-
-          <mat-option [value]="null">
-            All Cities
-          </mat-option>
-
-          @for (city of cities; track city.id) {
-
-            <mat-option [value]="city.id" >
-              {{ city.name }}
-            </mat-option>
-
-          }
-
-        </mat-select>
-
-      </mat-form-field>
-
-
-      @if (selectedStateId || selectedCityId) {
-
-        <button
-          type="button"
-          class="clear-filters-btn"
-          (click)="clearLocationFilters()">
-
-          <mat-icon>close</mat-icon>
-
-          Clear location
-
-        </button>
-
-      }
-
+    <div class="hero-stats">
+      <span><b>Verified</b> vendors only</span>
+      <span><b>Live</b> availability</span>
+      <span><b>Free</b> chat before booking</span>
     </div>
-
   </div>
-
 </section>
 
 
 <!-- =====================================================
-     CATEGORY SECTION
+     TIPS & INSPIRATION  (between hero and Why Evenzoo)
 ===================================================== -->
+<section class="tips-section">
+  <div class="tips-inner">
 
-<section class="categories-section">
+    <h2>Great events start with <span>good questions</span></h2>
+    <p class="tips-lead">
+      Short, practical advice for people hosting an event and for the vendors who make it happen.
+    </p>
 
-  <div class="categories-inner">
-
-    <div class="section-label">
-
-      <span class="section-label-icon">
-        <mat-icon>category</mat-icon>
-      </span>
-
+    <!-- rotating quote -->
+    <figure class="quote-card" aria-live="polite">
+      <div class="quote-mark" aria-hidden="true">“</div>
       <div>
-        <h3>Browse by Category</h3>
-        <p>Find the right vendor for your event</p>
+        <blockquote [class.fade]="quoteFading">{{ quotes[quoteIndex].text }}</blockquote>
+        <small>{{ quotes[quoteIndex].by }}</small>
+        <div class="quote-dots">
+          @for (q of quotes; track $index) {
+            <button
+              type="button"
+              [attr.aria-label]="'Quote ' + ($index + 1)"
+              [class.on]="quoteIndex === $index"
+              (click)="goToQuote($index)"></button>
+          }
+        </div>
       </div>
+    </figure>
 
+    <!-- tabs -->
+    <div class="tip-tabs" role="tablist">
+      <button type="button" role="tab"
+              [class.on]="activeTab === 'customer'"
+              [attr.aria-selected]="activeTab === 'customer'"
+              (click)="activeTab = 'customer'">For customers</button>
+      <button type="button" role="tab"
+              [class.on]="activeTab === 'vendor'"
+              [attr.aria-selected]="activeTab === 'vendor'"
+              (click)="activeTab = 'vendor'">For vendors</button>
     </div>
 
-
-    <mat-chip-listbox
-      aria-label="Category selection"
-      class="category-chips">
-
-      <mat-chip-option
-        [selected]="selectedCategoryId === null"
-        (click)="selectCategory(null)">
-
-        <mat-icon>apps</mat-icon>
-        All Categories
-
-      </mat-chip-option>
-
-
-      @for (cat of categories; track cat.id) {
-
-        <mat-chip-option
-          [selected]="selectedCategoryId === cat.id"
-          (click)="selectCategory(cat.id)">
-
-          {{ cat.icon }}
-          {{ cat.name }}
-
-        </mat-chip-option>
-
+    <div class="tip-grid">
+      @for (tip of (activeTab === 'customer' ? customerTips : vendorTips); track tip.title) {
+        <div class="tip-card">
+          <span class="tip-icon"><mat-icon>{{ tip.icon }}</mat-icon></span>
+          <h3>{{ tip.title }}</h3>
+          <p>{{ tip.text }}</p>
+        </div>
       }
+    </div>
 
-    </mat-chip-listbox>
+    <!-- timeline -->
+    <div class="timeline">
+      <h3>A simple planning timeline</h3>
+      <p>Most events go smoothly when the big bookings happen early.</p>
+      <div class="steps">
+        @for (s of timeline; track s.when) {
+          <div class="step">
+            <b>{{ s.when }}</b>
+            <span>{{ s.what }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="trust-bar">
+      <div><mat-icon>check_circle</mat-icon> Every vendor is verified</div>
+      <div><mat-icon>check_circle</mat-icon> Check availability before you chat</div>
+      <div><mat-icon>check_circle</mat-icon> Reviews from real bookings</div>
+    </div>
 
   </div>
-
 </section>
 
 
 <!-- =====================================================
-     RESULTS
+     CATEGORY SECTION + RESULTS
+     (keep your existing commented-out blocks here, unchanged)
 ===================================================== -->
 
-<section class="results-section">
 
-  <div class="results-container">
+<!-- =====================================================
+     WHY EVENZOO  (unchanged)
+===================================================== -->
+<section class="why-section" #whySection>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
 
+  <div class="why-inner">
 
-    @if (loading) {
-
-      <!-- LOADING -->
-
-      <div class="loading-container">
-
-        <div class="loading-spinner">
-
-          <mat-spinner diameter="42"></mat-spinner>
-
-        </div>
-
-        <h3>Finding vendors</h3>
-
-        <p>
-          Searching for the best vendors for you...
-        </p>
-
+    <!-- LEFT -->
+    <div class="why-left reveal">
+      <div class="why-badge">
+        <mat-icon>auto_awesome</mat-icon>
+        Why Evenzoo
       </div>
 
+      <h2>Plan your event <span>without the chasing.</span></h2>
 
-    } @else if (filteredVendors.length === 0) {
+      <p class="why-lead">
+        Finding a photographer or decorator usually means endless calls and not
+        knowing who is free. Evenzoo puts the answers in one place before you
+        message anyone.
+      </p>
 
-      <!-- EMPTY -->
-
-      <div class="empty-state">
-
-        <div class="empty-icon">
-
-          <mat-icon>search_off</mat-icon>
-
+      <div class="cal">
+        <div class="cal-head">
+          <h3>October 2026</h3>
+          <small>Tap a date to check this vendor</small>
         </div>
 
-        <h3>No vendors found</h3>
+        <div class="cal-grid">
+          @for (w of weekDays; track $index) {
+            <b>{{ w }}</b>
+          }
+          @for (b of blanks; track $index) {
+            <i></i>
+          }
+          @for (d of days; track d) {
+            <button
+              type="button"
+              [class.bk]="booked.has(d)"
+              [class.sel]="selectedDay === d"
+              [style.animation-delay.ms]="d * 18"
+              (click)="pickDay(d)">
+              {{ d }}
+            </button>
+          }
+        </div>
 
-        <p>
-          We couldn't find vendors matching your current
-          search and filters.
-        </p>
-
-        <button
-          mat-stroked-button
-          class="reset-btn"
-          (click)="searchTerm = ''; selectedCategoryId = null; clearLocationFilters()">
-
-          <mat-icon>refresh</mat-icon>
-
-          Reset Filters
-
-        </button>
-
+        <div class="cal-status" role="status"
+             [class.ok]="selectedDay && !booked.has(selectedDay)"
+             [class.no]="selectedDay && booked.has(selectedDay)">
+          @if (!selectedDay) {
+            Pick a date to see availability.
+          } @else if (booked.has(selectedDay)) {
+            <mat-icon>event_busy</mat-icon> Oct {{ selectedDay }} · Already booked
+          } @else {
+            <mat-icon>event_available</mat-icon> Oct {{ selectedDay }} · Available
+          }
+        </div>
       </div>
-
-
-    } @else {
-
-      <!-- RESULTS HEADER -->
-
-      <div class="results-header">
-
-        <div>
-
-          <h2>
-            Available Vendors
-          </h2>
-
-          <p>
-            {{ filteredVendors.length }}
-            vendor{{ filteredVendors.length !== 1 ? 's' : '' }}
-            found
-          </p>
-
-        </div>
-
-
-        <div class="results-count">
-
-          <mat-icon>storefront</mat-icon>
-
-          {{ filteredVendors.length }}
-
-        </div>
-
-      </div>
-
-
-      <!-- VENDOR GRID -->
-
-      <div class="vendor-grid">
-
-        @for (vendor of filteredVendors; track vendor.id) {
-
-          <app-vendor-card
-            [vendor]="vendor"
-            [initialWishlisted]="wishlistedVendorIds.has(vendor.id)">
-          </app-vendor-card>
-
-        }
-
-      </div>
-
-
-      <!-- LOAD MORE -->
-
-      @if (hasMore && !loading) {
-
-        <div class="load-more-wrap">
-
-          <button
-            mat-stroked-button
-            class="load-more-btn"
-            (click)="loadMore()"
-            [disabled]="loadingMore">
-
-            @if (loadingMore) {
-
-              <mat-spinner diameter="18"></mat-spinner>
-
-              <span>Loading...</span>
-
-            } @else {
-
-              <mat-icon>expand_more</mat-icon>
-
-              <span>Load More Vendors</span>
-
-            }
-
-          </button>
-
-        </div>
-
-      }
-
-    }
-@if (compareService.count() > 0) {
-  <div class="compare-bar">
-    <span class="compare-count">{{ compareService.count() }} vendor{{ compareService.count() > 1 ? 's' : '' }} selected</span>
-    <div class="compare-bar-actions">
-      <button class="clear-btn" (click)="compareService.clear()">Clear</button>
-      <button class="compare-btn" [disabled]="compareService.count() < 2" (click)="goToCompare()">
-        Compare Now
-      </button>
+      <a class="why-btn" routerLink="/vendors">
+        Browse vendors
+        <mat-icon>arrow_forward</mat-icon>
+      </a>
     </div>
-  </div>
-}
-  </div>
 
+    <!-- RIGHT -->
+    <div class="why-rows">
+      <div class="why-card reveal" style="--i:0">
+        <span class="why-icon"><mat-icon>verified_user</mat-icon></span>
+        <div>
+          <h3>Every vendor is verified</h3>
+          <p>Profiles are reviewed before they go live, so you start with people you can trust.</p>
+        </div>
+      </div>
+
+      <div class="why-card reveal" style="--i:1">
+        <span class="why-icon"><mat-icon>event_available</mat-icon></span>
+        <div>
+          <h3>See who is free on your date</h3>
+          <p>Check availability first and skip vendors who are already booked.</p>
+        </div>
+      </div>
+
+      <div class="why-card reveal" style="--i:2">
+        <span class="why-icon"><mat-icon>chat_bubble</mat-icon></span>
+        <div>
+          <h3>Chat before you decide</h3>
+          <p>Ask questions and share your plans with vendors inside Evenzoo.</p>
+        </div>
+      </div>
+
+      <div class="why-card reveal" style="--i:3">
+        <span class="why-icon"><mat-icon>post_add</mat-icon></span>
+        <div>
+          <h3>Post what you need</h3>
+          <p>Describe your event once and let vendors come to you, or pick from the list yourself.</p>
+        </div>
+      </div>
+
+      <div class="why-card reveal" style="--i:4">
+        <span class="why-icon"><mat-icon>star</mat-icon></span>
+        <div>
+          <h3>Compare with real reviews</h3>
+          <p>Ratings, review counts and past bookings sit side by side.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </section>
 
+</div><!-- /page-bg -->
 
 <app-footer></app-footer>

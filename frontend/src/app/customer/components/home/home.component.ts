@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -8,26 +9,25 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { VendorService } from '../../../core/services/vendor.service';
 import { LocationService, State, City } from '../../../core/services/location.service';
-import { VendorCardComponent } from '../vendor-card/vendor-card.component';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { VendorProfile, Category } from '../../../core/models/vendor.model';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { CompareService } from '../../../core/services/compare.service';
-import { Router } from '@angular/router';
 import { GeolocationService } from '../../../core/services/geolocation.service';
 import { WishlistService } from '../../../core/services/wishlist.service';
+
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, MatChipsModule, MatIconModule,
+    CommonModule, FormsModule, RouterLink, MatChipsModule, MatIconModule,
     MatSelectModule, MatFormFieldModule, MatProgressSpinnerModule,
-    VendorCardComponent, NavbarComponent, FooterComponent
+    NavbarComponent, FooterComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   vendors: VendorProfile[] = [];
   wishlistedVendorIds = new Set<number>();
   categories: Category[] = [];
@@ -47,6 +47,67 @@ export class HomeComponent implements OnInit {
 
   detectingLocation = false;
   locationError = '';
+
+  // ---------- Why Evenzoo section ----------
+  @ViewChild('whySection') whySection!: ElementRef<HTMLElement>;
+  private observer?: IntersectionObserver;
+
+  weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  blanks = Array(4);                                   // Oct 1, 2026 is a Thursday
+  days = Array.from({ length: 31 }, (_, i) => i + 1);
+  booked = new Set([3, 4, 10, 11, 17, 18, 24, 25, 31]); // demo data
+  selectedDay: number | null = null;
+
+  // ---------- NEW: hero planner ----------
+  eventTypes = [
+    { icon: '💍', name: 'Wedding' },
+    { icon: '🎂', name: 'Birthday' },
+    { icon: '🏢', name: 'Corporate' },
+    { icon: '👶', name: 'Baby shower' },
+    { icon: '🎓', name: 'Engagement' },
+    { icon: '🎉', name: 'Other' }
+  ];
+  selectedEventType = '';
+  eventDate = '';
+  minDate = new Date().toISOString().split('T')[0];
+  planMessage = 'Pick an event type and a date. We will show only vendors who are free.';
+  planError = false;
+
+  // ---------- NEW: tips section ----------
+  quotes = [
+    { text: 'A good vendor is not the cheapest one. It is the one who is free on your day and answers your message.', by: 'Evenzoo planning tip' },
+    { text: 'Your event is one day. The memories from it last decades, so book the people who care about the details.', by: 'Evenzoo planning tip' },
+    { text: 'Every great photograph begins with a clear conversation about what matters to you.', by: 'For customers' },
+    { text: 'Every five-star review started as an honest promise kept on time.', by: 'For vendors' },
+    { text: 'Plan early, ask clearly, confirm in writing. Then enjoy your own party.', by: 'Evenzoo planning tip' }
+  ];
+  quoteIndex = 0;
+  quoteFading = false;
+  private quoteTimer?: ReturnType<typeof setInterval>;
+
+  activeTab: 'customer' | 'vendor' = 'customer';
+
+  customerTips = [
+    { icon: 'event_available', title: 'Lock the date first', text: 'Check who is free on your date before you compare prices. It saves days of calls.' },
+    { icon: 'chat', title: 'Share your plan in chat', text: 'Guest count, venue, timings and theme. A clear brief gets you a clear quote.' },
+    { icon: 'star', title: 'Read reviews and past bookings', text: 'Look at how many events a vendor has done, not only the star rating.' },
+    { icon: 'assignment_turned_in', title: 'Confirm in writing', text: 'Agree on price, advance, delivery date and cancellation terms inside the chat.' }
+  ];
+
+  vendorTips = [
+    { icon: 'edit_calendar', title: 'Keep your calendar current', text: 'Mark booked dates right away. Customers skip vendors whose availability looks unreliable.' },
+    { icon: 'photo_library', title: 'Show your best 10 photos', text: 'Pick recent work from different event types. Quality beats quantity.' },
+    { icon: 'bolt', title: 'Reply within a few hours', text: 'The first vendor to answer clearly often wins the booking.' },
+    { icon: 'payments', title: 'List what is included', text: 'State hours, travel, extras and advance amount so there are no surprises later.' }
+  ];
+
+  timeline = [
+    { when: '3–6 months before', what: 'Book photographer, decorator and caterer.' },
+    { when: '2 months before', what: 'Finalise theme, menu and shot list.' },
+    { when: '2 weeks before', what: 'Reconfirm timings and payment plan.' },
+    { when: 'Event day', what: 'Share one point of contact with every vendor.' },
+    { when: 'After the event', what: 'Leave an honest review to help the next family.' }
+  ];
 
   constructor(
     private vendorService: VendorService,
@@ -82,6 +143,80 @@ export class HomeComponent implements OnInit {
     }
   });
 }
+
+  ngAfterViewInit() {
+    // scroll reveal for Why Evenzoo
+    this.observer = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          this.observer?.unobserve(e.target);
+        }
+      }),
+      { threshold: 0.15 }
+    );
+    this.whySection.nativeElement
+      .querySelectorAll('.reveal')
+      .forEach(el => this.observer!.observe(el));
+
+    // auto-rotate quotes (skipped when the user prefers reduced motion)
+    this.startQuoteTimer();
+  }
+
+  ngOnDestroy() {
+    this.observer?.disconnect();
+    if (this.quoteTimer) clearInterval(this.quoteTimer);
+  }
+
+  // ---------- NEW: planner actions ----------
+  selectEventType(name: string) {
+    this.selectedEventType = name;
+    this.planError = false;
+  }
+
+  checkAvailability() {
+    if (!this.selectedEventType || !this.eventDate) {
+      this.planError = true;
+      this.planMessage = 'Please choose an event type and a date first.';
+      return;
+    }
+    this.planError = false;
+    this.router.navigate(['/customer/vendor-card'], {
+      queryParams: { type: this.selectedEventType, date: this.eventDate }
+    });
+  }
+
+  postRequirement() {
+    // TODO: change to your real "post requirement" route
+    this.router.navigate(['/customer/post/create'], {
+      queryParams: this.selectedEventType ? { type: this.selectedEventType } : {}
+    });
+  }
+
+  // ---------- NEW: quote carousel ----------
+  goToQuote(i: number) {
+    this.showQuote(i);
+    this.startQuoteTimer();
+  }
+
+  private showQuote(i: number) {
+    this.quoteFading = true;
+    setTimeout(() => {
+      this.quoteIndex = i;
+      this.quoteFading = false;
+    }, 200);
+  }
+
+  private startQuoteTimer() {
+    if (this.quoteTimer) clearInterval(this.quoteTimer);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    this.quoteTimer = setInterval(
+      () => this.showQuote((this.quoteIndex + 1) % this.quotes.length),
+      6000
+    );
+  }
+
+  // ---------- existing logic (unchanged) ----------
   goToCompare() {
     const ids = this.compareService.getSelected();
     if (ids.length < 2) {
@@ -91,6 +226,7 @@ export class HomeComponent implements OnInit {
     //this.router.navigate(['/customer/compare'], { queryParams: { ids: ids.join(',') } });
     this.router.navigate(['/browse/compare'], { queryParams: { ids: ids.join(',') } });
   }
+
   loadCategories() {
     this.vendorService.getCategories().subscribe({
       next: (data) => this.categories = data,
@@ -113,7 +249,6 @@ export class HomeComponent implements OnInit {
   }
 
   onStateChange() {
-    // Reset city since the previously picked city may not belong to the new state
     this.selectedCityId = null;
     this.loadCities(this.selectedStateId ?? undefined);
     this.loadVendors();
@@ -236,8 +371,6 @@ export class HomeComponent implements OnInit {
         this.locationService.findNearestCity(coords.latitude, coords.longitude).subscribe({
           next: (nearest) => {
             this.detectingLocation = false;
-
-            // Auto-select the matched state and city
             this.selectedStateId = nearest.state_id;
             this.loadCities(nearest.state_id);
             this.selectedCityId = nearest.city_id;
@@ -254,5 +387,9 @@ export class HomeComponent implements OnInit {
         this.locationError = err.message;
       }
     });
+  }
+
+  pickDay(d: number) {
+    this.selectedDay = d;
   }
 }

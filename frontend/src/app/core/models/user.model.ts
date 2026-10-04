@@ -6,6 +6,7 @@ export interface User {
   role: 'customer' | 'vendor' | 'admin';
   is_verified: boolean;
   profile_photo?: string;
+  created_at?: string;
 }
 
 export interface LoginResponse {

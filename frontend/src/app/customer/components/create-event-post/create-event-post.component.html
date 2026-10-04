@@ -1,4 +1,3 @@
-
 <app-navbar></app-navbar>
 
 <div class="event-post-page">
@@ -8,6 +7,12 @@
        ========================= -->
 
   <div class="page-header">
+
+    <!-- ADDED: badge -->
+    <div class="post-badge">
+      <mat-icon>post_add</mat-icon>
+      Post what you need
+    </div>
 
     <h1>
       {{ editMode ? 'Edit Your Event Post' : 'Post Your Event' }}
@@ -246,5 +251,63 @@
     </form>
 
   </div>
+
+
+  <!-- =========================
+       ADDED: WHAT HAPPENS NEXT
+       ========================= -->
+
+  <aside class="info-col">
+
+    <div class="info-card">
+      <h2>What happens after you post</h2>
+
+      <ol class="flow">
+        <li style="--i:0">
+          <span class="flow-icon"><mat-icon>send</mat-icon></span>
+          <div>
+            <h3>Your post goes live</h3>
+            <p>Vendors in your selected city are notified about your event.</p>
+          </div>
+        </li>
+        <li style="--i:1">
+          <span class="flow-icon"><mat-icon>chat_bubble</mat-icon></span>
+          <div>
+            <h3>Vendors reach out</h3>
+            <p>Interested vendors message you inside Evenzoo with their price and availability.</p>
+          </div>
+        </li>
+        <li style="--i:2">
+          <span class="flow-icon"><mat-icon>star</mat-icon></span>
+          <div>
+            <h3>Compare and chat</h3>
+            <p>Look at reviews and past bookings, and ask your questions before you decide.</p>
+          </div>
+        </li>
+        <li style="--i:3">
+          <span class="flow-icon"><mat-icon>event_available</mat-icon></span>
+          <div>
+            <h3>Pick your vendor</h3>
+            <p>Confirm the details in writing and book the one you trust.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="info-card tips-mini">
+      <h2>Get more replies</h2>
+      <ul>
+        <li><mat-icon>check_circle</mat-icon> Write a clear title, like "Photographer for 300-guest wedding".</li>
+        <li><mat-icon>check_circle</mat-icon> Add your budget and date so vendors can reply faster.</li>
+        <li><mat-icon>check_circle</mat-icon> Mention the venue, guest count and any special needs.</li>
+      </ul>
+    </div>
+
+    <div class="info-note">
+      <mat-icon>verified_user</mat-icon>
+      Every vendor on Evenzoo is verified before their profile goes live.
+    </div>
+
+  </aside>
 
 </div>

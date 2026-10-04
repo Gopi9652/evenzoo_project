@@ -5,7 +5,7 @@
     </button>
 
     <a
-      [routerLink]="authService.getRole() === 'customer' ? '/customer/home' : '/'"
+      [routerLink]="authService.getRole() === 'customer' ? '/customer/home' : authService.getRole() === 'vendor' ? '/vendor/dashboard' : authService.getRole() === 'admin' ? '/admin/dashboard': '/'"
       class="brand">
       <div class="brand-mark">
         <img
@@ -19,7 +19,7 @@
     </a>
   </div>
 
-  <div class="right-section">
+   <div class="right-section">
   @if (authService.isLoggedIn()) {
     <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="icon-btn">
       <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeColor="warn" matBadgeSize="small">
@@ -54,24 +54,55 @@
       }
     </mat-menu>
 
-    <button mat-icon-button [matMenuTriggerFor]="accountMenu" class="avatar-btn">
+    <button mat-icon-button [matMenuTriggerFor]="accountMenu" class="avatar-btn" aria-label="Account menu">
       <div class="avatar">{{ userInitial }}</div>
     </button>
-    <mat-menu #accountMenu="matMenu">
-      <div class="menu-header">
-        <p class="menu-name">{{ userName }}</p>
+    <mat-menu #accountMenu="matMenu" class="account-panel" xPosition="before">
+      <div class="dd-head" (click)="$event.stopPropagation()">
+        <div class="dd-avatar">{{ userInitial }}</div>
+        <div class="dd-info">
+          <div class="dd-name">{{ userName }}</div>
+          @if (userEmail) {
+            <div class="dd-email">{{ userEmail }}</div>
+          }
+        </div>
       </div>
+      <div class="dd-divider"></div>
+
+      <div class="dd-section-label" (click)="$event.stopPropagation()">NAVIGATE</div>
+      <button mat-menu-item routerLink="/profile">
+        <mat-icon>person</mat-icon><span>My Profile</span>
+      </button>
+      <button mat-menu-item [routerLink]="bookingsLink">
+        <mat-icon>event_available</mat-icon><span>My Bookings</span><span class="dd-badge">{{ upcomingBookingsCount }} upcoming</span>
+      </button>
+      @if (authService.getRole() === 'customer') {
+        <button mat-menu-item routerLink="/customer/wishlist">
+          <mat-icon>favorite</mat-icon><span>Saved Vendors</span>
+        </button>
+      }
+
+      <div class="dd-divider"></div>
+      <div class="dd-section-label" (click)="$event.stopPropagation()">ACCOUNT &amp; SECURITY</div>
       <button mat-menu-item routerLink="/settings/change-password">
-        <mat-icon>lock</mat-icon>
-        <span>Change Password</span>
+        <mat-icon>lock</mat-icon><span>Change Password</span>
       </button>
       <button mat-menu-item routerLink="/sessions">
-        <mat-icon>devices</mat-icon>
-        <span>Active Sessions</span>
+        <mat-icon>devices</mat-icon><span>Active Sessions</span>
       </button>
       <button mat-menu-item routerLink="/settings/privacy">
-        <mat-icon>shield</mat-icon>
-        <span>Privacy & Data</span>
+        <mat-icon>shield</mat-icon><span>Privacy &amp; Data</span>
+      </button>
+
+      <div class="dd-divider"></div>
+      <div class="dd-section-label" (click)="$event.stopPropagation()">SUPPORT</div>
+      <button mat-menu-item routerLink="/help-support">
+        <mat-icon>help_outline</mat-icon><span>Help &amp; Support</span>
+      </button>
+
+      <div class="dd-divider"></div>
+      <button mat-menu-item class="logout" (click)="logout()">
+        <mat-icon>logout</mat-icon><span>Logout</span>
       </button>
     </mat-menu>
   }
@@ -91,6 +122,12 @@
     <div class="avatar">{{ userInitial }}</div>
     <div class="who">
       <div class="nm">{{ userName }}</div>
+      @if (userEmail) {
+        <div class="email">
+          <!-- <span class="email-icon">✉</span> -->
+          <span>{{ userEmail }}</span>
+        </div>
+      }
       <div class="rl">{{ authService.getRole() }}</div>
     </div>
   </div>
@@ -101,14 +138,24 @@
       <a routerLink="/customer/home" routerLinkActive="active" (click)="menuOpen=false">
         <span class="ic"><mat-icon>travel_explore</mat-icon></span>Browse
       </a>
+      <a routerLink="/customer/bookings" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic">
+          <mat-icon>event_available</mat-icon>
+        </span>
+
+        <span>Bookings</span>
+
+        @if (upcomingBookingsCount > 0) {
+          <span class="dd-badge">
+            {{ upcomingBookingsCount }} upcoming
+          </span>
+        }
+      </a>
       <a routerLink="/customer/wishlist" routerLinkActive="active" (click)="menuOpen=false">
-        <span class="ic"><mat-icon>favorite</mat-icon></span>Saved
+        <span class="ic"><mat-icon>favorite</mat-icon></span>Saved Vendors
       </a>
       <a routerLink="/customer/my-posts" routerLinkActive="active" (click)="menuOpen=false">
         <span class="ic"><mat-icon>campaign</mat-icon></span>My Event Posts
-      </a>
-      <a routerLink="/customer/bookings" routerLinkActive="active" (click)="menuOpen=false">
-        <span class="ic"><mat-icon>event_available</mat-icon></span>Bookings
       </a>
       <a routerLink="/customer/reviews" routerLinkActive="active" (click)="menuOpen=false">
         <span class="ic"><mat-icon>reviews</mat-icon></span>Reviews
@@ -164,6 +211,12 @@
     <a routerLink="/messages" routerLinkActive="active" (click)="menuOpen=false">
       <span class="ic"><mat-icon>chat_bubble</mat-icon></span>Messages
     </a>
+    <a routerLink="/help-support" routerLinkActive="active" (click)="menuOpen=false">
+      <span class="ic"><mat-icon>help_outline</mat-icon></span>Help &amp; Support
+    </a>
+    <!-- <a routerLink="/settings" routerLinkActive="active" (click)="menuOpen=false">
+      <span class="ic"><mat-icon>settings</mat-icon></span>Settings
+    </a> -->
   </div>
 
   <div class="sidebar-foot">

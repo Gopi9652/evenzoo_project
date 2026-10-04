@@ -2,6 +2,8 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     DATABASE_URL: str
+    TESTING: bool = False
+    TEST_DATABASE_URL: str = "sqlite:///./test.db"
     JWT_SECRET: str
     JWT_EXPIRE_MINUTES: int = 60
     JWT_REFRESH_EXPIRE_DAYS: int = 7

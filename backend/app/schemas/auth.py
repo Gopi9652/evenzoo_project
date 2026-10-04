@@ -70,6 +70,7 @@ class UserResponse(BaseModel):
     role: str
     is_verified: bool
     profile_photo: Optional[str] = None
+    created_at: datetime
 
     class Config:
         from_attributes = True

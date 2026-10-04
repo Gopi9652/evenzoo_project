@@ -10,13 +10,16 @@ import { AuthService } from '../../../core/services/auth.service';
 import { AccountService } from '../../../core/services/account.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { User } from '../../../core/models/user.model';
+import { BookingService } from '../../../core/services/booking.service';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { WishlistService } from '../../../core/services/wishlist.service';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, MatButtonModule, MatIconModule,
-    MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, NavbarComponent
+    MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, NavbarComponent, DatePipe, DecimalPipe
   ],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.scss'
@@ -43,10 +46,24 @@ export class MyProfileComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
 
+  bookingStats = {
+    totalBookings: 0,
+    pendingBookings: 0,
+    confirmedBookings: 0,
+    completedBookings: 0,
+    cancelledBookings: 0,
+    totalAmount: 0
+  };
+  upcomingBooking: any = null;
+  wishList: any[] = []
+  isVendor: boolean = false;
+
   constructor(
     private authService: AuthService,
     private accountService: AccountService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private bookingService: BookingService,
+    private wishlistService: WishlistService
   ) {
     this.emailForm = this.fb.group({
       new_email: ['', [Validators.required, Validators.email]],
@@ -67,12 +84,17 @@ export class MyProfileComponent implements OnInit {
     this.authService.getMe().subscribe({
       next: (data) => {
         this.user = data;
+        // console.log("USER", this.user)
+        this.isVendor = this.user.role == 'vendor'
         this.loading = false;
       },
       error: () => this.loading = false
     });
 
     this.loadPendingChanges();
+    this.loadBookingStats();
+    this.loadWishList();
+
   }
 
   loadPendingChanges() {
@@ -81,6 +103,78 @@ export class MyProfileComponent implements OnInit {
         this.pendingEmail = data.pending_email;
         this.pendingPhone = data.pending_phone;
         if (this.pendingPhone) this.showPhoneOtpForm = true;
+      }
+    });
+  }
+
+  loadBookingStats() {
+    this.bookingService.getMyBookings().subscribe({
+      next: (data) => {
+
+        const bookings = data || [];
+
+        const today = new Date().toISOString().split('T')[0];
+
+        this.upcomingBooking = bookings
+          .filter(booking =>
+            booking.status === 'pending' ||
+            booking.status === 'confirmed'
+          )
+          .filter(booking => booking.event_date >= today)
+          .sort((a, b) =>
+            a.event_date.localeCompare(b.event_date)
+          )[0] || null;
+
+        // console.log('Today:', today);
+        // console.log('Upcoming:', this.upcomingBooking);
+
+        // console.log('Upcoming Booking:', this.upcomingBooking);
+        // console.log("bookins", bookings)
+
+        this.bookingStats = {
+          totalBookings: bookings.length,
+
+          pendingBookings: bookings.filter(
+            booking => booking.status === 'pending'
+          ).length,
+
+          confirmedBookings: bookings.filter(
+            booking => booking.status === 'confirmed'
+          ).length,
+
+          completedBookings: bookings.filter(
+            booking => booking.status === 'completed'
+          ).length,
+
+          cancelledBookings: bookings.filter(
+            booking => booking.status === 'cancelled'
+          ).length,
+
+          totalAmount: bookings.reduce(
+            (total, booking) =>
+              total + Number(booking.total_amount || 0),
+            0
+          )
+        };
+
+        console.log('Booking Stats:', this.bookingStats);
+      },
+
+      error: (error) => {
+        console.error('Failed to load booking stats:', error);
+      }
+    });
+  }
+
+  loadWishList() {
+    this.wishlistService.getMyWishlist().subscribe({
+      next: (data) => {
+        this.wishList = data || [];
+        console.log("Wishlist", this.wishList);
+      },
+      error: (error) => {
+        console.error("Wishlist error:", error);
+        this.wishList = [];
       }
     });
   }

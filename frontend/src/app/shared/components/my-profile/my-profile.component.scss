@@ -1199,3 +1199,204 @@
     font-size: 11px;
   }
 }
+/* =========================
+   PROFILE STATS
+========================= */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 40px 22px;
+}
+
+.stat {
+  min-width: 0;
+  padding: 18px 12px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #e7e7ec;
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+.stat .num {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat .lbl {
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #777;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 700px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 0 20px 18px;
+  }
+
+  .stat {
+    padding: 16px 10px;
+  }
+
+  .stat .num {
+    font-size: 20px;
+  }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 0 14px 18px;
+  }
+
+  .stat {
+    padding: 14px 8px;
+    border-radius: 12px;
+  }
+
+  .stat .num {
+    font-size: 18px;
+  }
+
+  .stat .lbl {
+    font-size: 11px;
+  }
+}
+
+
+/* =========================
+   VERY SMALL PHONES
+========================= */
+
+@media (max-width: 350px) {
+  .stats {
+    gap: 6px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .stat {
+    padding: 12px 6px;
+  }
+
+  .stat .num {
+    font-size: 16px;
+  }
+
+  .stat .lbl {
+    font-size: 10px;
+  }
+}
+
+/* ADDED: define the variables the section depends on */
+:root{
+  --line:#e6e1f3;
+  --sub:#6b6585;
+  --purple-dark:#5b21b6;
+  --page-bg:#f1f0f7;
+}
+
+/* ADDED: tinted page behind the cards (apply to your page wrapper/body) */
+body{ background:var(--page-bg); }
+
+.section{
+  display:grid;
+  margin:0 40px 22px;
+  background:#fff;
+  border:1px solid var(--line, #e6e1f3);        /* fallback added */
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 2px 10px rgba(91,33,182,.06);    /* ADDED */
+}
+.sec-head{display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+.sec-icon{width:38px;height:38px;border-radius:11px; display:flex;align-items:center;justify-content:center;}
+.sec-icon svg{width:18px;height:18px;}
+.sec-title{font-weight:700; font-size:16px; color:#14111f;}   /* color added */
+.sec-sub{font-size:12.5px; color:var(--sub, #6b6585);}         /* fallback added */
+
+.booking-card{
+  display:flex; align-items:center; gap:12px; padding:12px;
+  border:1px solid var(--line, #e6e1f3);        /* fallback added */
+  border-radius:12px;
+  background:linear-gradient(180deg,#faf7ff,#fff);
+}
+.booking-thumb{
+  width:48px;height:48px;border-radius:10px;background:#f2ebfd;
+  display:flex;align-items:center;justify-content:center; flex-shrink:0;
+}
+.booking-thumb svg{width:22px;height:22px; color:var(--purple-dark, #5b21b6);} /* fallback added */
+.booking-info{flex:1; min-width:0;}
+.booking-info .vname{font-weight:700; font-size:14.5px; color:#14111f;}        /* color added */
+.booking-info .vdate{font-size:12.5px; color:var(--sub, #6b6585); margin-top:2px;}
+.booking-status{
+  font-size:11.5px; font-weight:700; color:#b8850a; background:#fdf3dd;
+  padding:4px 10px; border-radius:999px; white-space:nowrap;
+}
+
+.no-upcoming {
+  text-align: center;
+  padding: 28px 18px;
+}
+
+.no-upcoming-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-upcoming-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #f2ebfd;
+  color: #5b21b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.no-upcoming-icon svg {
+  width: 23px;
+  height: 23px;
+}
+
+.no-upcoming-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.no-upcoming-text {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--sub);
+}
+
+.fav-scroll{display:flex; gap:12px; overflow-x:auto; padding-bottom:4px; margin:0 -4px;}
+.fav-card{flex:0 0 128px; border:1px solid var(--line); border-radius:12px; padding:10px; text-align:left;}
+.fav-thumb{width:100%; height:64px; border-radius:8px; background:#f2ebfd; display:flex; align-items:center; justify-content:center; margin-bottom:8px;}
+.fav-thumb svg{width:24px;height:24px; color:var(--purple-dark);}
+.fav-name{font-size:12.5px; font-weight:700; line-height:1.25;}
+.fav-cat{font-size:11px; color:var(--sub); margin-top:2px;}
