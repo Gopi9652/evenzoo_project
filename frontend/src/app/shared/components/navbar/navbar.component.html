@@ -135,7 +135,7 @@
   <div class="sidebar-nav">
     @if (authService.getRole() === 'customer') {
       <div class="nav-label">Main</div>
-      <a routerLink="/customer/home" routerLinkActive="active" (click)="menuOpen=false">
+      <a routerLink='/customer/vendor-card' routerLinkActive="active" (click)="menuOpen=false">
         <span class="ic"><mat-icon>travel_explore</mat-icon></span>Browse
       </a>
       <a routerLink="/customer/bookings" routerLinkActive="active" (click)="menuOpen=false">

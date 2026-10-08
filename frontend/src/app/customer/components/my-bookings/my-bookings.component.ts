@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -13,7 +13,7 @@ import { Booking } from '../../../core/models/booking.model';
   standalone: true,
   imports: [
     CommonModule, MatTabsModule, MatIconModule,
-    MatProgressSpinnerModule, NavbarComponent
+    MatProgressSpinnerModule, NavbarComponent, RouterLink
   ],
   templateUrl: './my-bookings.component.html',
   styleUrl: './my-bookings.component.scss'

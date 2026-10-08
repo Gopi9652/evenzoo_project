@@ -15,12 +15,14 @@ listVendors(
   cityId?: number,
   categoryId?: number,
   skip = 0,
-  limit = 20
+  limit = 20,
+  date?: string
 ): Observable<VendorProfile[]> {
   let url = `${this.apiUrl}?skip=${skip}&limit=${limit}`;
   if (stateId) url += `&state_id=${stateId}`;
   if (cityId) url += `&city_id=${cityId}`;
   if (categoryId) url += `&category_id=${categoryId}`;
+  if (date) url += `&date=${date}`;
   return this.http.get<VendorProfile[]>(url);
 }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -20,7 +20,7 @@ import { WishlistService } from '../../../core/services/wishlist.service';
   selector: 'app-home',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, RouterLink, MatChipsModule, MatIconModule,
+    CommonModule, FormsModule, MatChipsModule, MatIconModule,
     MatSelectModule, MatFormFieldModule, MatProgressSpinnerModule,
     NavbarComponent, FooterComponent
   ],
@@ -58,16 +58,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   booked = new Set([3, 4, 10, 11, 17, 18, 24, 25, 31]); // demo data
   selectedDay: number | null = null;
 
-  // ---------- NEW: hero planner ----------
-  eventTypes = [
-    { icon: '💍', name: 'Wedding' },
-    { icon: '🎂', name: 'Birthday' },
-    { icon: '🏢', name: 'Corporate' },
-    { icon: '👶', name: 'Baby shower' },
-    { icon: '🎓', name: 'Engagement' },
-    { icon: '🎉', name: 'Other' }
-  ];
-  selectedEventType = '';
   eventDate = '';
   minDate = new Date().toISOString().split('T')[0];
   planMessage = 'Pick an event type and a date. We will show only vendors who are free.';
@@ -107,6 +97,23 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     { when: '2 weeks before', what: 'Reconfirm timings and payment plan.' },
     { when: 'Event day', what: 'Share one point of contact with every vendor.' },
     { when: 'After the event', what: 'Leave an honest review to help the next family.' }
+  ];
+
+  calendarDate = new Date();
+
+  monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
   ];
 
   constructor(
@@ -168,29 +175,25 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.quoteTimer) clearInterval(this.quoteTimer);
   }
 
-  // ---------- NEW: planner actions ----------
-  selectEventType(name: string) {
-    this.selectedEventType = name;
-    this.planError = false;
+  selectCategory(categoryId: number | null) {
+    this.selectedCategoryId = categoryId;
   }
 
   checkAvailability() {
-    if (!this.selectedEventType || !this.eventDate) {
-      this.planError = true;
-      this.planMessage = 'Please choose an event type and a date first.';
-      return;
-    }
+    // if (!this.selectedCategoryId || !this.eventDate) {
+    //   this.planError = true;
+    //   this.planMessage = 'Please choose an event type and a date first.';
+    //   return;
+    // }
     this.planError = false;
     this.router.navigate(['/customer/vendor-card'], {
-      queryParams: { type: this.selectedEventType, date: this.eventDate }
+      queryParams: { category_id: this.selectedCategoryId, date: this.eventDate }
     });
   }
 
   postRequirement() {
     // TODO: change to your real "post requirement" route
-    this.router.navigate(['/customer/post/create'], {
-      queryParams: this.selectedEventType ? { type: this.selectedEventType } : {}
-    });
+    this.router.navigate(['/customer/post/create']);
   }
 
   // ---------- NEW: quote carousel ----------
@@ -258,11 +261,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadVendors();
   }
 
-  selectCategory(categoryId: number | null) {
-    this.selectedCategoryId = categoryId;
-    this.loadVendors();
-  }
-
   clearLocationFilters() {
     this.selectedStateId = null;
     this.selectedCityId = null;
@@ -285,7 +283,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.selectedCityId || undefined,
       this.selectedCategoryId || undefined,
       this.skip,
-      this.limit
+      this.limit,
+      undefined
     ).subscribe({
       next: (data) => {
         this.vendors = reset ? data : [...this.vendors, ...data];
@@ -391,5 +390,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   pickDay(d: number) {
     this.selectedDay = d;
+
+    const year = this.calendarDate.getFullYear();
+    const month = this.calendarDate.getMonth() + 1;
+
+    this.eventDate =
+      `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+    console.log('Selected day:', this.selectedDay);
+    console.log('Selected date:', this.eventDate);
   }
 }

@@ -90,12 +90,12 @@
         <span class="planner-lbl">What are you planning?</span>
 
         <div class="chips">
-          @for (t of eventTypes; track t.name) {
+          @for (c of categories; track c.id) {
             <button
               type="button"
-              [class.on]="selectedEventType === t.name"
-              (click)="selectEventType(t.name)">
-              {{ t.icon }} {{ t.name }}
+              [class.on]="selectedCategoryId === c.id"
+              (click)="selectCategory(c.id)">
+              {{ c.name }}
             </button>
           }
         </div>
@@ -274,7 +274,7 @@
           }
         </div>
       </div>
-      <a class="why-btn" routerLink="/vendors">
+      <a class="why-btn" (click)="checkAvailability()">
         Browse vendors
         <mat-icon>arrow_forward</mat-icon>
       </a>

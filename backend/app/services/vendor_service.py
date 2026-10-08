@@ -2,6 +2,9 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from typing import Optional
 from app.utils.geo import calculate_distance_km
+from datetime import datetime
+from sqlalchemy import select
+from sqlalchemy import or_, and_
 from app.models.vendor import (
     VendorProfile, VendorService, VendorPhoto,
     VendorAvailability, VendorWorkingHours,
@@ -94,7 +97,8 @@ class VendorService_:
         city_id: Optional[int] = None,
         category_id: Optional[int] = None,
         skip: int = 0,
-        limit: int = 20
+        limit: int = 20,
+        date: Optional[str] = None,
     ):
         # =========================================================
         # 1. BASE VENDOR QUERY
@@ -133,18 +137,47 @@ class VendorService_:
         # =========================================================
 
         if category_id:
-            vendor_ids_subquery = (
-                db.query(VendorCategoryMap.vendor_id)
-                .filter(
-                    VendorCategoryMap.category_id == category_id
-                )
-                .subquery()
-            )
 
             query = query.filter(
-                VendorProfile.id.in_(vendor_ids_subquery)
+                VendorProfile.id.in_(
+                    db.query(VendorCategoryMap.vendor_id)
+                    .filter(
+                        VendorCategoryMap.category_id == category_id
+                    )
+                )
             )
 
+
+        # =========================================================
+        # 5. DATE / AVAILABILITY FILTER
+        # =========================================================
+
+        if date:
+
+            requested_date = datetime.strptime(
+                date,
+                "%Y-%m-%d"
+            ).date()
+
+            # Find vendors explicitly unavailable on this date
+            unavailable_vendor_ids = (
+                db.query(VendorAvailability.vendor_id)
+                .filter(
+                    VendorAvailability.date == requested_date,
+                    VendorAvailability.is_available == False
+                )
+            )
+
+            # Remove only unavailable vendors.
+            #
+            # IMPORTANT:
+            # If vendor has NO row for this date,
+            # they are considered available.
+            query = query.filter(
+                ~VendorProfile.id.in_(unavailable_vendor_ids)
+            )
+
+            
         # =========================================================
         # 5. SORT + PAGINATION
         # =========================================================

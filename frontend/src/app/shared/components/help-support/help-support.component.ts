@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { FooterComponent } from '../footer/footer.component';
 
 interface SupportCategory {
   id: string;
@@ -41,7 +42,8 @@ interface SupportTicket {
     MatButtonModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    NavbarComponent
+    NavbarComponent,
+    FooterComponent
   ],
   templateUrl: './help-support.component.html',
   styleUrl: './help-support.component.scss'

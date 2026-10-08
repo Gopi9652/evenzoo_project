@@ -13,13 +13,14 @@ import { User } from '../../../core/models/user.model';
 import { BookingService } from '../../../core/services/booking.service';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { WishlistService } from '../../../core/services/wishlist.service';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, MatButtonModule, MatIconModule,
-    MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, NavbarComponent, DatePipe, DecimalPipe
+    MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, NavbarComponent, DatePipe, DecimalPipe, FooterComponent
   ],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.scss'

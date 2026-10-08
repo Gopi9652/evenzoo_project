@@ -49,10 +49,11 @@ def list_vendors(
     category_id: Optional[int] = Query(None),
     skip:        int           = Query(0),
     limit:       int           = Query(20),
+    date:        str            =Query(None),
     db:          Session       = Depends(get_db)
 ):
     return vendor_service.list_vendors(
-        db, state_id, city_id, category_id, skip, limit
+        db, state_id, city_id, category_id, skip, limit, date
     )
 
 @router.get("/compare", response_model=List[VendorCompareData])
