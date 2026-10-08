@@ -1,0 +1,1439 @@
+
+<app-navbar></app-navbar>
+
+<div class="quotes-page">
+
+  <!-- ========================================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================================================= -->
+
+  <header class="page-header">
+
+    <div class="header-glow"></div>
+
+    <div class="header-content">
+
+      <div class="header-icon">
+        <mat-icon>request_quote</mat-icon>
+      </div>
+
+      <div class="header-text">
+        <span class="eyebrow">YOUR QUOTE CENTER</span>
+
+        <h1>My Quotes</h1>
+
+        <p>
+          Compare vendor quotes, manage your event requests,
+          and choose the right option for your event.
+        </p>
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ========================================================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ========================================================= -->
+
+  <main class="quotes-container">
+
+
+    <!-- ======================================================= -->
+    <!-- TOP NAVIGATION -->
+    <!-- ======================================================= -->
+
+    <div class="quotes-nav">
+
+      <!-- EVENT QUOTES -->
+      <button
+        type="button"
+        class="nav-item"
+        [class.active]="quoteView === 'posts'"
+        (click)="switchQuoteView('posts')"
+      >
+
+        <div class="nav-icon">
+          <mat-icon>event_note</mat-icon>
+        </div>
+
+        <div class="nav-text">
+
+          <strong>Event Quotes</strong>
+
+          <span>
+            Quotes from your active events
+          </span>
+
+        </div>
+
+        @if (activePostCount > 0) {
+
+          <span class="nav-count">
+            {{ activePostCount }}
+          </span>
+
+        }
+
+        <mat-icon class="nav-arrow">
+          chevron_right
+        </mat-icon>
+
+      </button>
+
+
+      <!-- DIRECT VENDOR QUOTES
+      <button
+        type="button"
+        class="nav-item"
+        [class.active]="quoteView === 'direct'"
+        (click)="switchQuoteView('direct')"
+      >
+
+        <div class="nav-icon direct-nav-icon">
+          <mat-icon>storefront</mat-icon>
+        </div>
+
+        <div class="nav-text">
+
+          <strong>Direct Quotes</strong>
+
+          <span>
+            Quotes requested from vendors
+          </span>
+
+        </div>
+
+        <mat-icon class="nav-arrow">
+          chevron_right
+        </mat-icon>
+
+      </button>
+      -->
+
+
+      <!-- EXPIRED QUOTES -->
+      <button
+        type="button"
+        class="nav-item"
+        [class.active]="quoteView === 'expired'"
+        (click)="switchQuoteView('expired')"
+      >
+
+        <div class="nav-icon expired-nav-icon">
+          <mat-icon>history</mat-icon>
+        </div>
+
+        <div class="nav-text">
+
+          <strong>Expired Quotes</strong>
+
+          <span>
+            Past and expired event posts
+          </span>
+
+        </div>
+
+        @if (expiredPostCount > 0) {
+
+          <span class="nav-count expired-count">
+            {{ expiredPostCount }}
+          </span>
+
+        }
+
+        <mat-icon class="nav-arrow">
+          chevron_right
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+
+    <!-- ======================================================= -->
+    <!-- LOADING SUMMARY -->
+    <!-- ======================================================= -->
+
+    @if (loadingSummary) {
+
+      <div class="loading-state">
+
+        <div class="loading-spinner">
+          <mat-spinner diameter="42"></mat-spinner>
+        </div>
+
+        <h3>
+          Loading your quotes...
+        </h3>
+
+        <p>
+          We're gathering your event quote information.
+        </p>
+
+      </div>
+
+    }
+
+    @else {
+
+
+      <!-- ===================================================== -->
+      <!-- EVENT QUOTES TAB -->
+      <!-- ===================================================== -->
+
+      @if (quoteView === 'posts') {
+
+
+        <!-- =================================================== -->
+        <!-- POST SELECTED -->
+        <!-- =================================================== -->
+
+        @if (selectedPostId !== undefined) {
+
+
+          <!-- BACK BUTTON -->
+
+          <button
+            type="button"
+            mat-button
+            class="back-btn"
+            (click)="backToPostList()"
+          >
+
+            <mat-icon>
+              arrow_back
+            </mat-icon>
+
+            Back to All Events
+
+          </button>
+
+
+          <!-- ================================================= -->
+          <!-- SELECTED POST HEADER -->
+          <!-- ================================================= -->
+
+          <div class="selected-post-header">
+
+            <div class="selected-post-icon">
+
+              <mat-icon>
+                event
+              </mat-icon>
+
+            </div>
+
+
+            <div class="selected-post-info">
+
+              <span class="selected-post-label">
+                EVENT QUOTES
+              </span>
+
+
+              @for (
+                post of postSummaries;
+                track post.event_post_id
+              ) {
+
+                @if (
+                  post.event_post_id === selectedPostId
+                ) {
+
+                  <h2>
+                    {{ post.post_title }}
+                  </h2>
+
+
+                  @if (post.event_date) {
+
+                    <span class="selected-post-date">
+
+                      <mat-icon>
+                        calendar_month
+                      </mat-icon>
+
+                      {{ post.event_date | date:'mediumDate' }}
+
+                    </span>
+
+                  }
+
+                }
+
+              }
+
+            </div>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- FILTER BAR -->
+          <!-- ================================================= -->
+
+          <div class="filter-bar">
+
+
+            <!-- ================================================= -->
+            <!-- CATEGORY -->
+            <!-- ================================================= -->
+
+            <div class="filter-group">
+
+              <label>
+                <mat-icon>
+                  category
+                </mat-icon>
+
+                Category
+              </label>
+
+
+              <mat-form-field
+                appearance="outline"
+                class="category-select"
+              >
+
+                <mat-select
+                  [(ngModel)]="selectedCategoryId"
+                  (selectionChange)="onCategoryChange()"
+                  placeholder="All Categories"
+                >
+
+                  <mat-option [value]="null">
+                    All Categories
+                  </mat-option>
+
+
+                  @for (
+                    cat of categories;
+                    track cat.id
+                  ) {
+
+                    <mat-option [value]="cat.id">
+
+                      @if (cat.icon) {
+                        {{ cat.icon }}
+                      }
+
+                      {{ cat.name }}
+
+                    </mat-option>
+
+                  }
+
+                </mat-select>
+
+              </mat-form-field>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- DATE RANGE -->
+            <!-- ================================================= -->
+
+            <button
+              type="button"
+              mat-stroked-button
+              class="range-toggle-btn"
+              (click)="toggleCustomRange()"
+            >
+
+              <span>
+                {{
+                  useCustomRange
+                    ? 'Showing: Custom Range'
+                    : 'Showing: Last 30 Days'
+                }}
+              </span>
+
+              <mat-icon>
+                date_range
+              </mat-icon>
+
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- CUSTOM DATE RANGE -->
+            <!-- ================================================= -->
+
+           @if (useCustomRange) {
+              <mat-form-field appearance="outline" class="date-field">
+                <mat-label>From</mat-label>
+                <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" (dateChange)="onDateRangeChange()" readonly>
+                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                <mat-datepicker #fromPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="date-field">
+                <mat-label>To</mat-label>
+                <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" (dateChange)="onDateRangeChange()" readonly>
+                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                <mat-datepicker #toPicker></mat-datepicker>
+              </mat-form-field>
+            }
+
+
+            <!-- ================================================= -->
+            <!-- SORT -->
+            <!-- ================================================= -->
+
+            <button
+              type="button"
+              mat-stroked-button
+              class="sort-btn"
+              (click)="toggleSort()"
+            >
+
+              <span>
+
+                Sort:
+
+                {{
+                  sortOrder === 'best'
+                    ? 'Best → Worst'
+                    : 'Worst → Best'
+                }}
+
+              </span>
+
+              <mat-icon>
+                swap_vert
+              </mat-icon>
+
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- COMPARE -->
+            <!-- ================================================= -->
+
+            @if (selectedForCompare.length > 0) {
+
+              <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                class="compare-btn"
+                (click)="goToVendorComparison()"
+              >
+
+                <mat-icon>
+                  compare_arrows
+                </mat-icon>
+
+                Compare Selected Vendors
+                ({{ selectedForCompare.length }})
+
+              </button>
+
+            }
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- QUOTES LOADING -->
+          <!-- ================================================= -->
+
+          @if (loadingQuotes) {
+
+            <div class="quotes-loading">
+
+              <mat-spinner diameter="38"></mat-spinner>
+
+              <span>
+                Loading vendor quotes...
+              </span>
+
+            </div>
+
+          }
+
+
+          <!-- ================================================= -->
+          <!-- NO QUOTES -->
+          <!-- ================================================= -->
+
+          @else if (sortedQuotes.length === 0) {
+
+            <div class="empty-state">
+
+              <div class="empty-icon">
+
+                <mat-icon>
+                  request_quote
+                </mat-icon>
+
+              </div>
+
+              <h2>
+                No Quotes Yet
+              </h2>
+
+              <p>
+                Vendors haven't submitted any quotes for this
+                event yet. Check back soon.
+              </p>
+
+            </div>
+
+          }
+
+
+          <!-- ================================================= -->
+          <!-- QUOTES -->
+          <!-- ================================================= -->
+
+          @else {
+
+            <div class="quotes-section-header">
+
+              <div>
+
+                <span class="section-kicker">
+                  VENDOR RESPONSES
+                </span>
+
+                <h3>
+
+                  {{ sortedQuotes.length }}
+
+                  Quote{{ sortedQuotes.length > 1 ? 's' : '' }}
+
+                  Received
+
+                </h3>
+
+              </div>
+
+
+              @if (selectedForCompare.length > 0) {
+
+                <span class="selection-info">
+
+                  {{ selectedForCompare.length }}
+                  selected for comparison
+
+                </span>
+
+              }
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- QUOTE LIST -->
+            <!-- ================================================= -->
+
+            <div class="quotes-list">
+
+              @for (
+                quote of sortedQuotes;
+                track quote.id;
+                let rank = $index
+              ) {
+
+
+                <div
+                  class="quote-card"
+                  [class.best]="
+                    rank === 0 &&
+                    sortOrder === 'best' &&
+                    (quote.quoted_amount ?? 0) > 0
+                  "
+
+                  [class.selected]="
+                    selectedForCompare.includes(quote.id)
+                  "
+                >
+
+
+                  <!-- ================================================= -->
+                  <!-- BEST PRICE -->
+                  <!-- ================================================= -->
+
+                  @if (
+                    rank === 0 &&
+                    sortOrder === 'best' &&
+                    (quote.quoted_amount ?? 0) > 0
+                  ) {
+
+                    <div class="best-badge">
+
+                      <mat-icon>
+                        workspace_premium
+                      </mat-icon>
+
+                      Best Price
+
+                    </div>
+
+                  }
+
+
+                  <!-- ================================================= -->
+                  <!-- CARD TOP -->
+                  <!-- ================================================= -->
+
+                  <div class="quote-card-top">
+
+
+                    <!-- CHECKBOX -->
+
+                    <div class="quote-select">
+
+                      <mat-checkbox
+
+                        [checked]="
+                          selectedForCompare.includes(quote.id)
+                        "
+
+                        (change)="
+                          toggleCompareSelect(quote.id)
+                        "
+
+                        matTooltip="Compare this vendor"
+
+                      >
+                      </mat-checkbox>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- VENDOR -->
+                    <!-- ================================================= -->
+
+                    <div class="quote-main">
+
+
+                      <!-- AVATAR -->
+
+                      <div class="vendor-avatar">
+
+                        @if (quote.vendor_business_name) {
+
+                          {{
+                            quote.vendor_business_name
+                              .charAt(0)
+                              .toUpperCase()
+                          }}
+
+                        }
+
+                        @else {
+
+                          V
+
+                        }
+
+                      </div>
+
+
+                      <!-- VENDOR DETAILS -->
+
+                      <div class="vendor-details" >
+
+
+                        <!-- NAME + STATUS -->
+
+                        <div class="vendor-name-row">
+
+                          <h3>
+                            {{ quote.vendor_business_name }}
+                          </h3>
+
+
+                          @if (quote.status) {
+
+                            <span
+                              class="status-tag"
+
+                              [style.color]="
+                                statusColor(quote.status)
+                              "
+
+                              [style.background]="
+                                statusColor(quote.status) + '18'
+                              "
+
+                              [style.border-color]="
+                                statusColor(quote.status) + '35'
+                              "
+                            >
+
+                              {{ quote.status | titlecase }}
+
+                            </span>
+
+                          }
+
+                        </div>
+
+
+                        <!-- VENDOR META -->
+
+                        <div class="vendor-meta">
+
+
+                          <!-- VENDOR LINK -->
+
+
+
+                          <!-- CATEGORY -->
+
+                          @if (quote.category_name) {
+
+                            <span class="category-tag">
+
+                              <mat-icon>
+                                category
+                              </mat-icon>
+
+                              {{ quote.category_name }}
+
+                            </span>
+
+                          }
+
+
+                          <!-- RATING -->
+
+                          @if (quote.vendor_avg_rating) {
+
+                            <span class="vendor-rating">
+
+                              <mat-icon>
+                                star
+                              </mat-icon>
+
+                              {{ quote.vendor_avg_rating }}
+
+                            </span>
+
+                          }
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- PRICE / RESPONSE -->
+                    <!-- ================================================= -->
+
+                    <div class="quote-side">
+
+
+                      <!-- QUOTED AMOUNT -->
+
+                      @if (
+                        quote.quoted_amount &&
+                        quote.quoted_amount > 0
+                      ) {
+
+                        <span class="price-caption">
+                          QUOTED PRICE
+                        </span>
+
+
+                        <strong class="quote-amount">
+
+                          ₹{{ quote.quoted_amount | number }}
+
+                        </strong>
+
+
+                        <!-- RESPONSE DATE -->
+
+                        @if (quote.responded_at) {
+
+                          <span class="responded-note">
+
+                            Responded
+                            {{ quote.responded_at | date:'mediumDate' }}
+
+                          </span>
+
+                        }
+
+                      }
+
+
+                      <!-- WAITING FOR PRICE -->
+
+                      @else {
+
+                        <span class="price-caption">
+                          PRICE
+                        </span>
+
+                        <strong class="quote-pending">
+                          Waiting for price...
+                        </strong>
+
+                      }
+
+
+                      <!-- ================================================= -->
+                      <!-- ACCEPT / DECLINE -->
+                      <!-- ================================================= -->
+
+                      @if (
+                        quote.status === 'pending' &&
+                        quote.quoted_amount &&
+                        quote.quoted_amount > 0
+                      ) {
+
+                        <div class="quote-actions">
+
+
+                          <!-- ACCEPT -->
+
+                          <button
+                            type="button"
+                            mat-raised-button
+                            class="accept-btn"
+                            (click)="accept(quote)"
+                          >
+
+                            <mat-icon>
+                              check_circle
+                            </mat-icon>
+
+                            Accept Quote
+
+                          </button>
+
+
+                          <!-- DECLINE -->
+
+                          <button
+                            type="button"
+                            mat-stroked-button
+                            class="decline-btn"
+                            (click)="decline(quote)"
+                          >
+
+                            <mat-icon>
+                              close
+                            </mat-icon>
+
+                            Decline
+
+                          </button>
+
+                        </div>
+
+                      }
+
+
+                      <!-- ================================================= -->
+                      <!-- ACCEPTED → VIEW VENDOR -->
+                      <!-- ================================================= -->
+
+                        <a
+                          class="view-vendor-btn"
+
+                          [routerLink]="[
+                            '/browse/vendor',
+                            quote.vendor_slug || quote.vendor_id
+                          ]"
+                        >
+
+                          <mat-icon>
+                            person
+                          </mat-icon>
+
+                          View Vendor Profile
+
+                        </a>
+
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- ================================================= -->
+                  <!-- MESSAGE -->
+                  <!-- ================================================= -->
+
+                  @if (quote.message) {
+
+                    <div class="quote-message">
+
+                      <mat-icon>
+                        format_quote
+                      </mat-icon>
+
+                      <p>
+                        {{ quote.message }}
+                      </p>
+
+                    </div>
+
+                  }
+
+
+                  <!-- ================================================= -->
+                  <!-- NO PRICE / WAITING -->
+                  <!-- ================================================= -->
+
+                  @if (
+                    !quote.quoted_amount ||
+                    quote.quoted_amount <= 0
+                  ) {
+
+                    <div class="waiting-message">
+
+                      <mat-icon>
+                        schedule
+                      </mat-icon>
+
+                      <span>
+                        This vendor hasn't submitted a price yet.
+                      </span>
+
+                    </div>
+
+                  }
+
+                </div>
+
+              }
+
+            </div>
+
+          }
+
+        }
+
+
+        <!-- ===================================================== -->
+        <!-- EVENT POST LIST -->
+        <!-- ===================================================== -->
+
+        @else {
+
+
+          <div class="section-heading">
+
+            <div>
+
+              <div class="section-title-row">
+
+                <span class="section-dot"></span>
+
+                <h2>
+                  Active Event Quotes
+                </h2>
+
+              </div>
+
+              <p>
+                Select an event to view and compare vendor quotes.
+              </p>
+
+            </div>
+
+
+            <span class="section-label">
+
+              {{ activePostCount }}
+              Active
+
+            </span>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- NO ACTIVE POSTS -->
+          <!-- ================================================= -->
+
+          @if (activePostCount === 0) {
+
+            <div class="empty-state">
+
+              <div class="empty-icon">
+
+                <mat-icon>
+                  event_busy
+                </mat-icon>
+
+              </div>
+
+              <h2>
+                No Active Event Posts
+              </h2>
+
+              <p>
+                You don't have any active event posts with quotes
+                right now.
+              </p>
+
+            </div>
+
+          }
+
+
+          <!-- ================================================= -->
+          <!-- ACTIVE POSTS -->
+          <!-- ================================================= -->
+
+          @else {
+
+            <div class="post-list">
+
+              @for (
+                post of postSummaries;
+                track post.event_post_id
+              ) {
+
+                @if (!post.is_expired) {
+
+                  <div
+                    class="post-summary-card"
+
+                    (click)="
+                      selectPost(post.event_post_id)
+                    "
+
+                    tabindex="0"
+                  >
+
+                    <div class="post-accent"></div>
+
+
+                    <!-- POST MAIN -->
+
+                    <div class="psc-main">
+
+
+                      <!-- TITLE -->
+
+                      <div class="post-title-row">
+
+                        <span class="psc-title">
+                          {{ post.post_title }}
+                        </span>
+
+
+                        <span class="post-status active-status">
+                          Active
+                        </span>
+
+                      </div>
+
+
+                      <!-- EVENT DATE -->
+
+                      @if (post.event_date) {
+
+                        <span class="psc-date">
+
+                          <mat-icon>
+                            calendar_month
+                          </mat-icon>
+
+                          Event:
+                          {{ post.event_date | date:'mediumDate' }}
+
+                        </span>
+
+                      }
+
+                      @else {
+
+                        <span class="psc-date">
+
+                          <mat-icon>
+                            event
+                          </mat-icon>
+
+                          Event date not specified
+
+                        </span>
+
+                      }
+
+                    </div>
+
+
+                    <!-- POST STATS -->
+
+                    <div class="psc-stats">
+
+
+                      <!-- QUOTE COUNT -->
+
+                      <div class="quote-count">
+
+                        <mat-icon>
+                          format_quote
+                        </mat-icon>
+
+                        <strong>
+                          {{ post.quote_count }}
+                        </strong>
+
+                        <span>
+                          quote{{ post.quote_count > 1 ? 's' : '' }}
+                        </span>
+
+                      </div>
+
+
+                      <!-- PRICE RANGE -->
+
+                      @if (
+                        post.lowest_quote !== null &&
+                        post.lowest_quote !== undefined
+                      ) {
+
+                        <span class="psc-range">
+
+                          ₹{{ post.lowest_quote | number }}
+
+                          <span>–</span>
+
+                          ₹{{ post.highest_quote | number }}
+
+                        </span>
+
+                      }
+
+                      @else {
+
+                        <span class="psc-no-price">
+                          Waiting for quotes
+                        </span>
+
+                      }
+
+                    </div>
+
+
+                    <!-- ARROW -->
+
+                    <div class="post-arrow">
+
+                      <mat-icon>
+                        chevron_right
+                      </mat-icon>
+
+                    </div>
+
+                  </div>
+
+                }
+
+              }
+
+            </div>
+
+          }
+
+        }
+
+      }
+
+
+      <!-- ===================================================== -->
+      <!-- DIRECT VENDOR QUOTES TAB -->
+      <!-- ===================================================== -->
+
+      @if (quoteView === 'direct') {
+
+        <div class="section-heading">
+
+          <div>
+
+            <div class="section-title-row">
+
+              <span class="section-dot direct-dot"></span>
+
+              <h2>
+                Direct Vendor Quotes
+              </h2>
+
+            </div>
+
+            <p>
+              Quotes requested directly from individual vendors.
+            </p>
+
+          </div>
+
+
+          <span class="section-label direct-label">
+            Direct
+          </span>
+
+        </div>
+
+
+        <div class="direct-quotes">
+
+          <div class="direct-empty">
+
+
+            <div class="direct-empty-icon">
+
+              <mat-icon>
+                storefront
+              </mat-icon>
+
+            </div>
+
+
+            <span class="direct-coming">
+              DIRECT VENDOR QUOTES
+            </span>
+
+
+            <h2>
+              No Direct Quotes Yet
+            </h2>
+
+
+            <p>
+              When you request a quote directly from a vendor,
+              their response will appear here.
+            </p>
+
+
+            <button
+              type="button"
+              mat-stroked-button
+              class="browse-vendors-btn"
+              routerLink="/browse"
+            >
+
+              <mat-icon>
+                search
+              </mat-icon>
+
+              Browse Vendors
+
+            </button>
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- ===================================================== -->
+      <!-- EXPIRED QUOTES TAB -->
+      <!-- ===================================================== -->
+
+      @if (quoteView === 'expired') {
+
+        <div class="section-heading">
+
+          <div>
+
+            <div class="section-title-row">
+
+              <span class="section-dot expired-dot"></span>
+
+              <h2>
+                Expired Quotes
+              </h2>
+
+            </div>
+
+            <p>
+              View quotes from your past and expired event posts.
+            </p>
+
+          </div>
+
+
+          <span class="section-label expired-label">
+
+            {{ expiredPostCount }}
+            Past
+
+          </span>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- NO EXPIRED POSTS -->
+        <!-- ================================================= -->
+
+        @if (expiredPostCount === 0) {
+
+          <div class="empty-state expired-empty">
+
+            <div class="empty-icon expired-empty-icon">
+
+              <mat-icon>
+                history
+              </mat-icon>
+
+            </div>
+
+
+            <h2>
+              No Expired Posts
+            </h2>
+
+
+            <p>
+              Your past event posts will appear here after they
+              expire.
+            </p>
+
+          </div>
+
+        }
+
+
+        <!-- ================================================= -->
+        <!-- EXPIRED POSTS -->
+        <!-- ================================================= -->
+
+        @else {
+
+          <div class="post-list">
+
+            @for (
+              post of postSummaries;
+              track post.event_post_id
+            ) {
+
+              @if (post.is_expired) {
+
+                <div
+                  class="post-summary-card expired-post"
+
+                  (click)="
+                    selectPost(post.event_post_id)
+                  "
+
+                  tabindex="0"
+                >
+
+                  <div class="post-accent expired-accent"></div>
+
+
+                  <!-- POST MAIN -->
+
+                  <div class="psc-main">
+
+                    <div class="post-title-row">
+
+                      <span class="psc-title">
+                        {{ post.post_title }}
+                      </span>
+
+                      <span class="post-status expired-status">
+                        Expired
+                      </span>
+
+                    </div>
+
+
+                    <span class="psc-date expired-date">
+
+                      <mat-icon>
+                        history
+                      </mat-icon>
+
+                      Event post expired
+
+                    </span>
+
+                  </div>
+
+
+                  <!-- POST STATS -->
+
+                  <div class="psc-stats">
+
+                    <div class="quote-count">
+
+                      <mat-icon>
+                        format_quote
+                      </mat-icon>
+
+                      <strong>
+                        {{ post.quote_count }}
+                      </strong>
+
+                      <span>
+                        quote{{ post.quote_count > 1 ? 's' : '' }}
+                      </span>
+
+                    </div>
+
+
+                    @if (
+                      post.lowest_quote !== null &&
+                      post.lowest_quote !== undefined
+                    ) {
+
+                      <span class="psc-range expired-range">
+
+                        ₹{{ post.lowest_quote | number }}
+
+                        <span>–</span>
+
+                        ₹{{ post.highest_quote | number }}
+
+                      </span>
+
+                    }
+
+                    @else {
+
+                      <span class="psc-no-price">
+                        No quoted price
+                      </span>
+
+                    }
+
+                  </div>
+
+
+                  <!-- ARROW -->
+
+                  <div class="post-arrow">
+
+                    <mat-icon>
+                      chevron_right
+                    </mat-icon>
+
+                  </div>
+
+                </div>
+
+              }
+
+            }
+
+          </div>
+
+        }
+
+      }
+
+    }
+
+  </main>
+
+</div>

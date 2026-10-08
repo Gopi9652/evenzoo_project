@@ -310,3 +310,1155 @@
   }
 
 }
+
+/* ============================================================
+   EVENZOO — GROWTH DASHBOARD
+   LIGHT ANALYTICS THEME
+   Purple + Soft Violet + Gold
+   ============================================================ */
+
+.growth-dashboard {
+  position: relative;
+  width: 100%;
+  margin-top: 24px;
+  padding: 26px;
+
+  background:
+    radial-gradient(
+      circle at 5% 0%,
+      rgba(124, 58, 237, 0.08),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 95% 100%,
+      rgba(245, 158, 11, 0.06),
+      transparent 28%
+    ),
+    #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  color: #1f2937;
+
+  box-sizing: border-box;
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 18px rgba(15, 23, 42, 0.05);
+
+  animation: growthDashboardIn 0.65s ease both;
+}
+
+
+/* ============================================================
+   SOFT BACKGROUND GLOW
+   ============================================================ */
+
+.growth-dashboard::before {
+  content: "";
+
+  position: absolute;
+
+  top: -90px;
+  left: -90px;
+
+  width: 200px;
+  height: 200px;
+
+  background: rgba(124, 58, 237, 0.08);
+
+  border-radius: 50%;
+
+  filter: blur(55px);
+
+  pointer-events: none;
+
+  animation: lightGlowMove 6s ease-in-out infinite alternate;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.growth-dashboard h3 {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  margin: 0 0 23px;
+
+  color: #1f2937;
+
+  font-size: 21px;
+  font-weight: 700;
+
+  letter-spacing: -0.3px;
+
+  animation: growthTitleIn 0.6s ease both;
+}
+
+
+/* ============================================================
+   THIS MONTH BADGE
+   ============================================================ */
+
+.month-tag {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  background: #f3e8ff;
+
+  border: 1px solid #ddd6fe;
+
+  color: #7c3aed;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.6px;
+
+  text-transform: uppercase;
+
+  box-shadow:
+    0 2px 8px rgba(124, 58, 237, 0.08);
+
+  animation: monthPulse 3s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   STATISTICS GRID
+   ============================================================ */
+
+.growth-stats {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+
+  gap: 13px;
+
+  width: 100%;
+}
+
+
+/* ============================================================
+   STAT CARD
+   ============================================================ */
+
+.growth-stat {
+  position: relative;
+
+  min-width: 0;
+  min-height: 140px;
+
+  padding: 18px 12px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fafaff
+    );
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 15px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 3px 12px rgba(15, 23, 42, 0.04);
+
+  transition:
+    transform 0.3s cubic-bezier(.2,.8,.2,1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+
+  animation:
+    growthCardIn 0.6s cubic-bezier(.2,.8,.2,1) both;
+}
+
+
+/* ============================================================
+   STAGGERED CARD ANIMATION
+   ============================================================ */
+
+.growth-stat:nth-child(1) {
+  animation-delay: 0.08s;
+}
+
+.growth-stat:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.growth-stat:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.growth-stat:nth-child(4) {
+  animation-delay: 0.32s;
+}
+
+.growth-stat:nth-child(5) {
+  animation-delay: 0.40s;
+}
+
+.growth-stat:nth-child(6) {
+  animation-delay: 0.48s;
+}
+
+
+/* ============================================================
+   CARD SHINE
+   ============================================================ */
+
+.growth-stat::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -120%;
+
+  width: 70%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(124, 58, 237, 0.045),
+      transparent
+    );
+
+  transform: skewX(-20deg);
+
+  transition: left 0.7s ease;
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   CARD HOVER
+   ============================================================ */
+
+.growth-stat:hover {
+  transform:
+    translateY(-6px)
+    scale(1.015);
+
+  border-color: #c4b5fd;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #faf7ff
+    );
+
+  box-shadow:
+    0 12px 28px rgba(15, 23, 42, 0.09),
+    0 4px 16px rgba(124, 58, 237, 0.08);
+}
+
+.growth-stat:hover::before {
+  left: 150%;
+}
+
+
+/* ============================================================
+   ICON
+   ============================================================ */
+
+.g-icon {
+  width: 43px;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 10px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f3e8ff,
+      #faf5ff
+    );
+
+  border: 1px solid #ddd6fe;
+
+  border-radius: 12px;
+
+  font-size: 20px;
+
+  box-shadow:
+    0 4px 10px rgba(124, 58, 237, 0.08);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+}
+
+
+/* ICON HOVER */
+
+.growth-stat:hover .g-icon {
+  transform:
+    translateY(-4px)
+    rotate(-4deg);
+
+  background: #ede9fe;
+
+  box-shadow:
+    0 7px 17px rgba(124, 58, 237, 0.15);
+}
+
+
+/* ============================================================
+   NUMBER
+   ============================================================ */
+
+.g-num {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #7c3aed;
+
+  font-size: 25px;
+  font-weight: 750;
+
+  line-height: 1.1;
+
+  letter-spacing: -0.5px;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+/* NUMBER HOVER */
+
+.growth-stat:hover .g-num {
+  color: #6d28d9;
+
+  transform: scale(1.06);
+}
+
+
+/* ============================================================
+   LABEL
+   ============================================================ */
+
+.g-label {
+  display: block;
+
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  line-height: 1.4;
+
+  white-space: nowrap;
+
+  transition:
+    color 0.25s ease;
+}
+
+.growth-stat:hover .g-label {
+  color: #4b5563;
+}
+
+
+/* ============================================================
+   BOOKINGS — SPECIAL CARD
+   ============================================================ */
+
+.growth-stat.highlight {
+  background:
+    linear-gradient(
+      145deg,
+      #fffdf5,
+      #ffffff
+    );
+
+  border-color: #f1d98b;
+
+  box-shadow:
+    0 4px 16px rgba(245, 158, 11, 0.07);
+
+  animation:
+    growthCardIn 0.6s cubic-bezier(.2,.8,.2,1) 0.48s both,
+    bookingGlow 3.5s ease-in-out 1.2s infinite;
+}
+
+
+/* GOLD LIGHT */
+
+.growth-stat.highlight::after {
+  content: "";
+
+  position: absolute;
+
+  width: 90px;
+  height: 90px;
+
+  right: -45px;
+  bottom: -45px;
+
+  background: rgba(245, 158, 11, 0.10);
+
+  border-radius: 50%;
+
+  filter: blur(25px);
+
+  animation: goldLightMove 4s ease-in-out infinite;
+}
+
+
+/* BOOKING ICON */
+
+.growth-stat.highlight .g-icon {
+  background:
+    linear-gradient(
+      145deg,
+      #fff7d6,
+      #fffdf2
+    );
+
+  border-color: #f3d77a;
+
+  box-shadow:
+    0 4px 12px rgba(245, 158, 11, 0.10);
+}
+
+
+/* BOOKING NUMBER */
+
+.growth-stat.highlight .g-num {
+  color: #b7791f;
+}
+
+
+/* BOOKING LABEL */
+
+.growth-stat.highlight .g-label {
+  color: #8a6d3b;
+}
+
+
+/* BOOKING HOVER */
+
+.growth-stat.highlight:hover {
+  border-color: #e7c65c;
+
+  box-shadow:
+    0 12px 28px rgba(15, 23, 42, 0.09),
+    0 4px 18px rgba(245, 158, 11, 0.12);
+}
+
+
+/* ============================================================
+   FUNNEL CONTAINER
+   ============================================================ */
+
+.funnel-chart {
+  position: relative;
+
+  margin-top: 24px;
+
+  padding: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fafaff
+    );
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 16px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 3px 14px rgba(15, 23, 42, 0.04);
+
+  animation:
+    funnelIn 0.75s ease 0.35s both;
+}
+
+
+/* ============================================================
+   FUNNEL TITLE
+   ============================================================ */
+
+.funnel-chart h4 {
+  display: flex;
+  align-items: center;
+
+  margin: 0 0 22px;
+
+  color: #1f2937;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+
+/* PURPLE TITLE LINE */
+
+.funnel-chart h4::before {
+  content: "";
+
+  width: 4px;
+  height: 18px;
+
+  margin-right: 9px;
+
+  background: #7c3aed;
+
+  border-radius: 5px;
+
+  box-shadow:
+    0 0 8px rgba(124, 58, 237, 0.25);
+}
+
+
+/* ============================================================
+   FUNNEL STEP
+   ============================================================ */
+
+.funnel-step {
+  width: 100%;
+
+  margin-bottom: 20px;
+
+  animation:
+    funnelStepIn 0.6s ease both;
+}
+
+
+/* STAGGER */
+
+.funnel-step:nth-child(2) {
+  animation-delay: 0.10s;
+}
+
+.funnel-step:nth-child(3) {
+  animation-delay: 0.20s;
+}
+
+.funnel-step:nth-child(4) {
+  animation-delay: 0.30s;
+}
+
+.funnel-step:nth-child(5) {
+  animation-delay: 0.40s;
+}
+
+.funnel-step:nth-child(6) {
+  animation-delay: 0.50s;
+}
+
+
+/* ============================================================
+   LABEL + COUNT
+   ============================================================ */
+
+.funnel-bar-row {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 8px;
+}
+
+
+.funnel-label {
+  min-width: 0;
+
+  color: #374151;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.funnel-count {
+  flex-shrink: 0;
+
+  color: #1f2937;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   BAR TRACK
+   ============================================================ */
+
+.funnel-bar-track {
+  position: relative;
+
+  width: 100%;
+  height: 10px;
+
+  overflow: hidden;
+
+  background: #edeef2;
+
+  border-radius: 20px;
+
+  box-shadow:
+    inset 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+
+/* ============================================================
+   BAR FILL
+   ============================================================ */
+
+.funnel-bar-fill {
+  position: relative;
+
+  height: 100%;
+
+  min-width: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #7c3aed,
+      #8b5cf6,
+      #a78bfa
+    );
+
+  border-radius: inherit;
+
+  box-shadow:
+    0 2px 7px rgba(124, 58, 237, 0.20);
+
+  transform-origin: left center;
+
+  animation:
+    funnelBarGrow 1.1s cubic-bezier(.22,1,.36,1) both;
+}
+
+
+/* BAR SHINE */
+
+.funnel-bar-fill::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -40%;
+
+  width: 35%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.45),
+      transparent
+    );
+
+  animation:
+    funnelBarShine 3s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   CONVERSION TEXT
+   ============================================================ */
+
+.funnel-conversion {
+  display: block;
+
+  margin-top: 7px;
+
+  color: #9ca3af;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  transition:
+    color 0.25s ease;
+}
+
+.funnel-step:hover .funnel-conversion {
+  color: #7c3aed;
+}
+
+
+/* ============================================================
+   OVERALL CONVERSION
+   ============================================================ */
+
+.overall-conversion {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-top: 24px;
+
+  padding: 16px 18px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #f5f3ff,
+      #faf8ff
+    );
+
+  border: 1px solid #ddd6fe;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  animation:
+    conversionIn 0.7s ease 0.9s both;
+}
+
+
+/* MOVING LIGHT */
+
+.overall-conversion::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -100%;
+
+  width: 65%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(124, 58, 237, 0.06),
+      transparent
+    );
+
+  animation:
+    conversionSweep 4s ease-in-out infinite;
+}
+
+
+.overall-conversion span {
+  position: relative;
+
+  color: #6b7280;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+
+.overall-conversion strong {
+  position: relative;
+
+  flex-shrink: 0;
+
+  color: #7c3aed;
+
+  font-size: 23px;
+  font-weight: 800;
+
+  text-shadow:
+    0 2px 8px rgba(124, 58, 237, 0.12);
+
+  animation:
+    conversionPulse 2.5s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes growthDashboardIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+@keyframes growthTitleIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+@keyframes growthCardIn {
+
+  from {
+    opacity: 0;
+    transform:
+      translateY(22px)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+@keyframes funnelIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+@keyframes funnelStepIn {
+
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+
+@keyframes funnelBarGrow {
+
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+
+}
+
+
+@keyframes funnelBarShine {
+
+  0% {
+    left: -40%;
+  }
+
+  50% {
+    left: 120%;
+  }
+
+  100% {
+    left: 120%;
+  }
+
+}
+
+
+@keyframes monthPulse {
+
+  0%,
+  100% {
+    box-shadow:
+      0 2px 8px rgba(124, 58, 237, 0.06);
+  }
+
+  50% {
+    box-shadow:
+      0 3px 14px rgba(124, 58, 237, 0.15);
+  }
+
+}
+
+
+@keyframes bookingGlow {
+
+  0%,
+  100% {
+    box-shadow:
+      0 4px 16px rgba(245, 158, 11, 0.05);
+  }
+
+  50% {
+    box-shadow:
+      0 7px 22px rgba(245, 158, 11, 0.11);
+  }
+
+}
+
+
+@keyframes goldLightMove {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(-22px, -18px);
+  }
+
+}
+
+
+@keyframes lightGlowMove {
+
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(65px, 35px);
+  }
+
+}
+
+
+@keyframes conversionIn {
+
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}
+
+
+@keyframes conversionSweep {
+
+  0% {
+    left: -100%;
+  }
+
+  45% {
+    left: 130%;
+  }
+
+  100% {
+    left: 130%;
+  }
+
+}
+
+
+@keyframes conversionPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .growth-stats {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .growth-dashboard {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .growth-dashboard h3 {
+    font-size: 18px;
+    flex-wrap: wrap;
+  }
+
+  .growth-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .growth-stat {
+    min-height: 120px;
+    padding: 15px 10px;
+  }
+
+  .g-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  .g-num {
+    font-size: 21px;
+  }
+
+  .g-label {
+    font-size: 10px;
+  }
+
+  .funnel-chart {
+    padding: 17px;
+  }
+
+  .overall-conversion {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 7px;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 420px) {
+
+  .growth-dashboard {
+    padding: 14px;
+  }
+
+  .growth-stats {
+    gap: 8px;
+  }
+
+  .growth-stat {
+    min-height: 112px;
+  }
+
+  .g-num {
+    font-size: 19px;
+  }
+
+  .funnel-chart h4 {
+    font-size: 15px;
+  }
+
+  .funnel-label,
+  .funnel-count {
+    font-size: 12px;
+  }
+
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .growth-dashboard,
+  .growth-dashboard *,
+  .growth-dashboard::before {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+}

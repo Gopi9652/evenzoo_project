@@ -13,23 +13,28 @@ import { LocationService, State, City } from '../../../core/services/location.se
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { VendorService } from '../../../core/services/vendor.service';
 import { Category } from '../../../core/models/vendor.model';
+
+import { FormArray } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { LocationPickerComponent, PickedLocation } from '../../../shared/components/location-picker/location-picker.component';
+
 @Component({
   selector: 'app-create-event-post',
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatSelectModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule,
-    NavbarComponent, FormsModule, MatIconModule
+    NavbarComponent, FormsModule, MatIconModule, MatCheckboxModule, LocationPickerComponent
   ],
   templateUrl: './create-event-post.component.html',
   styleUrl: './create-event-post.component.scss'
 })
 export class CreateEventPostComponent implements OnInit {
   postForm: FormGroup;
+  categories: Category[] = [];
   states: State[] = [];
   cities: City[] = [];
-  categories: Category[] = [];
   selectedStateId: number | null = null;
   submitting = false;
   errorMessage = '';
@@ -52,27 +57,56 @@ export class CreateEventPostComponent implements OnInit {
       city_id: [''],
       category_id: [''], 
       budget_amount: [''],
-      event_date: ['']
+      event_date: [''],
+      allow_messages: [true],
+      response_deadline: [''],
+      items: this.fb.array([this.createItemGroup()])  
     });
   }
 
   ngOnInit() {
-    this.locationService.getStates().subscribe({
-      next: (data) => this.states = data
-    });
+    this.locationService.getStates().subscribe({ next: (data) => this.states = data });
+    this.vendorService.getCategories().subscribe({ next: (data) => this.categories = data });
 
-    this.vendorService.getCategories().subscribe({    // ← new
-      next: (data) => this.categories = data
-    });
-
-    // Support editing an existing post via query param, e.g. /customer/post/create?edit=5
     const editId = this.route.snapshot.queryParamMap.get('edit');
     if (editId) {
       this.editMode = true;
       this.editPostId = Number(editId);
       this.eventPostService.getPostById(this.editPostId).subscribe({
         next: (post) => {
-          this.postForm.patchValue(post);
+          // Patch the plain fields normally
+          this.postForm.patchValue({
+            title: post.title,
+            description: post.description,
+            event_location: post.event_location,
+            city_id: post.city_id,
+            event_date: post.event_date,
+            allow_messages: post.allow_messages,
+            latitude: post.latitude,
+            longitude: post.longitude,
+            place_id: post.place_id
+          });
+
+          // Rebuild the items FormArray to match what was actually saved —
+          // patchValue cannot populate a FormArray from a plain data array
+          this.items.clear();
+          if (post.items && post.items.length > 0) {
+            post.items.forEach((item: any) => {
+              this.items.push(this.fb.group({
+                category_id: [item.category_id, Validators.required],
+                budget_amount: [item.budget_amount]
+              }));
+            });
+          } else if (post.category_id) {
+            // Backward compatibility: an older post saved with only the single category_id field
+            this.items.push(this.fb.group({
+              category_id: [post.category_id, Validators.required],
+              budget_amount: [post.budget_amount]
+            }));
+          } else {
+            this.items.push(this.createItemGroup());
+          }
+
           if (post.city_id) {
             this.locationService.getCityById(post.city_id).subscribe({
               next: (city) => {
@@ -100,34 +134,67 @@ export class CreateEventPostComponent implements OnInit {
       next: (data) => this.cities = data
     });
   }
+   get items(): FormArray {
+    return this.postForm.get('items') as FormArray;
+  }
+
+  createItemGroup(): FormGroup {
+    return this.fb.group({
+      category_id: ['', Validators.required],
+      budget_amount: ['']
+    });
+  }
+
+  addEventItem() {
+    this.items.push(this.createItemGroup());
+  }
+
+  removeEventItem(index: number) {
+    if (this.items.length > 1) this.items.removeAt(index);
+  }
 
   onSubmit() {
-    if (this.postForm.invalid) {
-      this.postForm.markAllAsTouched();
-      return;
+  if (this.postForm.invalid) {
+    this.postForm.markAllAsTouched();
+    return;
+  }
+
+  this.submitting = true;
+  this.errorMessage = '';
+
+  const formValue = { ...this.postForm.value, state_id: this.selectedStateId };
+  if (formValue.event_date instanceof Date) {
+    formValue.event_date = formValue.event_date.toISOString();
+  }
+  if (formValue.response_deadline instanceof Date) {
+    formValue.response_deadline = formValue.response_deadline.toISOString();
+  }
+
+  if (formValue.items.length > 0) {
+    formValue.category_id = formValue.items[0].category_id;
+    formValue.budget_amount = formValue.items[0].budget_amount;
+  }
+
+  const request$ = this.editMode
+    ? this.eventPostService.updatePost(this.editPostId!, formValue)
+    : this.eventPostService.createPost(formValue);
+
+  request$.subscribe({
+    next: () => {
+      this.submitting = false;
+      this.router.navigate(['/customer/my-posts']);
+    },
+    error: (err) => {
+      this.submitting = false;
+      this.errorMessage = err.error?.detail || 'Failed to save post';
     }
-
-    this.submitting = true;
-    this.errorMessage = '';
-
-    const formValue = { ...this.postForm.value, state_id: this.selectedStateId };
-    if (formValue.event_date instanceof Date) {
-      formValue.event_date = formValue.event_date.toISOString();
-    }
-
-    const request$ = this.editMode
-      ? this.eventPostService.updatePost(this.editPostId!, formValue)
-      : this.eventPostService.createPost(formValue);
-
-    request$.subscribe({
-      next: () => {
-        this.submitting = false;
-        this.router.navigate(['/customer/my-posts']);
-      },
-      error: (err) => {
-        this.submitting = false;
-        this.errorMessage = err.error?.detail || 'Failed to save post';
-      }
+  });
+}
+  onLocationPicked(loc: PickedLocation) {
+    this.postForm.patchValue({
+      latitude: loc.latitude,
+      longitude: loc.longitude,
+      place_id: loc.place_id
     });
   }
 }

@@ -1,66 +1,82 @@
-/* ================================
+
+/* =========================================================
    PAGE
-================================ */
+========================================================= */
 
 :host {
   display: block;
   min-height: 100vh;
-  background: #f6f7fb;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(124, 58, 237, 0.06), transparent 28%),
+    radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.05), transparent 25%),
+    #f6f7fb;
+
   color: #1f2937;
 }
 
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
 .page-header {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 40px 24px 24px;
+  padding: 42px 24px 28px;
   text-align: center;
 }
 
 .page-header h1 {
   margin: 0;
-  color: #1f2937;
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1.25;
+  color: #17121f;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.7px;
 }
 
 .page-header p {
-  margin: 10px 0 0;
+  max-width: 680px;
+  margin: 11px auto 0;
   color: #6b7280;
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 
-/* ================================
+/* =========================================================
    FILTER BAR
-================================ */
+========================================================= */
 
 .filter-bar {
-  max-width: 1200px;
-  margin: 0 auto 28px;
-  padding: 20px 24px;
+  max-width: 1240px;
+  margin: 0 auto 30px;
+  padding: 18px 20px;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 14px;
 
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e7e3ee;
+  border-radius: 18px;
 
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  box-shadow:
+    0 8px 30px rgba(30, 20, 50, 0.06),
+    0 2px 8px rgba(30, 20, 50, 0.03);
+
+  backdrop-filter: blur(10px);
 }
 
 .filter-select {
-  width: 240px;
+  width: 230px;
 }
 
 
-/* ================================
+/* =========================================================
    ANGULAR MATERIAL FORM FIELD
-================================ */
+========================================================= */
 
 ::ng-deep .filter-bar .mat-mdc-form-field {
   --mdc-outlined-text-field-container-color: #ffffff;
@@ -68,12 +84,12 @@
 
 ::ng-deep .filter-bar .mat-mdc-text-field-wrapper {
   background: #ffffff !important;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 ::ng-deep .filter-bar .mdc-text-field--outlined {
-  --mdc-outlined-text-field-outline-color: #d1d5db;
-  --mdc-outlined-text-field-hover-outline-color: #8b5cf6;
+  --mdc-outlined-text-field-outline-color: #d8d2e2;
+  --mdc-outlined-text-field-hover-outline-color: #a78bfa;
   --mdc-outlined-text-field-focus-outline-color: #7c3aed;
 }
 
@@ -81,8 +97,9 @@
   color: #4b5563 !important;
 }
 
-::ng-deep .filter-bar .mat-mdc-form-field.mat-focused
-  .mdc-floating-label {
+::ng-deep .filter-bar
+.mat-mdc-form-field.mat-focused
+.mdc-floating-label {
   color: #7c3aed !important;
 }
 
@@ -100,9 +117,9 @@
 }
 
 
-/* ================================
+/* =========================================================
    SELECT DROPDOWN
-================================ */
+========================================================= */
 
 ::ng-deep .cdk-overlay-container {
   z-index: 9999;
@@ -110,8 +127,11 @@
 
 ::ng-deep .mat-mdc-select-panel {
   background: #ffffff !important;
-  border-radius: 10px !important;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15) !important;
+  border-radius: 12px !important;
+
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.16),
+    0 4px 12px rgba(15, 23, 42, 0.08) !important;
 }
 
 ::ng-deep .mat-mdc-option {
@@ -132,231 +152,486 @@
 }
 
 
-/* ================================
+/* =========================================================
    RESET BUTTON
-================================ */
+========================================================= */
 
 .filter-bar button {
   min-height: 48px;
   padding: 0 20px;
 
-  color: #7c3aed !important;
-  border-color: #c4b5fd !important;
+  color: #6d28d9 !important;
+  border: 1px solid #c4b5fd !important;
 
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 10px;
 
-  font-weight: 600;
+  font-weight: 700;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .filter-bar button:hover {
   background: #f5f3ff;
+  border-color: #a78bfa !important;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 5px 14px rgba(124, 58, 237, 0.10);
 }
 
 
-/* ================================
+/* =========================================================
    POSTS CONTAINER
-================================ */
+========================================================= */
 
 .posts-container {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px 50px;
+  padding: 0 24px 55px;
 }
 
 
-/* ================================
+/* =========================================================
    POSTS GRID
-================================ */
+========================================================= */
 
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
+  align-items: stretch;
 }
 
 
-/* ================================
+/* =========================================================
    POST CARD
-================================ */
+========================================================= */
 
 .post-card {
   position: relative;
 
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
 
   padding: 24px;
 
-  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.06);
+  background: #ffffff;
+
+  border: 1px solid #e7e3ee;
+  border-radius: 18px;
+
+  box-shadow:
+    0 5px 18px rgba(31, 20, 50, 0.055),
+    0 1px 3px rgba(31, 20, 50, 0.04);
+
+  overflow: hidden;
 
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
+
+
+/* Top purple accent */
+
+.post-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 3px;
+
+  background: linear-gradient(
+    90deg,
+    #7c3aed,
+    #a855f7,
+    #c084fc
+  );
+
+  opacity: 0.85;
+}
+
+
+/* Hover */
 
 .post-card:hover {
-  transform: translateY(-3px);
-
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.10);
+  transform: translateY(-5px);
 
   border-color: #d8b4fe;
+
+  box-shadow:
+    0 18px 38px rgba(76, 29, 149, 0.11),
+    0 5px 12px rgba(31, 20, 50, 0.06);
 }
 
 
-/* ================================
+/* =========================================================
    HIGHLIGHTED POST
-================================ */
+========================================================= */
 
 .post-card.highlighted {
   border: 2px solid #8b5cf6;
-  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.16);
+
+  box-shadow:
+    0 12px 32px rgba(124, 58, 237, 0.16),
+    0 0 0 4px rgba(124, 58, 237, 0.06);
+}
+
+.post-card.highlighted::before {
+  height: 4px;
+  opacity: 1;
 }
 
 
-/* ================================
+/* =========================================================
    CARD HEADER
-================================ */
+========================================================= */
 
 .post-card-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   gap: 15px;
 
-  margin-bottom: 8px;
+  margin-bottom: 9px;
 }
 
 .post-card h4 {
+  min-width: 0;
+
   margin: 0;
 
-  color: #111827;
+  color: #17121f;
 
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 800;
+
   line-height: 1.4;
+  letter-spacing: -0.2px;
+
+  overflow-wrap: anywhere;
 }
 
 
-/* ================================
-   CATEGORY
-================================ */
+/* =========================================================
+   CATEGORY BADGE
+========================================================= */
 
 .category-badge {
   flex-shrink: 0;
 
   padding: 6px 11px;
 
-  background: #f3e8ff;
-  color: #7e22ce;
+  background: linear-gradient(
+    135deg,
+    #f3e8ff,
+    #ede9fe
+  );
 
+  color: #6d28d9;
+
+  border: 1px solid #ddd6fe;
   border-radius: 20px;
 
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
+
+  white-space: nowrap;
 }
 
 
-/* ================================
+/* =========================================================
    POSTED BY
-================================ */
+========================================================= */
 
 .posted-by {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+
+  width: fit-content;
 
   margin-bottom: 15px;
 
   color: #7c3aed;
 
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.posted-by::before {
+  content: "•";
+
+  margin-right: 6px;
+
+  color: #a78bfa;
+  font-size: 16px;
 }
 
 
-/* ================================
+/* =========================================================
    DESCRIPTION
-================================ */
+========================================================= */
 
 .post-desc {
   margin: 0 0 18px;
 
-  color: #4b5563;
+  color: #52525b;
 
   font-size: 14px;
   line-height: 1.7;
 
   word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
 }
 
 
-/* ================================
-   META INFORMATION
-================================ */
+/* =========================================================
+   ITEMS STRIP
+========================================================= */
+
+.items-strip {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  margin: 0 0 18px;
+  padding: 12px;
+
+  background: #faf9fc;
+
+  border: 1px solid #eeeaf4;
+  border-radius: 12px;
+}
+
+
+/* Individual item */
+
+.item-chip {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 28px;
+
+  padding: 5px 9px;
+
+  background: #ffffff;
+
+  color: #5b21b6;
+
+  border: 1px solid #ddd6fe;
+  border-radius: 8px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  box-shadow: 0 2px 5px rgba(76, 29, 149, 0.04);
+}
+
+
+/* =========================================================
+   POST META
+========================================================= */
 
 .post-meta {
   display: flex;
   flex-direction: column;
+
   gap: 9px;
 
-  padding: 15px;
+  margin-bottom: 20px;
+  padding: 14px;
 
-  background: #f8fafc;
+  background:
+    linear-gradient(
+      135deg,
+      #fafafa,
+      #f8f7fb
+    );
 
-  border: 1px solid #eef0f4;
-  border-radius: 10px;
-
-  margin-bottom: 18px;
+  border: 1px solid #ece9f1;
+  border-radius: 12px;
 }
 
 .post-meta span {
   display: flex;
-  align-items: center;
-  gap: 7px;
+  align-items: flex-start;
 
-  color: #374151;
+  gap: 8px;
 
-  font-size: 13px;
+  color: #3f3f46;
+
+  font-size: 12px;
+  font-weight: 500;
+
   line-height: 1.5;
+
+  word-break: break-word;
+}
+
+.post-meta span::first-letter {
+  font-size: 14px;
 }
 
 
-/* ================================
-   MESSAGE BUTTON
-================================ */
+/* Quote count */
 
-.message-btn {
-  width: 100%;
+.post-meta span:last-child {
+  color: #7c3aed;
+  font-weight: 700;
+}
 
+
+/* =========================================================
+   ACTION ROW
+========================================================= */
+
+.post-actions-row {
+  display: flex;
+  gap: 10px;
+
+  margin-top: auto;
+  padding-top: 2px;
+}
+
+
+/* Both buttons */
+
+.post-actions-row button {
   min-height: 44px;
 
-  border-radius: 9px !important;
+  border-radius: 10px !important;
 
-  font-weight: 600;
-
-  background: #7c3aed !important;
-  color: #ffffff !important;
-
-  box-shadow: none !important;
+  font-size: 13px;
+  font-weight: 700;
 
   transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+
+/* =========================================================
+   MESSAGE BUTTON
+========================================================= */
+
+.message-btn {
+  flex: 1;
+
+  color: #6d28d9 !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #c4b5fd !important;
+
+  box-shadow: none !important;
 }
 
 .message-btn:hover {
-  background: #6d28d9 !important;
+  background: #f5f3ff !important;
+
+  border-color: #a78bfa !important;
+
   transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 12px rgba(124, 58, 237, 0.10) !important;
 }
 
 
-/* ================================
+/* =========================================================
+   QUOTE BUTTON
+========================================================= */
+
+.quote-btn {
+  flex: 1;
+
+  color: #ffffff !important;
+
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #9333ea
+  ) !important;
+
+  border: none !important;
+
+  box-shadow:
+    0 5px 12px rgba(124, 58, 237, 0.20) !important;
+}
+
+.quote-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #6d28d9,
+    #7e22ce
+  ) !important;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 18px rgba(124, 58, 237, 0.27) !important;
+}
+
+
+/* =========================================================
+   MESSAGES DISABLED
+========================================================= */
+
+.messages-disabled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  min-height: 42px;
+
+  padding: 8px 12px;
+
+  box-sizing: border-box;
+
+  color: #71717a;
+
+  background: #f7f7f8;
+
+  border: 1px dashed #d4d4d8;
+  border-radius: 9px;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  line-height: 1.4;
+
+  text-align: center;
+}
+
+
+/* =========================================================
    EMPTY STATE
-================================ */
+========================================================= */
 
 .empty-state {
-  min-height: 300px;
+  min-height: 330px;
 
   display: flex;
   flex-direction: column;
@@ -366,41 +641,54 @@
 
   text-align: center;
 
-  padding: 40px 20px;
+  padding: 45px 20px;
 
-  background: #ffffff;
+  background:
+    radial-gradient(
+      circle at center,
+      #faf7ff 0%,
+      #ffffff 65%
+    );
 
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
+  border: 1px solid #e7e3ee;
+  border-radius: 18px;
 
-  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+  box-shadow:
+    0 6px 20px rgba(31, 20, 50, 0.05);
 }
 
 .empty-icon {
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  width: 70px;
-  height: 70px;
+  width: 76px;
+  height: 76px;
 
   margin-bottom: 18px;
 
-  background: #f3e8ff;
+  background: linear-gradient(
+    135deg,
+    #f3e8ff,
+    #ede9fe
+  );
 
+  border: 1px solid #ddd6fe;
   border-radius: 50%;
 
-  font-size: 32px;
+  font-size: 34px;
+
+  box-shadow:
+    0 8px 20px rgba(124, 58, 237, 0.10);
 }
 
 .empty-state h3 {
   margin: 0 0 8px;
 
-  color: #1f2937;
+  color: #27212f;
 
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 800;
 }
 
 .empty-state p {
@@ -408,19 +696,19 @@
 
   margin: 0;
 
-  color: #6b7280;
+  color: #71717a;
 
   font-size: 14px;
   line-height: 1.6;
 }
 
 
-/* ================================
+/* =========================================================
    LOADING
-================================ */
+========================================================= */
 
 .loading-container {
-  min-height: 300px;
+  min-height: 330px;
 
   display: flex;
   flex-direction: column;
@@ -438,36 +726,48 @@
 }
 
 
-/* ================================
-   RESPONSIVE
-================================ */
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1050px) {
 
   .posts-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .filter-bar {
     margin-left: 24px;
     margin-right: 24px;
   }
-
 }
 
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
 
 @media (max-width: 700px) {
 
   .page-header {
-    padding: 30px 18px 20px;
+    padding: 32px 18px 22px;
   }
 
   .page-header h1 {
-    font-size: 27px;
+    font-size: 28px;
+  }
+
+  .page-header p {
+    font-size: 14px;
   }
 
   .posts-container {
-    padding: 0 18px 40px;
+    padding: 0 18px 42px;
+  }
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .filter-bar {
@@ -477,7 +777,9 @@
     margin-left: 18px;
     margin-right: 18px;
 
-    padding: 18px;
+    padding: 17px;
+
+    border-radius: 15px;
   }
 
   .filter-select {
@@ -489,28 +791,119 @@
   }
 
   .post-card {
-    padding: 20px;
+    padding: 21px;
+    border-radius: 16px;
   }
 
   .post-card-header {
     flex-direction: column;
+    gap: 9px;
   }
 
+  .category-badge {
+    align-self: flex-start;
+  }
+
+  .post-card h4 {
+    font-size: 19px;
+  }
+
+  .post-actions-row {
+    flex-direction: column;
+  }
+
+  .message-btn,
+  .quote-btn {
+    width: 100%;
+  }
 }
 
 
+/* =========================================================
+   RESPONSIVE - SMALL MOBILE
+========================================================= */
+
 @media (max-width: 480px) {
+
+  .page-header {
+    padding: 28px 16px 20px;
+  }
 
   .page-header h1 {
     font-size: 24px;
   }
 
   .page-header p {
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .posts-container {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .filter-bar {
+    margin-left: 14px;
+    margin-right: 14px;
+  }
+
+  .post-card {
+    padding: 18px;
   }
 
   .post-card h4 {
     font-size: 18px;
   }
 
+  .post-desc {
+    font-size: 13px;
+  }
+
+  .items-strip {
+    padding: 10px;
+  }
+
+  .item-chip {
+    font-size: 10px;
+  }
+
+  .post-meta {
+    padding: 12px;
+  }
+
+  .post-meta span {
+    font-size: 11px;
+  }
+}
+.post-actions-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  button { flex: 1; }
+}
+
+.messages-disabled {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-style: italic;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.items-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 0.7rem;
+}
+
+.item-chip {
+  background: rgba(232,101,10,0.08);
+  color: #b84e08;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 100px;
 }

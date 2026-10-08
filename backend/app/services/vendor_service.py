@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from typing import Optional
-
+from app.utils.geo import calculate_distance_km
 from app.models.vendor import (
     VendorProfile, VendorService, VendorPhoto,
     VendorAvailability, VendorWorkingHours,
@@ -636,63 +636,56 @@ class VendorService_:
         db.commit()
         return {"message": "Document deleted"}
     def get_compare_data(self, db: Session, vendor_ids: List[int]):
-        """
-        Returns full comparison data for up to 4 vendors in a single call —
-        services, photos, recent reviews, and min/max pricing — so the
-        frontend can render a side-by-side comparison without needing
-        a separate round-trip per vendor.
-        """
         if len(vendor_ids) < 2:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Select at least 2 vendors to compare"
-            )
-
+            raise HTTPException(status_code=400, detail="Select at least 2 vendors to compare")
         if len(vendor_ids) > 4:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="You can compare up to 4 vendors at a time"
-            )
+            raise HTTPException(status_code=400, detail="You can compare up to 4 vendors at a time")
 
         vendors = db.query(VendorProfile).filter(
-            VendorProfile.id.in_(vendor_ids),
-            VendorProfile.is_approved == True
+            VendorProfile.id.in_(vendor_ids), VendorProfile.is_approved == True
         ).all()
-        
-
 
         if len(vendors) != len(set(vendor_ids)):
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="One or more selected vendors could not be found"
-            )
+            raise HTTPException(status_code=404, detail="One or more selected vendors could not be found")
 
-        # Preserve the order the customer selected them in, not arbitrary DB order
         vendor_map = {v.id: v for v in vendors}
         ordered_vendors = [vendor_map[vid] for vid in vendor_ids if vid in vendor_map]
 
+        # Batch-fetch everything up front instead of per-vendor
+        actual_ids = [v.id for v in ordered_vendors]
+
+        all_services = db.query(VendorService).filter(
+            VendorService.vendor_id.in_(actual_ids), VendorService.is_active == True
+        ).all()
+        services_by_vendor: dict = {}
+        for s in all_services:
+            services_by_vendor.setdefault(s.vendor_id, []).append(s)
+
+        all_photos = db.query(VendorPhoto).filter(
+            VendorPhoto.vendor_id.in_(actual_ids)
+        ).order_by(VendorPhoto.sort_order.asc()).all()
+        photos_by_vendor: dict = {}
+        for p in all_photos:
+            photos_by_vendor.setdefault(p.vendor_id, []).append(p)
+
+        all_reviews = db.query(Review).filter(
+            Review.vendor_id.in_(actual_ids)
+        ).order_by(Review.created_at.desc()).all()
+        reviews_by_vendor: dict = {}
+        for r in all_reviews:
+            reviews_by_vendor.setdefault(r.vendor_id, []).append(r)
+
         results = []
         for vendor in ordered_vendors:
-            services = db.query(VendorService).filter(
-                VendorService.vendor_id == vendor.id,
-                VendorService.is_active == True
-            ).all()
-
-            photos = db.query(VendorPhoto).filter(
-                VendorPhoto.vendor_id == vendor.id
-            ).order_by(VendorPhoto.sort_order.asc()).limit(6).all()
-
+            services = services_by_vendor.get(vendor.id, [])
+            photos = photos_by_vendor.get(vendor.id, [])[:6]
             cover = next((p for p in photos if p.is_cover), photos[0] if photos else None)
-            video_count = db.query(VendorVideo).filter(VendorVideo.vendor_id == vendor.id).count()
-
-            recent_reviews = db.query(Review).filter(
-                Review.vendor_id == vendor.id
-            ).order_by(Review.created_at.desc()).limit(2).all()
-
+            recent_reviews = reviews_by_vendor.get(vendor.id, [])[:2]
             prices = [float(s.price) for s in services]
 
             results.append({
                 "id": vendor.id,
+                "slug": vendor.slug,
                 "business_name": vendor.business_name,
                 "description": vendor.description,
                 "address": vendor.address,
@@ -706,9 +699,120 @@ class VendorService_:
                 "recent_reviews": recent_reviews,
                 "min_price": min(prices) if prices else None,
                 "max_price": max(prices) if prices else None,
-                "has_videos": video_count > 0,
-                "video_count": video_count,
             })
 
         return results
+    def get_similar_vendors(self, db: Session, vendor_id: int, limit: int = 6):
+        vendor = db.query(VendorProfile).filter(VendorProfile.id == vendor_id).first()
+        if not vendor:
+            raise HTTPException(status_code=404, detail="Vendor not found")
+
+        vendor_category_ids = [
+            row.category_id for row in
+            db.query(VendorCategoryMap.category_id).filter(VendorCategoryMap.vendor_id == vendor.id).all()
+        ]
+
+        base_query = db.query(VendorProfile).filter(
+            VendorProfile.is_approved == True,
+            VendorProfile.id != vendor.id
+        )
+
+        category_filtered_ids = None
+        if vendor_category_ids:
+            category_filtered_ids = db.query(VendorCategoryMap.vendor_id).filter(
+                VendorCategoryMap.category_id.in_(vendor_category_ids)
+            ).subquery()
+
+        results = []
+        seen_ids = set()
+
+        # Tier 1: same category + same city
+        if vendor.city_id and category_filtered_ids is not None:
+            tier1 = base_query.filter(
+                VendorProfile.city_id == vendor.city_id,
+                VendorProfile.id.in_(category_filtered_ids)
+            ).order_by(VendorProfile.rank_score.desc()).limit(limit).all()
+            results.extend(tier1)
+            seen_ids.update(v.id for v in tier1)
+
+        # Tier 2: same category + same state (covers vendors with a city in the same state, or no city set at all)
+        if len(results) < limit and category_filtered_ids is not None:
+            city = db.query(City).filter(City.id == vendor.city_id).first() if vendor.city_id else None
+            tier2_query = base_query.filter(VendorProfile.id.in_(category_filtered_ids), ~VendorProfile.id.in_(seen_ids))
+            if city:
+                city_ids_in_state = db.query(City.id).filter(City.state_id == city.state_id).subquery()
+                tier2_query = tier2_query.filter(VendorProfile.city_id.in_(city_ids_in_state))
+            tier2 = tier2_query.order_by(VendorProfile.rank_score.desc()).limit(limit - len(results)).all()
+            results.extend(tier2)
+            seen_ids.update(v.id for v in tier2)
+
+        # Tier 3: same category, anywhere (covers the "state/city not found" case entirely —
+        # ensures a photographer always sees other photographers even with no location data at all)
+        if len(results) < limit and category_filtered_ids is not None:
+            tier3 = base_query.filter(
+                VendorProfile.id.in_(category_filtered_ids), ~VendorProfile.id.in_(seen_ids)
+            ).order_by(VendorProfile.rank_score.desc()).limit(limit - len(results)).all()
+            results.extend(tier3)
+            seen_ids.update(v.id for v in tier3)
+
+        # Tier 4: final fallback — any approved vendor at all, so the section is never empty
+        # for a vendor with no categories/location set
+        if len(results) < limit:
+            tier4 = base_query.filter(~VendorProfile.id.in_(seen_ids)).order_by(
+                VendorProfile.rank_score.desc()
+            ).limit(limit - len(results)).all()
+            results.extend(tier4)
+
+        for v in results:
+            cover = db.query(VendorPhoto).filter(VendorPhoto.vendor_id == v.id, VendorPhoto.is_cover == True).first()
+            if not cover:
+                cover = db.query(VendorPhoto).filter(VendorPhoto.vendor_id == v.id).order_by(VendorPhoto.sort_order.asc()).first()
+            v.cover_photo_url = cover.photo_url if cover else None
+
+        return results
+
+    
+
+    def get_nearby_vendors(
+        self, db: Session,
+        latitude: float, longitude: float,
+        radius_km: float = 25,
+        category_id: Optional[int] = None,
+        skip: int = 0, limit: int = 20
+    ):
+        query = db.query(VendorProfile).filter(
+            VendorProfile.is_approved == True,
+            VendorProfile.latitude.isnot(None),
+            VendorProfile.longitude.isnot(None)
+        )
+
+        if category_id:
+            vendor_ids = db.query(VendorCategoryMap.vendor_id).filter(
+                VendorCategoryMap.category_id == category_id
+            ).subquery()
+            query = query.filter(VendorProfile.id.in_(vendor_ids))
+
+        candidates = query.all()
+
+        results = []
+        for vendor in candidates:
+            distance = calculate_distance_km(latitude, longitude, vendor.latitude, vendor.longitude)
+            if distance <= radius_km:
+                cover = db.query(VendorPhoto).filter(VendorPhoto.vendor_id == vendor.id, VendorPhoto.is_cover == True).first()
+                if not cover:
+                    cover = db.query(VendorPhoto).filter(VendorPhoto.vendor_id == vendor.id).order_by(VendorPhoto.sort_order.asc()).first()
+                vendor.cover_photo_url = cover.photo_url if cover else None
+
+                all_services = db.query(VendorService).filter(
+                    VendorService.vendor_id == vendor.id, VendorService.is_active == True
+                ).order_by(VendorService.price.asc()).all()
+                vendor.services_preview = all_services[:4]
+                vendor.service_count = len(all_services)
+                vendor.min_price = all_services[0].price if all_services else None
+                vendor.distance_km = round(distance, 2)
+
+                results.append(vendor)
+
+        results.sort(key=lambda v: v.distance_km)
+        return results[skip: skip + limit]
 vendor_service = VendorService_()

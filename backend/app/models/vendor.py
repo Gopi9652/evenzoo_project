@@ -1,6 +1,6 @@
 from sqlalchemy import (Column, Integer, String, Boolean,
                         DateTime, Text, Numeric, Date,
-                        Time, ForeignKey)
+                        Time, ForeignKey, Float)
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
@@ -43,7 +43,10 @@ class VendorProfile(Base):
     reviews      = relationship("Review", foreign_keys="Review.vendor_id",
                                 back_populates="vendor")
     slug = Column(String(250), unique=True, index=True, nullable=True)
-
+    latitude          = Column(Float, nullable=True)
+    longitude         = Column(Float, nullable=True)
+    place_id          = Column(String(255), nullable=True)
+    service_radius_km = Column(Float, default=25)
 
 class VendorCategory(Base):
     __tablename__ = "vendor_categories"

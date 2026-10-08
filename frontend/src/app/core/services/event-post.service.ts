@@ -30,10 +30,11 @@ export class EventPostService {
     return this.http.get<EventPost>(`${this.apiUrl}/${postId}`);
   }
 
-  getVendorFeed(filterStateId?: number, filterCityId?: number, skip = 0, limit = 20): Observable<EventPost[]> {
+  getVendorFeed(filterStateId?: number, filterCityId?: number, eventTypeId?: number, skip = 0, limit = 20): Observable<EventPost[]> {
     let url = `${this.apiUrl}/vendor-feed?skip=${skip}&limit=${limit}`;
     if (filterStateId) url += `&filter_state_id=${filterStateId}`;
     if (filterCityId) url += `&filter_city_id=${filterCityId}`;
+    if (eventTypeId) url += `&event_type_id=${eventTypeId}`;
     return this.http.get<EventPost[]>(url);
   }
 }

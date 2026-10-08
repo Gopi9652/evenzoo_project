@@ -15,6 +15,7 @@ export interface VendorProfile {
   services_preview?: ServicePreview[];
   min_price?: number;
   service_count?: number;
+  
 }
 export interface ServicePreview {
   name: string;

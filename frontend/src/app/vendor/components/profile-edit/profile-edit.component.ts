@@ -9,13 +9,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { LocationPickerComponent, PickedLocation } from '../../../shared/components/location-picker/location-picker.component';
 
 
 
 @Component({
   selector: 'app-profile-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NavbarComponent, MatFormFieldModule,MatSelectModule,MatButtonModule,MatInputModule,FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NavbarComponent, MatFormFieldModule,MatSelectModule,MatButtonModule,
+            LocationPickerComponent, MatInputModule,FormsModule],
   templateUrl: './profile-edit.component.html',
   styleUrl: './profile-edit.component.scss'
 })
@@ -31,6 +33,8 @@ export class ProfileEditComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
 selectedStateId: number | null = null;
+pickerInitialLat = 17.4483;   // ← missing — add this
+pickerInitialLng = 78.3915;
 
   constructor(
     private fb: FormBuilder,
@@ -46,38 +50,44 @@ selectedStateId: number | null = null;
       pan_number: [''],
       bank_account: [''],
       bank_ifsc: [''],
-      bank_name: ['']
+      bank_name: [''],
+      latitude: [null],
+      longitude: [null],
+      place_id: [null]
     });
   }
 
     ngOnInit() {
-    this.locationService.getStates().subscribe({
-      next: (data) => this.states = data
-    });
-    
-    this.vendorService.getCategories().subscribe({
-      next: (data) => this.allCategories = data
-    });
-    this.vendorService.getMyProfile().subscribe({
-      next: (data: any) => {
-        this.profileForm.patchValue(data);
-        this.loading = false;
+      this.locationService.getStates().subscribe({
+        next: (data) => this.states = data
+      });
+      
+      this.vendorService.getCategories().subscribe({
+        next: (data) => this.allCategories = data
+      });
+      this.vendorService.getMyProfile().subscribe({
+        next: (data: any) => {
+          this.profileForm.patchValue(data);
+          this.loading = false;
+                if (data.latitude && data.longitude) {
+                this.pickerInitialLat = data.latitude;
+                this.pickerInitialLng = data.longitude;
+              }
+          // If vendor already has a city set, figure out which state it belongs to
+          // so the state dropdown pre-selects correctly and cities load for it
+          if (data.city_id) {
+            this.locationService.getCityById(data.city_id).subscribe({
+              next: (city) => {
+                this.selectedStateId = city.state_id;
+                this.loadCitiesForState(city.state_id);
+              }
+            });
+          }
+        },
+        error: () => this.loading = false
+      });
 
-        // If vendor already has a city set, figure out which state it belongs to
-        // so the state dropdown pre-selects correctly and cities load for it
-        if (data.city_id) {
-          this.locationService.getCityById(data.city_id).subscribe({
-            next: (city) => {
-              this.selectedStateId = city.state_id;
-              this.loadCitiesForState(city.state_id);
-            }
-          });
-        }
-      },
-      error: () => this.loading = false
-    });
-
-    this.loadMyCategories()
+      this.loadMyCategories()
   }
 
   loadCitiesForState(stateId: number) {
@@ -152,6 +162,14 @@ onSubmit() {
         this.saving = false;
         this.errorMessage = err.error?.detail || 'Failed to update profile';
       }
+    });
+  }
+
+  onLocationPicked(loc: PickedLocation) {
+    this.profileForm.patchValue({
+      latitude: loc.latitude,
+      longitude: loc.longitude,
+      place_id: loc.place_id
     });
   }
 }

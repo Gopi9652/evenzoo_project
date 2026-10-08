@@ -1,0 +1,1638 @@
+/* =========================================================
+   EVENZOO — QUOTES RECEIVED
+   Premium Light Theme
+   ========================================================= */
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+:host {
+  display: block;
+
+  --primary: #7657e8;
+  --primary-dark: #5d3fd3;
+  --primary-light: #eeeaff;
+
+  --secondary: #a855f7;
+  --gold: #d39b27;
+  --gold-light: #fff7df;
+
+  --success: #159957;
+  --success-light: #eafaf2;
+
+  --warning: #d97706;
+  --warning-light: #fff7e8;
+
+  --danger: #dc3545;
+  --danger-light: #fff0f1;
+
+  --text-main: #242238;
+  --text-dark: #302c45;
+  --text-medium: #66627a;
+  --text-light: #8d899f;
+
+  --border: #e8e5f0;
+  --border-light: #f1eef7;
+
+  --page-bg: #f8f7fc;
+  --card-bg: #ffffff;
+
+  --shadow-sm:
+    0 4px 14px rgba(64, 48, 120, 0.06);
+
+  --shadow-md:
+    0 10px 30px rgba(64, 48, 120, 0.09);
+
+  --shadow-lg:
+    0 20px 50px rgba(64, 48, 120, 0.13);
+
+  color: var(--text-main);
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+  position: relative;
+
+  max-width: 1180px;
+  margin: 0 auto;
+
+  padding: 42px 28px 28px;
+
+  animation: fadeDown 0.55s ease both;
+}
+
+.page-header::before {
+  content: "";
+
+  position: absolute;
+
+  top: 20px;
+  left: 10px;
+
+  width: 90px;
+  height: 90px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(118, 87, 232, 0.12),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+.page-header h1 {
+  position: relative;
+
+  margin: 0;
+
+  font-size: 34px;
+  line-height: 1.2;
+
+  font-weight: 800;
+  letter-spacing: -0.8px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #30215f,
+      #7657e8,
+      #a855f7
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+.page-header p {
+  margin: 9px 0 0;
+
+  color: var(--text-medium);
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.quotes-container {
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  padding: 0 28px 60px;
+}
+
+
+/* =========================================================
+   FILTER BAR
+   ========================================================= */
+
+.filter-bar {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  max-width: 1180px;
+
+  margin: 0 auto 22px;
+
+  padding: 16px 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.96),
+      rgba(249, 247, 255, 0.96)
+    );
+
+  border: 1px solid rgba(118, 87, 232, 0.12);
+
+  border-radius: 18px;
+
+  box-shadow: var(--shadow-sm);
+
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+
+
+/* subtle glow */
+
+.filter-bar::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(118, 87, 232, 0.035),
+      transparent 45%,
+      rgba(168, 85, 247, 0.035)
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CATEGORY SELECT
+   ========================================================= */
+
+.filter-bar mat-select {
+  min-width: 210px;
+
+  padding: 4px 2px;
+
+  color: var(--text-dark);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   FILTER BUTTON
+   ========================================================= */
+
+.filter-bar button {
+  min-height: 46px;
+
+  padding: 0 16px;
+
+  border-radius: 12px !important;
+
+  border: 1px solid #ddd7ef !important;
+
+  color: var(--primary-dark) !important;
+
+  background: #ffffff !important;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease;
+}
+
+.filter-bar button mat-icon {
+  margin-left: 7px;
+
+  font-size: 20px;
+
+  vertical-align: middle;
+}
+
+.filter-bar button:hover {
+  transform: translateY(-2px);
+
+  border-color: rgba(118, 87, 232, 0.45) !important;
+
+  background: #faf8ff !important;
+
+  box-shadow:
+    0 7px 18px rgba(118, 87, 232, 0.12);
+}
+
+.filter-bar button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   DATE FIELDS
+   ========================================================= */
+
+.date-field {
+  width: 175px;
+
+  animation: dateReveal 0.35s ease both;
+}
+
+.date-field mat-form-field {
+  width: 100%;
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.tabs-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  max-width: 1180px;
+
+  margin: 0 auto 24px;
+
+  padding: 6px;
+
+  background: #efedf7;
+
+  border: 1px solid #e5e1ef;
+
+  border-radius: 15px;
+
+  animation: fadeUp 0.6s ease 0.18s both;
+}
+
+.tab-btn {
+  position: relative;
+
+  flex: 1;
+
+  min-height: 46px;
+
+  border: none;
+
+  border-radius: 11px;
+
+  background: transparent;
+
+  color: var(--text-medium);
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.tab-btn:hover {
+  color: var(--primary);
+
+  background: rgba(255, 255, 255, 0.65);
+
+  transform: translateY(-1px);
+}
+
+.tab-btn.active {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary)
+    );
+
+  box-shadow:
+    0 7px 18px rgba(118, 87, 232, 0.25);
+
+  animation: tabPop 0.28s ease;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-container {
+  min-height: 300px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 15px;
+
+  color: var(--text-medium);
+
+  animation: fadeIn 0.4s ease;
+}
+
+.loading-container p {
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   QUOTES LIST
+   ========================================================= */
+
+.quotes-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+
+/* =========================================================
+   QUOTE CARD
+   ========================================================= */
+
+.quote-card {
+  position: relative;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 28px;
+
+  padding: 23px 24px;
+
+  background: var(--card-bg);
+
+  border: 1px solid var(--border);
+
+  border-radius: 18px;
+
+  box-shadow: var(--shadow-sm);
+
+  overflow: hidden;
+
+  animation: cardEnter 0.5s ease both;
+
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+}
+
+
+/* animated left accent */
+
+.quote-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 4px;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--primary),
+      var(--secondary)
+    );
+
+  transform: scaleY(0);
+
+  transform-origin: bottom;
+
+  transition:
+    transform 0.3s ease;
+}
+
+.quote-card:hover::before {
+  transform: scaleY(1);
+}
+
+
+/* soft hover glow */
+
+.quote-card::after {
+  content: "";
+
+  position: absolute;
+
+  top: -80px;
+  right: -80px;
+
+  width: 180px;
+  height: 180px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(118, 87, 232, 0.07),
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  transition: transform 0.4s ease;
+}
+
+.quote-card:hover::after {
+  transform: scale(1.35);
+}
+
+.quote-card:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(118, 87, 232, 0.2);
+
+  box-shadow: var(--shadow-md);
+}
+
+
+/* responded card */
+
+.quote-card.responded {
+  border-color: #e5e0f1;
+}
+
+.quote-card.responded::before {
+  background:
+    linear-gradient(
+      180deg,
+      var(--success),
+      #42c98b
+    );
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.quote-main {
+  position: relative;
+
+  z-index: 1;
+
+  flex: 1;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   CUSTOMER
+   ========================================================= */
+
+.customer-name {
+  display: inline-block;
+
+  margin-right: 10px;
+
+  color: var(--text-dark);
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.2px;
+}
+
+
+/* =========================================================
+   CATEGORY
+   ========================================================= */
+
+.category-pill {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 27px;
+
+  padding: 4px 10px;
+
+  margin: 3px 0;
+
+  border-radius: 30px;
+
+  color: #6548bd;
+
+  background: #f0ebff;
+
+  border: 1px solid #e3dbff;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  vertical-align: middle;
+}
+
+
+/* =========================================================
+   EVENT REFERENCE
+   ========================================================= */
+
+.event-ref {
+  display: block;
+
+  margin-top: 8px;
+
+  color: var(--text-medium);
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.quote-message {
+  margin: 13px 0 10px;
+
+  padding: 11px 14px;
+
+  border-left: 3px solid #c8b8ff;
+
+  border-radius: 0 9px 9px 0;
+
+  color: #625d73;
+
+  background: #faf9ff;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  font-style: italic;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.quote-card:hover .quote-message {
+  background: #f6f3ff;
+
+  border-color: var(--primary);
+}
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+.date-note {
+  display: inline-block;
+
+  margin-top: 8px;
+
+  color: var(--text-light);
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   RESPONSE NOTE
+   ========================================================= */
+
+.response-note {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  margin-top: 10px;
+
+  padding: 6px 10px;
+
+  border-radius: 8px;
+
+  color: var(--success);
+
+  background: var(--success-light);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  animation: softPulse 2.8s ease infinite;
+}
+
+.response-note mat-icon {
+  width: 17px;
+  height: 17px;
+
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-tag {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 28px;
+
+  padding: 5px 11px;
+
+  margin-left: 7px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.2px;
+
+  vertical-align: middle;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.status-tag:hover {
+  transform: scale(1.04);
+}
+
+
+/* Pending */
+
+.status-tag.pending {
+  color: #b76a00;
+
+  background: #fff3dc;
+
+  border: 1px solid #f8dfb2;
+}
+
+
+/* =========================================================
+   QUOTE SIDE
+   ========================================================= */
+
+.quote-side {
+  position: relative;
+
+  z-index: 1;
+
+  width: 180px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: flex-end;
+
+  gap: 6px;
+
+  padding-left: 22px;
+
+  border-left: 1px solid var(--border-light);
+}
+
+
+/* =========================================================
+   PRICE LABEL
+   ========================================================= */
+
+.price-label {
+  color: var(--text-light);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.8px;
+}
+
+
+/* =========================================================
+   PENDING PRICE
+   ========================================================= */
+
+.quote-pending {
+  color: var(--text-light);
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  text-align: right;
+}
+
+
+/* =========================================================
+   QUOTE AMOUNT
+   ========================================================= */
+
+.quote-amount {
+  display: block;
+
+  color: #a76c00;
+
+  font-size: 25px;
+
+  font-weight: 900;
+
+  letter-spacing: -0.6px;
+
+  white-space: nowrap;
+}
+
+.quote-card.responded:hover .quote-amount {
+  animation: priceBounce 0.35s ease;
+}
+
+
+/* =========================================================
+   PRICE LABEL
+   ========================================================= */
+
+.quote-amount-label {
+  color: var(--text-light);
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   RESPONDED LABEL
+   ========================================================= */
+
+.responded-label {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  margin-top: 5px;
+
+  color: var(--success);
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.responded-label mat-icon {
+  width: 16px;
+  height: 16px;
+
+  font-size: 16px;
+}
+
+
+/* =========================================================
+   SEND PRICE BUTTON
+   ========================================================= */
+
+.respond-button {
+  min-height: 43px;
+
+  margin-top: 9px;
+
+  padding: 0 17px !important;
+
+  border-radius: 11px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary)
+    ) !important;
+
+  color: #ffffff !important;
+
+  font-weight: 800 !important;
+
+  box-shadow:
+    0 7px 17px rgba(118, 87, 232, 0.22);
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.respond-button mat-icon {
+  margin-right: 5px;
+
+  font-size: 19px;
+}
+
+.respond-button:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 11px 25px rgba(118, 87, 232, 0.3);
+}
+
+.respond-button:active {
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-text {
+  margin: 40px auto;
+
+  padding: 45px 25px;
+
+  max-width: 550px;
+
+  text-align: center;
+
+  color: var(--text-medium);
+
+  background: #ffffff;
+
+  border: 1px dashed #dcd6ed;
+
+  border-radius: 18px;
+
+  box-shadow: var(--shadow-sm);
+
+  animation: fadeUp 0.5s ease both;
+}
+
+.empty-state {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 260px;
+
+  padding: 35px 20px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px dashed #ddd7ec;
+
+  border-radius: 18px;
+
+  animation: fadeUp 0.5s ease both;
+}
+
+.empty-icon {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 64px;
+  height: 64px;
+
+  margin-bottom: 15px;
+
+  border-radius: 18px;
+
+  color: var(--primary);
+
+  background:
+    linear-gradient(
+      135deg,
+      #f0ecff,
+      #faf5ff
+    );
+
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+.empty-icon mat-icon {
+  font-size: 30px;
+
+  width: 30px;
+  height: 30px;
+}
+
+.empty-state h3 {
+  margin: 0 0 7px;
+
+  color: var(--text-dark);
+
+  font-size: 18px;
+
+  font-weight: 800;
+}
+
+.empty-state p {
+  margin: 0;
+
+  max-width: 400px;
+
+  color: var(--text-light);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+
+    transform: translateY(-15px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+
+    transform: translateY(15px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+@keyframes dateReveal {
+  from {
+    opacity: 0;
+
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes tabPop {
+  0% {
+    transform: scale(0.97);
+  }
+
+  70% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+@keyframes floatIcon {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+
+@keyframes priceBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+@keyframes softPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(21, 153, 87, 0);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 4px rgba(21, 153, 87, 0.05);
+  }
+}
+
+
+/* =========================================================
+   STAGGERED CARD ANIMATION
+   ========================================================= */
+
+.quotes-list .quote-card:nth-child(1) {
+  animation-delay: 0.04s;
+}
+
+.quotes-list .quote-card:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.quotes-list .quote-card:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.quotes-list .quote-card:nth-child(4) {
+  animation-delay: 0.16s;
+}
+
+.quotes-list .quote-card:nth-child(5) {
+  animation-delay: 0.20s;
+}
+
+.quotes-list .quote-card:nth-child(6) {
+  animation-delay: 0.24s;
+}
+
+
+/* =========================================================
+   ANGULAR MATERIAL DATEPICKER / SELECT
+   ========================================================= */
+
+::ng-deep .mat-mdc-select-panel {
+  border-radius: 14px !important;
+
+  box-shadow:
+    0 15px 40px rgba(50, 40, 90, 0.16) !important;
+}
+
+::ng-deep .mat-mdc-option {
+  min-height: 45px !important;
+
+  font-size: 14px !important;
+}
+
+::ng-deep .mat-mdc-option:hover {
+  background: #f3efff !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item--selected {
+  background: #eee9ff !important;
+}
+
+
+/* Date field */
+
+::ng-deep .date-field .mat-mdc-text-field-wrapper {
+  background: #ffffff !important;
+
+  border-radius: 12px !important;
+}
+
+::ng-deep .date-field .mdc-notched-outline {
+  border-color: #e0dbea !important;
+}
+
+::ng-deep .date-field:hover .mdc-notched-outline {
+  border-color: #b9a8ef !important;
+}
+
+::ng-deep .date-field.mat-focused .mdc-notched-outline {
+  border-color: var(--primary) !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  .page-header {
+    padding: 32px 20px 22px;
+  }
+
+  .page-header h1 {
+    font-size: 29px;
+  }
+
+  .quotes-container {
+    padding: 0 20px 45px;
+  }
+
+  .filter-bar {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .quote-card {
+    gap: 20px;
+
+    padding: 20px;
+  }
+
+  .quote-side {
+    width: 150px;
+  }
+
+  .quote-amount {
+    font-size: 22px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  .page-header {
+    padding: 27px 16px 20px;
+  }
+
+  .page-header h1 {
+    font-size: 26px;
+  }
+
+  .page-header p {
+    font-size: 13px;
+  }
+
+
+  .quotes-container {
+    padding: 0 16px 40px;
+  }
+
+
+  /* FILTERS */
+
+  .filter-bar {
+    margin: 0 16px 18px;
+
+    padding: 13px;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    border-radius: 15px;
+  }
+
+  .filter-bar mat-select {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+  .filter-bar button {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  .date-field {
+    width: 100%;
+  }
+
+
+  /* TABS */
+
+  .tabs-row {
+    margin: 0 16px 20px;
+
+    border-radius: 13px;
+  }
+
+  .tab-btn {
+    min-height: 43px;
+
+    font-size: 12px;
+  }
+
+
+  /* CARDS */
+
+  .quote-card {
+    flex-direction: column;
+
+    gap: 18px;
+
+    padding: 18px;
+  }
+
+  .quote-side {
+    width: 100%;
+
+    align-items: flex-start;
+
+    padding-left: 0;
+    padding-top: 15px;
+
+    border-left: none;
+
+    border-top: 1px solid var(--border-light);
+  }
+
+  .quote-pending {
+    text-align: left;
+  }
+
+  .quote-amount {
+    font-size: 24px;
+  }
+
+  .respond-button {
+    width: 100%;
+  }
+
+
+  .customer-name {
+    font-size: 16px;
+  }
+
+
+  .status-tag {
+    margin-top: 8px;
+    margin-left: 0;
+  }
+
+
+  .quote-message {
+    font-size: 12px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .page-header h1 {
+    font-size: 23px;
+  }
+
+  .tab-btn {
+    font-size: 11px;
+  }
+
+  .category-pill {
+    font-size: 11px;
+  }
+
+  .quote-card {
+    padding: 15px;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+}
+/* =========================================
+   TOP NAVIGATION
+========================================= */
+
+.quote-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  width: 100%;
+
+  padding: 6px;
+
+  margin-bottom: 30px;
+
+  background: #f7f3fb;
+
+  border: 1px solid #e5dced;
+
+  border-radius: 14px;
+}
+
+
+/* TAB BUTTON */
+
+.quote-nav-item {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  min-width: 150px;
+
+  padding: 12px 20px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: #71667e;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.quote-nav-item mat-icon {
+  width: 20px;
+  height: 20px;
+
+  font-size: 20px;
+}
+
+
+.quote-nav-item:hover {
+  color: #5f32a8;
+
+  background: #eee7f7;
+}
+
+
+/* ACTIVE TAB */
+
+.quote-nav-item.active {
+  color: #6d28d9;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 12px rgba(70, 42, 100, 0.10);
+}
+
+
+.quote-nav-item.active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 20px;
+  right: 20px;
+  bottom: 0;
+
+  height: 3px;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    90deg,
+    #7c3aed,
+    #a855f7
+  );
+}
+
+
+/* COUNT */
+
+.nav-count {
+  min-width: 22px;
+  height: 22px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 6px;
+
+  border-radius: 20px;
+
+  background: #ede9fe;
+
+  color: #6d28d9;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+
+.quote-nav-item.active .nav-count {
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.quotes-section {
+  animation: fadeIn 0.25s ease;
+}
+
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================
+   SECTION HEADING
+========================================= */
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+
+.section-heading h2 {
+  margin: 0;
+
+  color: #30273d;
+
+  font-size: 21px;
+  font-weight: 800;
+}
+
+
+.section-heading p {
+  margin: 5px 0 0;
+
+  color: #81778d;
+
+  font-size: 13px;
+}
+
+
+.section-count {
+  min-width: 34px;
+  height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #f0e8fb;
+
+  color: #6d28d9;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+

@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 
 from app.models.customer import CustomerWishlist
 from app.models.vendor import VendorProfile
-
+from app.services.engagement_service import engagement_service
 
 class WishlistService_:
 
@@ -30,6 +30,7 @@ class WishlistService_:
         db.add(item)
         db.commit()
         db.refresh(item)
+        engagement_service.track(db, vendor_id, "shortlisted", customer_id)
         return item
 
 

@@ -23,6 +23,7 @@ export class AnalyticsComponent implements OnInit {
 
   analytics: any = null;
   loading = true;
+  funnel: any = null;
 
   bookingsChartData: ChartData<'line'> = {
     labels: [],
@@ -77,6 +78,9 @@ export class AnalyticsComponent implements OnInit {
         this.loading = false;
       }
     });
+    this.vendorService.getGrowthFunnel().subscribe({
+    next: (data) => this.funnel = data
+  });
   }
 
   buildCharts(data: any): void {

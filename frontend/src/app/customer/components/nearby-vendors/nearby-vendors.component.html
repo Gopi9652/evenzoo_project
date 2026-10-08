@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+
+<div class="nearby-container">
+  <div class="page-header">
+    <h1>Vendors Near You</h1>
+    <p>Browse by actual distance from your location</p>
+  </div>
+
+  @if (!locationGranted && !loading) {
+    <div class="location-prompt">
+      <mat-icon>location_off</mat-icon>
+      <p>Enable location access to see vendors near you.</p>
+      <button mat-raised-button color="primary" (click)="ngOnInit()">Enable Location</button>
+    </div>
+  } @else {
+    <div class="map-layout">
+      <google-map height="520px" width="100%" [center]="center" [zoom]="zoom">
+        <map-marker [position]="center" title="You are here"></map-marker>
+        @for (vendor of vendors; track vendor.id) {
+          <map-marker
+            [position]="{ lat: vendor.latitude, lng: vendor.longitude }"
+            [title]="vendor.business_name"
+            (mapClick)="selectVendor(vendor)">
+          </map-marker>
+        }
+      </google-map>
+
+      <div class="vendor-side-list">
+        @if (loading) {
+          <p class="loading-text">Finding vendors near you...</p>
+        } @else if (vendors.length === 0) {
+          <p class="empty-text">No vendors found within 25km. Try browsing all vendors instead.</p>
+        } @else {
+          @for (vendor of vendors; track vendor.id) {
+            <div class="vendor-mini-card" [class.active]="selectedVendor?.id === vendor.id" (click)="selectVendor(vendor)">
+              <span class="v-name">{{ vendor.business_name }}</span>
+              <span class="v-distance">{{ vendor.distance_km }} km away</span>
+              <span class="v-rating">⭐ {{ vendor.avg_rating || 0 }}</span>
+              <button mat-button (click)="viewProfile(vendor); $event.stopPropagation()">View Profile</button>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

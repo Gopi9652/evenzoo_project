@@ -768,6 +768,9 @@
             Book Now
 
           </button>
+          <button mat-stroked-button class="quote-btn" (click)="requestQuote()">
+            💰 Ask for a Quote
+          </button>
 
 
           <!-- Message
@@ -793,6 +796,7 @@
           <button mat-stroked-button class="message-btn" (click)="messageVendor()">
             💬 Message on Evenzoo
           </button>
+
 
 
           <!-- WhatsApp -->
@@ -889,6 +893,26 @@
 
   </div>
 
+}
+@if (similarVendors.length > 0) {
+  <div class="similar-section">
+    <h3>Similar Vendors Nearby</h3>
+    <div class="similar-grid">
+      @for (sv of similarVendors; track sv.id) {
+        <a [routerLink]="['/browse/vendor', sv.slug || sv.id]" class="similar-card">
+          <div class="similar-photo">
+            @if (sv.profile_photo_url) {
+              <img [src]="sv.profile_photo_url" [alt]="sv.business_name">
+            } @else {
+              <span>🏪</span>
+            }
+          </div>
+          <span class="similar-name">{{ sv.business_name }}</span>
+          <span class="similar-rating">⭐ {{ sv.avg_rating || 0 }}</span>
+        </a>
+      }
+    </div>
+  </div>
 }
 
 @if (lightboxOpen) {

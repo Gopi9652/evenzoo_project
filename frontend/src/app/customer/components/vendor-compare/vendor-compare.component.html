@@ -32,7 +32,7 @@
               }
             </div>
             <h3>{{ vendor.business_name }}</h3>
-            <a [routerLink]="['/customer/vendor', vendor.id]" class="view-profile-link">View Full Profile →</a>
+            <a [routerLink]="['/browse/vendor', vendor.slug || vendor.id]" class="view-profile-link">View Full Profile →</a>
           </div>
         }
 
@@ -143,9 +143,9 @@
         <div class="row-label"></div>
         @for (vendor of vendors; track vendor.id) {
           <div class="cell">
-            <a [routerLink]="['/browse/vendor', vendor.slug || vendor.id]" mat-raised-button color="primary" class="cta-btn">
-              View & Book
-            </a>
+           <a [routerLink]="['/browse/vendor', vendor.slug || vendor.id]" mat-raised-button color="primary" class="cta-btn">
+            View & Book
+          </a>
           </div>
         }
 

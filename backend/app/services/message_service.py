@@ -109,7 +109,31 @@ class MessageService_:
                     status_code=403,
                     detail="You are not part of this booking"
                 )
+        if not data.booking_id:
+            prior_messages = db.query(Message).filter(
+                Message.booking_id.is_(None),
+                or_(
+                    and_(Message.sender_id == sender_id, Message.receiver_id == data.receiver_id),
+                    and_(Message.sender_id == data.receiver_id, Message.receiver_id == sender_id)
+                )
+            ).count()
 
+            if prior_messages == 0:
+                # Figure out which side is the vendor, track accordingly
+                vendor_receiving = db.query(VendorProfile).filter(VendorProfile.user_id == data.receiver_id).first()
+                if vendor_receiving:
+                    engagement_service.track(db, vendor_receiving.id, "enquiry", sender_id)
+            else:
+                # This is a reply in an existing thread — mark "conversation" happened once, on the vendor's first reply
+                vendor_sending = db.query(VendorProfile).filter(VendorProfile.user_id == sender_id).first()
+                if vendor_sending:
+                    already_tracked = db.query(VendorEngagementEvent).filter(
+                        VendorEngagementEvent.vendor_id == vendor_sending.id,
+                        VendorEngagementEvent.customer_id == data.receiver_id,
+                        VendorEngagementEvent.event_type == "conversation"
+                    ).first()
+                    if not already_tracked:
+                        engagement_service.track(db, vendor_sending.id, "conversation", data.receiver_id)
         # --------------------------------------------------------
         # 4. Encrypt BEFORE storing
         # --------------------------------------------------------

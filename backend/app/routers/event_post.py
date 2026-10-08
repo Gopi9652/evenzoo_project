@@ -49,22 +49,20 @@ def delete_post(
 ):
     return event_post_service.delete_post(db, current_user.id, post_id)
 
+# ── SHARED ──
 
-# ── VENDOR ROUTES ──
 
 @router.get("/vendor-feed", response_model=List[EventPostResponse])
 def get_posts_for_vendor(
     filter_state_id: Optional[int] = Query(None),
     filter_city_id:  Optional[int] = Query(None),
+    event_type_id:   Optional[int] = Query(None),   # ← new
     skip:  int = Query(0),
     limit: int = Query(20),
     current_user: User = Depends(get_vendor),
     db: Session = Depends(get_db)
 ):
-    vendor = db.query(VendorProfile).filter(
-        VendorProfile.user_id == current_user.id
-    ).first()
-
+    vendor = db.query(VendorProfile).filter(VendorProfile.user_id == current_user.id).first()
     vendor_city_id = vendor.city_id if vendor else None
     vendor_state_id = None
     if vendor and vendor.city_id:
@@ -74,15 +72,22 @@ def get_posts_for_vendor(
 
     return event_post_service.list_posts_for_vendor(
         db, vendor_state_id, vendor_city_id,
-        filter_state_id, filter_city_id, skip, limit
+        filter_state_id, filter_city_id, event_type_id, skip, limit
     )
-
-
-# ── SHARED ──
-
 @router.get("/{post_id}", response_model=EventPostResponse)
 def get_post(
     post_id: int,
     db: Session = Depends(get_db)
 ):
     return event_post_service.get_post_by_id(db, post_id)
+@router.get("/vendor-feed-nearby", response_model=List[EventPostResponse])
+def get_posts_near_vendor(
+    latitude: float = Query(...),
+    longitude: float = Query(...),
+    radius_km: float = Query(25),
+    skip: int = Query(0),
+    limit: int = Query(20),
+    current_user: User = Depends(get_vendor),
+    db: Session = Depends(get_db)
+):
+    return event_post_service.list_posts_nearby(db, latitude, longitude, radius_km, skip, limit)

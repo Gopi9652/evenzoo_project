@@ -1,0 +1,999 @@
+
+<app-navbar></app-navbar>
+
+
+<div class="page-header">
+
+  <h1>Quotes</h1>
+
+  <p>
+    Manage customer quote requests and your responses
+  </p>
+
+</div>
+
+
+<div class="quotes-container">
+
+
+  <!-- ================================================= -->
+  <!-- FILTER BAR -->
+  <!-- ================================================= -->
+
+  <div class="filter-bar">
+
+
+    <!-- CATEGORY -->
+    <mat-select
+      [(ngModel)]="selectedCategoryId"
+      (selectionChange)="onCategoryChange()"
+      placeholder="All Categories">
+
+      <mat-option [value]="null">
+        All Categories
+      </mat-option>
+
+
+      @for (cat of categories; track cat.id) {
+
+        <mat-option [value]="cat.id">
+
+          {{ cat.icon }} {{ cat.name }}
+
+        </mat-option>
+
+      }
+
+    </mat-select>
+
+
+    <!-- DATE RANGE -->
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="toggleCustomRange()">
+
+      {{
+        useCustomRange
+          ? 'Showing: Custom Range'
+          : 'Showing: Last 30 Days'
+      }}
+
+      <mat-icon>
+        date_range
+      </mat-icon>
+
+    </button>
+
+
+    <!-- CUSTOM DATE RANGE -->
+
+  @if (useCustomRange) {
+    <mat-form-field appearance="outline" class="date-field">
+      <mat-label>From</mat-label>
+      <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" (dateChange)="onDateRangeChange()" readonly>
+      <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+      <mat-datepicker #fromPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="date-field">
+      <mat-label>To</mat-label>
+      <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" (dateChange)="onDateRangeChange()" readonly>
+      <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+      <mat-datepicker #toPicker></mat-datepicker>
+    </mat-form-field>
+  }
+
+
+    <!-- SORT 
+
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="toggleSort()">
+
+      Sort:
+      {{
+        sortOrder === 'best'
+          ? 'Best → Worst'
+          : 'Worst → Best'
+      }}
+
+      <mat-icon>
+        swap_vert
+      </mat-icon>
+
+    </button>-->
+
+
+  </div>
+
+
+  <!-- ================================================= -->
+  <!-- QUOTE NAVIGATION -->
+  <!-- ================================================= -->
+
+  <div class="quote-nav">
+
+
+    <!-- REQUESTS -->
+
+    <button
+      type="button"
+      class="quote-nav-item"
+      [class.active]="activeTab === 'requests'"
+      (click)="activeTab = 'requests'">
+
+      <mat-icon>
+        inbox
+      </mat-icon>
+
+      <span>
+        Requests
+      </span>
+
+
+      @if (filteredPendingQuotes.length > 0) {
+
+        <span class="nav-count">
+
+          {{ filteredPendingQuotes.length }}
+
+        </span>
+
+      }
+
+    </button>
+
+
+    <!-- RESPONSES -->
+
+    <button
+      type="button"
+      class="quote-nav-item"
+      [class.active]="activeTab === 'responses'"
+      (click)="activeTab = 'responses'">
+
+      <mat-icon>
+        send
+      </mat-icon>
+
+      <span>
+        Responses
+      </span>
+
+
+      @if (filteredRespondedQuotes.length > 0) {
+
+        <span class="nav-count">
+
+          {{ filteredRespondedQuotes.length }}
+
+        </span>
+
+      }
+
+    </button>
+
+
+  </div>
+
+
+  <!-- ================================================= -->
+  <!-- LOADING -->
+  <!-- ================================================= -->
+
+  @if (loading) {
+
+    <div class="loading-container">
+
+      <mat-spinner
+        diameter="40">
+      </mat-spinner>
+
+      <p>
+        Loading quotes...
+      </p>
+
+    </div>
+
+  } @else {
+
+
+    <!-- ================================================= -->
+    <!-- REQUESTS TAB -->
+    <!-- ================================================= -->
+
+    @if (activeTab === 'requests') {
+
+
+      <section class="quotes-section">
+
+
+        <!-- SECTION HEADING -->
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>
+              Quote Requests
+            </h2>
+
+            <p>
+              Customers waiting for your price
+            </p>
+
+          </div>
+
+
+          <span class="section-count">
+
+            {{ filteredPendingQuotes.length }}
+
+          </span>
+
+        </div>
+
+
+        <!-- EMPTY -->
+
+        @if (
+          filteredPendingQuotes.length === 0
+        ) {
+
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+
+              <mat-icon>
+                inbox
+              </mat-icon>
+
+            </div>
+
+
+            <h3>
+              No Quote Requests
+            </h3>
+
+
+            <p>
+              No quote requests match your current filters.
+            </p>
+
+          </div>
+
+
+        } @else {
+
+
+          <!-- QUOTE LIST -->
+
+          <div class="quotes-list">
+
+
+            @for (
+              quote of filteredPendingQuotes;
+              track quote.id
+            ) {
+
+
+              <div class="quote-card">
+
+
+                <!-- ================================= -->
+                <!-- MAIN CONTENT -->
+                <!-- ================================= -->
+
+                <div class="quote-main">
+
+
+                  <!-- HEADER -->
+
+                  <div class="quote-header">
+
+
+                    <div class="customer-info">
+
+                      <span class="customer-label">
+                        Customer
+                      </span>
+
+
+                      <h2>
+
+                        {{
+                          quote.customer_name ||
+                          'Customer'
+                        }}
+
+                      </h2>
+
+                    </div>
+
+
+                    <span class="status-tag pending">
+
+                      Pending
+
+                    </span>
+
+
+                  </div>
+
+
+                  <!-- EVENT -->
+
+                  @if (quote.event_post_title) {
+
+                    <div class="info-row">
+
+                      <mat-icon>
+                        event
+                      </mat-icon>
+
+
+                      <div>
+
+                        <span class="info-label">
+                          Event
+                        </span>
+
+
+                        <span class="info-value">
+
+                          {{ quote.event_post_title }}
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  }
+
+
+                  <!-- CATEGORY -->
+
+                  @if (quote.category_name) {
+
+                    <div class="info-row">
+
+                      <mat-icon>
+                        category
+                      </mat-icon>
+
+
+                      <div>
+
+                        <span class="info-label">
+                          Category
+                        </span>
+
+
+                        <span class="info-value">
+
+                          {{ quote.category_name }}
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  }
+
+
+                  <!-- EVENT TYPE -->
+
+                  @if (quote.event_type_name) {
+
+                    <div class="info-row">
+
+                      <mat-icon>
+                        celebration
+                      </mat-icon>
+
+
+                      <div>
+
+                        <span class="info-label">
+                          Event Type
+                        </span>
+
+
+                        <span class="info-value">
+
+                          {{ quote.event_type_name }}
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  }
+
+
+                  <!-- CUSTOMER MESSAGE -->
+
+                  @if (quote.message) {
+
+                    <div class="customer-message">
+
+                      <span class="message-label">
+
+                        Customer message
+
+                      </span>
+
+
+                      <p>
+
+                        "{{ quote.message }}"
+
+                      </p>
+
+                    </div>
+
+                  }
+
+
+                  <!-- CREATED DATE -->
+
+                  @if (quote.created_at) {
+
+                    <span class="created-date">
+
+                      Requested
+                      {{ formatDate(quote.created_at) }}
+
+                    </span>
+
+                  }
+
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- PRICE / ACTION -->
+                <!-- ================================= -->
+
+                <div class="quote-side">
+
+
+                  <span class="price-label">
+
+                    Price
+
+                  </span>
+
+
+                  <span class="quote-pending">
+
+                    Not provided yet
+
+                  </span>
+
+
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="respond-button"
+                    type="button"
+                    (click)="respond(quote)">
+
+
+                    <mat-icon>
+                      send
+                    </mat-icon>
+
+
+                    Send Price
+
+
+                  </button>
+
+
+                </div>
+
+
+              </div>
+
+
+            }
+
+
+          </div>
+
+
+        }
+
+
+      </section>
+
+
+    }
+
+
+    <!-- ================================================= -->
+    <!-- RESPONSES TAB -->
+    <!-- ================================================= -->
+
+    @if (activeTab === 'responses') {
+
+
+      <section class="quotes-section">
+
+
+        <!-- SECTION HEADING -->
+
+        <div class="section-heading">
+
+
+          <div>
+
+            <h2>
+              Your Responses
+            </h2>
+
+
+            <p>
+              Quotes where you have already sent your price
+            </p>
+
+          </div>
+
+
+          <span class="section-count">
+
+            {{ filteredRespondedQuotes.length }}
+
+          </span>
+
+
+        </div>
+
+
+        <!-- EMPTY -->
+
+        @if (
+          filteredRespondedQuotes.length === 0
+        ) {
+
+
+          <div class="empty-state">
+
+
+            <div class="empty-icon">
+
+              <mat-icon>
+                send
+              </mat-icon>
+
+            </div>
+
+
+            <h3>
+              No Responses Yet
+            </h3>
+
+
+            <p>
+              No responses match your current filters.
+            </p>
+
+
+          </div>
+
+
+        } @else {
+
+
+          <!-- RESPONSE LIST -->
+
+          <div class="quotes-list">
+
+
+            @for (
+              quote of filteredRespondedQuotes;
+              track quote.id
+            ) {
+
+
+              <!-- ================================= -->
+              <!-- RESPONDED QUOTE CARD -->
+              <!-- ================================= -->
+
+              <div class="quote-card responded">
+
+
+                <!-- ================================= -->
+                <!-- MAIN CONTENT -->
+                <!-- ================================= -->
+
+                <div class="quote-main">
+
+
+                  <!-- HEADER -->
+
+                  <div class="quote-header">
+
+
+                    <div class="customer-info">
+
+                      <span class="customer-label">
+                        Customer
+                      </span>
+
+
+                      <h2>
+
+                        {{
+                          quote.customer_name ||
+                          'Customer'
+                        }}
+
+                      </h2>
+
+                    </div>
+
+
+                    <!-- CURRENT OUTCOME -->
+
+                    <span
+                      class="status-tag"
+                      [style.background]="
+                        statusColor(quote.status) + '15'
+                      "
+                      [style.color]="
+                        statusColor(quote.status)
+                      ">
+
+                      {{
+                        quote.status |
+                        titlecase
+                      }}
+
+                    </span>
+
+
+                  </div>
+
+
+                  <!-- CUSTOMER / CATEGORY SUMMARY -->
+
+                  <div class="response-summary">
+
+
+                    <span class="customer-name">
+
+                      {{
+                        quote.customer_name ||
+                        'Customer'
+                      }}
+
+                    </span>
+
+
+                    <span class="category-pill">
+
+                      {{
+                        quote.category_name ||
+                        'General enquiry'
+                      }}
+
+                    </span>
+
+
+                  </div>
+
+
+                  <!-- RESPONSE TIMESTAMP -->
+
+                  @if (quote.responded_at) {
+
+
+                    <span class="response-note">
+
+
+                      <mat-icon>
+                        check_circle
+                      </mat-icon>
+
+
+                      You responded on
+
+                      {{
+                        formatDate(
+                          quote.responded_at
+                        )
+                      }}
+
+
+                    </span>
+
+
+                  } @else if (quote.created_at) {
+
+
+                    <span class="response-note">
+
+
+                      <mat-icon>
+                        check_circle
+                      </mat-icon>
+
+
+                      You responded after
+
+                      {{
+                        formatDate(
+                          quote.created_at
+                        )
+                      }}
+
+
+                    </span>
+
+
+                  }
+
+
+                  <!-- EVENT -->
+
+                  @if (quote.event_post_title) {
+
+
+                    <div class="info-row">
+
+
+                      <mat-icon>
+                        event
+                      </mat-icon>
+
+
+                      <div>
+
+
+                        <span class="info-label">
+                          Event
+                        </span>
+
+
+                        <span class="info-value">
+
+                          {{
+                            quote.event_post_title
+                          }}
+
+                        </span>
+
+
+                      </div>
+
+
+                    </div>
+
+
+                  }
+
+
+                  <!-- CATEGORY -->
+
+                  @if (quote.category_name) {
+
+
+                    <div class="info-row">
+
+
+                      <mat-icon>
+                        category
+                      </mat-icon>
+
+
+                      <div>
+
+
+                        <span class="info-label">
+                          Category
+                        </span>
+
+
+                        <span class="info-value">
+
+                          {{
+                            quote.category_name
+                          }}
+
+                        </span>
+
+
+                      </div>
+
+
+                    </div>
+
+
+                  }
+
+
+                  <!-- EVENT TYPE -->
+
+                  @if (quote.event_type_name) {
+
+
+                    <div class="info-row">
+
+
+                      <mat-icon>
+                        celebration
+                      </mat-icon>
+
+
+                      <div>
+
+
+                        <span class="info-label">
+                          Event Type
+                        </span>
+
+
+                        <span class="info-value">
+
+                          {{
+                            quote.event_type_name
+                          }}
+
+                        </span>
+
+
+                      </div>
+
+
+                    </div>
+
+
+                  }
+
+
+                  <!-- CUSTOMER MESSAGE -->
+
+                  @if (quote.message) {
+
+
+                    <div class="customer-message">
+
+
+                      <span class="message-label">
+
+                        Customer message
+
+                      </span>
+
+
+                      <p>
+
+                        "{{ quote.message }}"
+
+                      </p>
+
+
+                    </div>
+
+
+                  }
+
+
+                  <!-- CREATED DATE -->
+
+                  @if (quote.created_at) {
+
+
+                    <span class="created-date">
+
+                      Requested
+                      {{
+                        formatDate(
+                          quote.created_at
+                        )
+                      }}
+
+                    </span>
+
+
+                  }
+
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- RESPONSE PRICE -->
+                <!-- ================================= -->
+
+                <div class="quote-side">
+
+
+                  <span class="price-label">
+
+                    Your quoted price
+
+                  </span>
+
+
+                  <span class="quote-amount">
+
+                    ₹{{
+                      quote.quoted_amount |
+                      number
+                    }}
+
+                  </span>
+
+
+                  <!-- RESPONSE STATUS -->
+
+                  <span class="responded-label">
+
+
+                    <mat-icon>
+                      check_circle
+                    </mat-icon>
+
+
+                    You responded
+
+
+                  </span>
+
+
+                  <!-- CURRENT OUTCOME -->
+
+                  <span
+                    class="status-tag"
+                    [style.background]="
+                      statusColor(quote.status) + '15'
+                    "
+                    [style.color]="
+                      statusColor(quote.status)
+                    ">
+
+
+                    {{
+                      quote.status |
+                      titlecase
+                    }}
+
+
+                  </span>
+
+
+                </div>
+
+
+              </div>
+
+
+            }
+
+
+          </div>
+
+
+        }
+
+
+      </section>
+
+
+    }
+
+
+  }
+
+
+</div>

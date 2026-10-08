@@ -7,6 +7,9 @@ from app.models.review import Review
 from app.models.payment import Payment
 from app.models.vendor import VendorProfile
 
+from app.models.vendor_event import VendorEngagementEvent
+from datetime import datetime
+from sqlalchemy import func, extract
 
 class AnalyticsService_:
 
@@ -88,5 +91,46 @@ class AnalyticsService_:
             "rating_distribution": {int(rating): count for rating, count in rating_distribution if rating}
         }
 
+    def get_growth_funnel(self, db: Session, vendor_id: int, month: int = None, year: int = None):
+        now = datetime.utcnow()
+        month = month or now.month
+        year = year or now.year
+
+        def count_for(event_type: str) -> int:
+            return db.query(VendorEngagementEvent).filter(
+                VendorEngagementEvent.vendor_id == vendor_id,
+                VendorEngagementEvent.event_type == event_type,
+                extract('month', VendorEngagementEvent.created_at) == month,
+                extract('year', VendorEngagementEvent.created_at) == year
+            ).count()
+
+        views          = count_for("profile_view")
+        enquiries      = count_for("enquiry")
+        conversations  = count_for("conversation")
+        quotes_sent    = count_for("quote_sent")
+        shortlisted    = count_for("shortlisted")
+        bookings       = count_for("booking_created")
+
+        def pct(part, whole):
+            return round((part / whole) * 100, 1) if whole > 0 else 0.0
+
+        return {
+            "month": month,
+            "year": year,
+            "views": views,
+            "enquiries": enquiries,
+            "conversations": conversations,
+            "quotes_sent": quotes_sent,
+            "shortlisted": shortlisted,
+            "bookings": bookings,
+            "funnel": [
+                {"stage": "Profile Views", "count": views, "conversion_from_previous": None},
+                {"stage": "Enquiries", "count": enquiries, "conversion_from_previous": pct(enquiries, views)},
+                {"stage": "Conversations", "count": conversations, "conversion_from_previous": pct(conversations, enquiries)},
+                {"stage": "Quotes Sent", "count": quotes_sent, "conversion_from_previous": pct(quotes_sent, conversations)},
+                {"stage": "Bookings", "count": bookings, "conversion_from_previous": pct(bookings, quotes_sent)},
+            ],
+            "overall_conversion": pct(bookings, views),
+        }
 
 analytics_service = AnalyticsService_()

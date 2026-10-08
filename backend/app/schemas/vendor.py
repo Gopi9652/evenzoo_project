@@ -43,6 +43,9 @@ class VendorProfileUpdate(BaseModel):
     bank_account:  Optional[str] = None
     bank_ifsc:     Optional[str] = None
     bank_name:     Optional[str] = None
+    latitude:  Optional[float]  = None
+    longitude: Optional[float]  = None
+    place_id:  Optional[str]    = None
 
 
 class VendorProfileResponse(BaseModel):
@@ -57,8 +60,11 @@ class VendorProfileResponse(BaseModel):
     total_reviews:    int
     total_bookings:   int
     profile_photo_url: Optional[str] = None
-    whatsapp_number:  Optional[str] = True 
+    whatsapp_number:  Optional[str] = None   # ← fixed type bug below
     slug:             Optional[str] = None
+    latitude:         Optional[float] = None   # ← new
+    longitude:        Optional[float] = None   # ← new
+    place_id:         Optional[str] = None     # ← new
 
     class Config:
         from_attributes = True
@@ -213,3 +219,5 @@ class VendorVideoResponse(BaseModel):
 
     class Config:
         from_attributes = True
+class NearbyVendorResponse(VendorListResponse):
+    distance_km: float

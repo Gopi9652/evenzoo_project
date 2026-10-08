@@ -1,0 +1,20 @@
+<div class="location-picker">
+  <button mat-stroked-button class="current-location-btn" (click)="useCurrentLocation()" [disabled]="loadingLocation">
+    <mat-icon>my_location</mat-icon>
+    {{ loadingLocation ? 'Finding you...' : 'Use my current location' }}
+  </button>
+
+  <div class="address-box">
+    <mat-icon>place</mat-icon>
+    <span>{{ address || 'Click on the map, or use your current location' }}</span>
+  </div>
+
+  <google-map
+    height="320px"
+    width="100%"
+    [center]="center"
+    [zoom]="zoom"
+    (mapClick)="onMapClick($event)">
+    <map-marker [position]="markerPosition"></map-marker>
+  </google-map>
+</div>

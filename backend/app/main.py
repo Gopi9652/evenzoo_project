@@ -12,6 +12,9 @@ from app.utils.rate_limiter import limiter
 from app.routers import privacy, account
 
 from app.config import settings
+from app.routers import quote
+
+
 
 docs_enabled = settings.ENVIRONMENT != "production"
 
@@ -54,6 +57,7 @@ app.include_router(message.router, prefix="/api/messages")
 app.include_router(event_post.router, prefix="/api/event-posts")
 app.include_router(privacy.router, prefix="/api/privacy")
 app.include_router(account.router, prefix="/api/account")
+app.include_router(quote.router, prefix="/api/quotes")
 Base.metadata.create_all(bind=engine)
 
 

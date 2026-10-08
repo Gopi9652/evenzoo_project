@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>Respond to {{ data.customerName || 'Customer' }}</h2>
+
+<mat-dialog-content>
+  <div class="request-summary">
+    @if (data.eventTitle) {
+      <div class="summary-row">
+        <span class="summary-label">Event</span>
+        <span class="summary-value">{{ data.eventTitle }}</span>
+      </div>
+    }
+    <div class="summary-row">
+      <span class="summary-label">Asking for</span>
+      <span class="summary-value category-pill">{{ data.categoryName || 'General enquiry (no specific category)' }}</span>
+    </div>
+    @if (data.existingMessage) {
+      <div class="summary-row">
+        <span class="summary-label">Their message</span>
+        <span class="summary-value message-text">"{{ data.existingMessage }}"</span>
+      </div>
+    }
+  </div>
+
+  <form [formGroup]="form" class="respond-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Your Price (₹)</mat-label>
+      <input matInput type="number" formControlName="quoted_amount" placeholder="e.g. 25000">
+      @if (form.get('quoted_amount')?.invalid && form.get('quoted_amount')?.touched) {
+        <mat-error>Enter a valid price</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Message (optional)</mat-label>
+      <textarea matInput formControlName="message" rows="3" placeholder="Add any details about what's included..."></textarea>
+    </mat-form-field>
+
+    @if (errorMessage) {
+      <div class="error-banner">{{ errorMessage }}</div>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="submitting">
+    {{ submitting ? 'Sending...' : 'Send Price' }}
+  </button>
+</mat-dialog-actions>

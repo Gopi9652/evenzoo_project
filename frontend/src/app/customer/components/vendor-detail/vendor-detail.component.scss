@@ -1682,4 +1682,327 @@
   transition: transform 0.2s;
 
   &:hover { transform: scale(1.03); }
+}.similar-section {
+max-width: 1200px;
+margin: 40px auto 60px;
+padding: 0 24px;
+animation: similarSectionIn 0.6s ease both;
+}
+
+.similar-section h3 {
+margin: 0 0 20px;
+color: #ffffff;
+font-size: 22px;
+font-weight: 750;
+letter-spacing: -0.3px;
+}
+
+/* =========================================
+GRID
+========================================= */
+
+.similar-grid {
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 18px;
+}
+
+/* =========================================
+SIMILAR VENDOR CARD
+========================================= */
+
+.similar-card {
+position: relative;
+display: flex;
+flex-direction: column;
+min-width: 0;
+overflow: hidden;
+background:
+linear-gradient(
+145deg,
+rgba(255, 255, 255, 0.055),
+rgba(255, 255, 255, 0.018)
+);
+border: 1px solid rgba(255, 255, 255, 0.09);
+border-radius: 15px;
+text-decoration: none;
+box-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
+transition:
+transform 0.28s ease,
+box-shadow 0.28s ease,
+border-color 0.28s ease;
+}
+
+.similar-card:hover {
+transform: translateY(-7px);
+border-color: rgba(138, 43, 226, 0.45);
+box-shadow:
+0 18px 40px rgba(0, 0, 0, 0.45),
+0 0 25px rgba(138, 43, 226, 0.12);
+}
+
+/* =========================================
+TOP PURPLE / GOLD ACCENT
+========================================= */
+
+.similar-card::before {
+content: "";
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 3px;
+background: linear-gradient(
+90deg,
+#8a2be2,
+#b76cff,
+#d4af37
+);
+transform: scaleX(0);
+transform-origin: left;
+transition: transform 0.3s ease;
+z-index: 3;
+}
+
+.similar-card:hover::before {
+transform: scaleX(1);
+}
+
+/* =========================================
+PHOTO
+========================================= */
+
+.similar-photo {
+position: relative;
+width: 100%;
+height: 175px;
+overflow: hidden;
+display: flex;
+align-items: center;
+justify-content: center;
+background:
+radial-gradient(
+circle at center,
+rgba(138, 43, 226, 0.16),
+transparent 65%
+),
+#11131a;
+}
+
+.similar-photo::after {
+content: "";
+position: absolute;
+inset: 0;
+background: linear-gradient(
+to top,
+rgba(0, 0, 0, 0.35),
+transparent 50%
+);
+pointer-events: none;
+}
+
+.similar-photo img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+transition:
+transform 0.45s ease,
+filter 0.3s ease;
+}
+
+.similar-card:hover .similar-photo img {
+transform: scale(1.07);
+filter: brightness(1.05);
+}
+
+/* =========================================
+IMAGE PLACEHOLDER
+========================================= */
+
+.similar-photo span {
+position: relative;
+z-index: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 62px;
+height: 62px;
+border-radius: 50%;
+background: rgba(138, 43, 226, 0.12);
+border: 1px solid rgba(138, 43, 226, 0.30);
+font-size: 28px;
+box-shadow:
+0 0 25px rgba(138, 43, 226, 0.15);
+animation: placeholderPulse 3s ease-in-out infinite;
+}
+
+/* =========================================
+VENDOR NAME
+========================================= */
+
+.similar-name {
+display: block;
+margin: 15px 15px 7px;
+overflow: hidden;
+color: #6219b6;
+font-size: 15px;
+font-weight: 700;
+line-height: 1.4;
+white-space: nowrap;
+text-overflow: ellipsis;
+transition: color 0.2s ease;
+}
+
+.similar-card:hover .similar-name {
+color: #51467c;
+}
+
+/* =========================================
+RATING
+========================================= */
+
+.similar-rating {
+display: inline-flex;
+align-items: center;
+width: fit-content;
+margin: 0 15px 16px;
+padding: 5px 9px;
+background: rgba(212, 175, 55, 0.10);
+border: 1px solid rgba(212, 175, 55, 0.25);
+border-radius: 7px;
+color: #f1c214;
+font-size: 12px;
+font-weight: 700;
+}
+
+/* =========================================
+SECTION ANIMATION
+========================================= */
+
+@keyframes similarSectionIn {
+from {
+opacity: 0;
+transform: translateY(18px);
+}
+
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+@keyframes placeholderPulse {
+0%,
+100% {
+box-shadow:
+0 0 20px rgba(138, 43, 226, 0.12);
+}
+
+50% {
+box-shadow:
+0 0 32px rgba(138, 43, 226, 0.25);
+}
+}
+
+/* =========================================
+TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+.similar-grid {
+grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.similar-photo {
+height: 160px;
+}
+}
+
+/* =========================================
+SMALL TABLET
+========================================= */
+
+@media (max-width: 750px) {
+.similar-section {
+margin-top: 32px;
+padding: 0 20px;
+}
+
+.similar-grid {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 15px;
+}
+
+.similar-photo {
+height: 155px;
+}
+}
+
+/* =========================================
+MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+.similar-section {
+margin: 28px auto 45px;
+padding: 0 16px;
+}
+
+.similar-section h3 {
+margin-bottom: 16px;
+font-size: 19px;
+}
+
+.similar-grid {
+grid-template-columns: 1fr;
+gap: 14px;
+}
+
+.similar-card {
+display: grid;
+grid-template-columns: 105px 1fr;
+grid-template-rows: auto auto;
+}
+
+.similar-photo {
+grid-row: 1 / 3;
+width: 105px;
+height: 105px;
+}
+
+.similar-name {
+align-self: end;
+margin: 14px 14px 5px;
+font-size: 14px;
+}
+
+.similar-rating {
+align-self: start;
+margin: 5px 14px 12px;
+}
+}
+
+/* =========================================
+REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+.similar-section,
+.similar-photo span {
+animation: none;
+}
+
+.similar-card,
+.similar-photo img {
+transition: none;
+}
+
+.similar-card:hover {
+transform: none;
+}
+
+.similar-card:hover .similar-photo img {
+transform: none;
+}
 }

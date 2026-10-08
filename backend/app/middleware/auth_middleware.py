@@ -6,9 +6,24 @@ from app.models.user import User
 from app.utils.security import decode_token
 from fastapi import Request
 from fastapi.security.utils import get_authorization_scheme_param
+from fastapi import Request
+from fastapi.security.utils import get_authorization_scheme_param
 
 bearer = HTTPBearer()
 
+def get_optional_current_user(request: Request, db: Session = Depends(get_db)):
+    authorization = request.headers.get("Authorization")
+    if not authorization:
+        return None
+    scheme, token = get_authorization_scheme_param(authorization)
+    if scheme.lower() != "bearer":
+        return None
+    try:
+        payload = decode_token(token)
+        user = db.query(User).filter(User.id == int(payload["sub"])).first()
+        return user
+    except Exception:
+        return None
 def get_current_user_optional(request: Request, db: Session = Depends(get_db)):
     """
     Same as get_current_user, but returns None instead of raising 401

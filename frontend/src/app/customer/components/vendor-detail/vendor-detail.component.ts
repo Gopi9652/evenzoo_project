@@ -16,18 +16,21 @@ import { CompareService } from '../../../core/services/compare.service';
 import { PhotoLightboxComponent } from '../../../shared/components/photo-lightbox/photo-lightbox.component';
 import { Location } from '@angular/common';
 import { LoginGateService } from '../../../core/services/login-gate.service';
+import { RequestQuoteDialogComponent } from '../../../shared/components/request-quote-dialog/request-quote-dialog.component';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-vendor-detail',
   standalone: true,
   imports: [
     CommonModule, MatIconModule, MatButtonModule, MatTabsModule,
-    MatProgressSpinnerModule, MatDialogModule, NavbarComponent, PhotoLightboxComponent
+    MatProgressSpinnerModule, MatDialogModule, NavbarComponent, PhotoLightboxComponent, RouterLink
   ],
   templateUrl: './vendor-detail.component.html',
   styleUrl: './vendor-detail.component.scss'
 })
 export class VendorDetailComponent implements OnInit {
   vendor: VendorProfile | null = null;
+  similarVendors: VendorProfile[] = [];
   services: VendorServiceModel[] = [];
   photos: any[] = [];
   videos: any[] = [];
@@ -105,6 +108,9 @@ export class VendorDetailComponent implements OnInit {
         this.reviewsLoading = false;
       },
       error: () => this.reviewsLoading = false
+    });
+    this.vendorService.getSimilarVendors(this.vendorId).subscribe({
+      next: (data) => this.similarVendors = data
     });
   }
 
@@ -209,6 +215,17 @@ messageVendor() {
   this.loginGate.requireLogin(() => {
     this.router.navigate(['/chat/user', this.vendor?.user_id], {
       queryParams: { name: this.vendor?.business_name }
+    });
+  });
+}
+requestQuote() {
+  this.loginGate.requireCustomer(() => {
+    const dialogRef = this.dialog.open(RequestQuoteDialogComponent, {
+      width: '450px',
+      data: { vendorId: this.vendorId, vendorName: this.vendor?.business_name }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'success') alert('Quote request sent! You\'ll be notified when the vendor responds.');
     });
   });
 }

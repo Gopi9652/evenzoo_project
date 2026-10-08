@@ -38,6 +38,7 @@ class VendorCompareData(BaseModel):
     business_name:    str
     description:      Optional[str] = None
     address:          Optional[str] = None
+    slug: Optional[str] = None
     is_approved:      bool
     avg_rating:       Optional[Decimal] = None
     total_reviews:    int

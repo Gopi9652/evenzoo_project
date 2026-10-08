@@ -40,6 +40,12 @@
             }
           </mat-select>
         </mat-form-field>
+        <label class="map-label">Pin your exact business location</label>
+        <app-location-picker
+          [initialLat]="pickerInitialLat"
+          [initialLng]="pickerInitialLng"
+          (locationPicked)="onLocationPicked($event)">
+        </app-location-picker>
       </div>
 
       <mat-form-field appearance="outline" class="full-width">

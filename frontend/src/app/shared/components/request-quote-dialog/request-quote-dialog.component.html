@@ -1,0 +1,35 @@
+
+<mat-dialog-content>
+  <h2 mat-dialog-title>Ask {{ data.vendorName }} for a Quote</h2>
+  <p class="intro-text">All fields below are optional — the more you share, the better the price the vendor can give you.</p>
+
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>What service do you need? (optional)</mat-label>
+      <mat-select formControlName="category_id">
+        <mat-option [value]="null">Not sure / General enquiry</mat-option>
+        @for (cat of categories; track cat.id) {
+          <mat-option [value]="cat.id">{{ cat.icon }} {{ cat.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Your target budget, ₹ (optional)</mat-label>
+      <input matInput type="number" formControlName="target_budget" placeholder="e.g. 30000">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Describe what you need (optional)</mat-label>
+      <textarea matInput formControlName="message" rows="3" placeholder="Event date, guest count, any specific requirements..."></textarea>
+    </mat-form-field>
+
+    @if (errorMessage) { <div class="error-banner">{{ errorMessage }}</div> }
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="submitting">
+    {{ submitting ? 'Sending...' : 'Request Quote' }}
+  </button>
+</mat-dialog-actions>

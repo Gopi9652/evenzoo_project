@@ -123,4 +123,20 @@ getVendorVideos(vendorId: number): Observable<any[]> {
 deleteVideo(videoId: number): Observable<any> {
   return this.http.delete(`${this.apiUrl}/me/videos/${videoId}`);
 }
+getSimilarVendors(vendorId: number): Observable<VendorProfile[]> {
+  return this.http.get<VendorProfile[]>(`${this.apiUrl}/${vendorId}/similar`);
+}
+getNearbyVendors(lat: number, lng: number, radiusKm = 25, categoryId?: number): Observable<any[]> {
+  let url = `${this.apiUrl}/nearby?latitude=${lat}&longitude=${lng}&radius_km=${radiusKm}`;
+  if (categoryId) url += `&category_id=${categoryId}`;
+  return this.http.get<any[]>(url);
+}
+getGrowthFunnel(month?: number, year?: number): Observable<any> {
+  let url = `${this.apiUrl}/me/growth-funnel`;
+  const params = [];
+  if (month) params.push(`month=${month}`);
+  if (year) params.push(`year=${year}`);
+  if (params.length) url += `?${params.join('&')}`;
+  return this.http.get<any>(url);
+}
 }

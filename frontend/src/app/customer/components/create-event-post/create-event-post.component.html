@@ -5,7 +5,6 @@
   <!-- =========================
        PAGE HEADER
        ========================= -->
-
   <div class="page-header">
 
     <!-- ADDED: badge -->
@@ -28,40 +27,37 @@
   <!-- =========================
        FORM CARD
        ========================= -->
-
   <div class="event-form">
 
     <form
       [formGroup]="postForm"
-      (ngSubmit)="onSubmit()">
-
+      (ngSubmit)="onSubmit()"
+    >
 
       <!-- =====================
            TITLE
            ===================== -->
-
       <mat-form-field
         appearance="outline"
-        class="full-width">
-
+        class="full-width"
+      >
         <mat-label>Title</mat-label>
 
         <input
           matInput
           formControlName="title"
-          placeholder="e.g. Need a photographer for my wedding">
-
+          placeholder="e.g. Need a photographer for my wedding"
+        >
       </mat-form-field>
 
 
       <!-- =====================
            CATEGORY
-           ===================== -->
-
+           =====================
       <mat-form-field
         appearance="outline"
-        class="full-width">
-
+        class="full-width"
+      >
         <mat-label>What type of vendor do you need?</mat-label>
 
         <mat-select formControlName="category_id">
@@ -69,34 +65,31 @@
           @for (cat of categories; track cat.id) {
 
             <mat-option [value]="cat.id">
-
               {{ cat.icon }} {{ cat.name }}
-
             </mat-option>
 
           }
 
         </mat-select>
 
-      </mat-form-field>
+      </mat-form-field> -->
 
 
       <!-- =====================
            DESCRIPTION
            ===================== -->
-
       <mat-form-field
         appearance="outline"
-        class="full-width">
-
+        class="full-width"
+      >
         <mat-label>Description</mat-label>
 
         <textarea
           matInput
           formControlName="description"
           rows="4"
-          placeholder="Describe your event, what services you need, and any specific requirements">
-        </textarea>
+          placeholder="Describe your event, what services you need, and any specific requirements"
+        ></textarea>
 
       </mat-form-field>
 
@@ -104,17 +97,17 @@
       <!-- =====================
            EVENT LOCATION
            ===================== -->
-
       <mat-form-field
         appearance="outline"
-        class="full-width">
-
+        class="full-width"
+      >
         <mat-label>Event Location (venue/address)</mat-label>
 
         <input
           matInput
           formControlName="event_location"
-          placeholder="e.g. Hitex Convention Centre, Hyderabad">
+          placeholder="e.g. Hitex Convention Centre, Hyderabad"
+        >
 
       </mat-form-field>
 
@@ -122,7 +115,6 @@
       <!-- =====================
            STATE + CITY
            ===================== -->
-
       <div class="form-row">
 
         <mat-form-field appearance="outline">
@@ -132,14 +124,13 @@
           <mat-select
             [(ngModel)]="selectedStateId"
             [ngModelOptions]="{ standalone: true }"
-            (selectionChange)="onStateChange()">
+            (selectionChange)="onStateChange()"
+          >
 
             @for (state of states; track state.id) {
 
               <mat-option [value]="state.id">
-
                 {{ state.name }}
-
               </mat-option>
 
             }
@@ -158,9 +149,7 @@
             @for (city of cities; track city.id) {
 
               <mat-option [value]="city.id">
-
                 {{ city.name }}
-
               </mat-option>
 
             }
@@ -175,10 +164,15 @@
       <!-- =====================
            BUDGET + DATE
            ===================== -->
-
       <div class="form-row">
-
         <mat-form-field appearance="outline">
+          <mat-label>Quote Deadline (optional)</mat-label>
+          <input matInput [matDatepicker]="deadlinePicker" [min]="minDate" formControlName="response_deadline">
+          <mat-datepicker-toggle matSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+          <mat-datepicker #deadlinePicker></mat-datepicker>
+          <mat-hint>Vendors can't send quotes after this date</mat-hint>
+        </mat-form-field>
+        <!--<mat-form-field appearance="outline">
 
           <mat-label>Budget (₹, optional)</mat-label>
 
@@ -186,9 +180,10 @@
             matInput
             type="number"
             formControlName="budget_amount"
-            placeholder="e.g. 40000">
+            placeholder="e.g. 40000"
+          >
 
-        </mat-form-field>
+        </mat-form-field>-->
 
 
         <mat-form-field appearance="outline">
@@ -199,12 +194,13 @@
             matInput
             [matDatepicker]="picker"
             [min]="minDate"
-            formControlName="event_date">
+            formControlName="event_date"
+          >
 
           <mat-datepicker-toggle
             matSuffix
-            [for]="picker">
-          </mat-datepicker-toggle>
+            [for]="picker"
+          ></mat-datepicker-toggle>
 
           <mat-datepicker #picker></mat-datepicker>
 
@@ -213,40 +209,173 @@
       </div>
 
 
+      <!-- =================================================
+           MULTIPLE EVENT / SERVICE ITEMS
+           ================================================= -->
+      <div
+        class="items-section"
+        formArrayName="items"
+      >
+
+        <label class="section-label">
+          What do you need?
+        </label>
+
+        <p class="section-hint">
+          Add one or more services you are looking for and set your budget for each.
+        </p>
+
+
+        @for (
+          item of items.controls;
+          track $index;
+          let i = $index
+        ) {
+
+          <div
+            [formGroupName]="i"
+            class="item-row"
+          >
+
+            <!-- SERVICE CATEGORY -->
+            <mat-form-field
+              appearance="outline"
+              class="item-category"
+            >
+
+              <mat-label>
+                Event / Service Type
+              </mat-label>
+
+              <mat-select formControlName="category_id">
+
+                @for (cat of categories; track cat.id) {
+
+                  <mat-option [value]="cat.id">
+                    {{ cat.icon }} {{ cat.name }}
+                  </mat-option>
+
+                }
+
+              </mat-select>
+
+            </mat-form-field>
+
+
+            <!-- ITEM BUDGET -->
+            <mat-form-field
+              appearance="outline"
+              class="item-budget"
+            >
+
+              <mat-label>
+                Budget (₹)
+              </mat-label>
+
+              <input
+                matInput
+                type="number"
+                formControlName="budget_amount"
+                placeholder="e.g. 15000"
+              >
+
+            </mat-form-field>
+
+
+            <!-- REMOVE ITEM -->
+            @if (items.length > 1) {
+
+              <button
+                mat-icon-button
+                type="button"
+                class="remove-item-btn"
+                aria-label="Remove event type"
+                (click)="removeEventItem(i)"
+              >
+
+                <mat-icon>
+                  close
+                </mat-icon>
+
+              </button>
+
+            }
+
+          </div>
+
+        }
+
+
+        <!-- ADD ANOTHER SERVICE -->
+        <button
+          mat-stroked-button
+          type="button"
+          class="add-item-btn"
+          (click)="addEventItem()"
+        >
+          + Add Another Event Type
+        </button>
+
+      </div>
+
+
+      <!-- =================================================
+           ALLOW VENDOR MESSAGES
+           ================================================= -->
+      <mat-checkbox 
+        formControlName="allow_messages"
+        class="consent-checkbox"
+        style="color: white; "
+      >
+
+        I'm okay with vendors messaging me directly about this post
+
+      </mat-checkbox>
+
+
       <!-- =====================
            ERROR
            ===================== -->
-
       @if (errorMessage) {
 
         <div class="error-banner">
-
           {{ errorMessage }}
-
         </div>
 
       }
 
 
       <!-- =====================
-           SUBMIT
+           LOCATION NOTICE
            ===================== -->
       <div class="location-notice">
-        <p>Vendors in your selected city will be notified about this post and can see your event details, including the location you provide above.</p>
+
+        <p>
+          Vendors in your selected city will be notified about this post
+          and can see your event details, including the location you provide above.
+        </p>
+
       </div>
+      <label class="map-label">Pin the exact event location</label>
+      <app-location-picker (locationPicked)="onLocationPicked($event)"></app-location-picker>
+
+      <!-- =====================
+           SUBMIT
+           ===================== -->
       <button
         mat-raised-button
         color="primary"
         type="submit"
         class="submit-btn"
-        [disabled]="submitting">
+        [disabled]="submitting"
+      >
 
         {{ submitting
           ? 'Saving...'
-          : (editMode ? 'Update Post' : 'Post Your Event') }}
+          : (editMode ? 'Update Post' : 'Post Your Event')
+        }}
 
       </button>
-
 
     </form>
 

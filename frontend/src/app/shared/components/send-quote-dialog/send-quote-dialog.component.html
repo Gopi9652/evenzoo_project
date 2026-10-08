@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Send a Quote to {{ data.customerName }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+
+    @if (categoryOptions.length > 1) {
+      <p class="helper-note">
+        This customer needs {{ categoryOptions.length }} services. Check the box for each one you can quote —
+        you can quote just one, or all of them at once. The rest stay open for other vendors.
+      </p>
+    }
+
+    <div formArrayName="lines">
+      @for (line of lines.controls; track $index; let i = $index) {
+        <div [formGroupName]="i" class="quote-line">
+          <mat-checkbox formControlName="selected">{{ line.value.category_name }}</mat-checkbox>
+          @if (line.value.selected) {
+            <mat-form-field  class="line-price">
+              <mat-label>Price (₹)</mat-label>
+              <input matInput type="number" formControlName="quoted_amount">
+            </mat-form-field>
+          }
+        </div>
+      }
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Message (optional, applies to all selected)</mat-label>
+      <textarea matInput formControlName="message" rows="2"></textarea>
+    </mat-form-field>
+
+    @if (errorMessage) { <div class="error-banner">{{ errorMessage }}</div> }
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="submitting">
+    {{ submitting ? 'Sending...' : (selectedCount > 1 ? 'Send ' + selectedCount + ' Quotes' : 'Send Quote') }}
+  </button>
+</mat-dialog-actions>

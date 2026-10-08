@@ -10,7 +10,69 @@
     <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
   } @else if (analytics) {
 
+    @if (funnel) {
+      <div class="growth-dashboard">
+        <h3>Growth Dashboard <span class="month-tag">This Month</span></h3>
+
+        <div class="growth-stats">
+          <div class="growth-stat">
+            <span class="g-icon">👁️</span>
+            <span class="g-num">{{ funnel.views | number }}</span>
+            <span class="g-label">Profile Views</span>
+          </div>
+          <div class="growth-stat">
+            <span class="g-icon">📩</span>
+            <span class="g-num">{{ funnel.enquiries | number }}</span>
+            <span class="g-label">Enquiries</span>
+          </div>
+          <div class="growth-stat">
+            <span class="g-icon">💬</span>
+            <span class="g-num">{{ funnel.conversations | number }}</span>
+            <span class="g-label">Conversations</span>
+          </div>
+          <div class="growth-stat">
+            <span class="g-icon">📋</span>
+            <span class="g-num">{{ funnel.quotes_sent | number }}</span>
+            <span class="g-label">Quotes Sent</span>
+          </div>
+          <div class="growth-stat">
+            <span class="g-icon">❤️</span>
+            <span class="g-num">{{ funnel.shortlisted | number }}</span>
+            <span class="g-label">Shortlisted</span>
+          </div>
+          <div class="growth-stat highlight">
+            <span class="g-icon">✅</span>
+            <span class="g-num">{{ funnel.bookings | number }}</span>
+            <span class="g-label">Bookings</span>
+          </div>
+        </div>
+
+        <div class="funnel-chart">
+          <h4>Conversion Funnel</h4>
+          @for (step of funnel.funnel; track step.stage) {
+            <div class="funnel-step">
+              <div class="funnel-bar-row">
+                <span class="funnel-label">{{ step.stage }}</span>
+                <span class="funnel-count">{{ step.count | number }}</span>
+              </div>
+              <div class="funnel-bar-track">
+                <div class="funnel-bar-fill" [style.width.%]="funnel.views > 0 ? (step.count / funnel.views) * 100 : 0"></div>
+              </div>
+              @if (step.conversion_from_previous !== null) {
+                <span class="funnel-conversion">↓ {{ step.conversion_from_previous }}% from previous stage</span>
+              }
+            </div>
+          }
+
+          <div class="overall-conversion">
+            <span>Overall Conversion (Views → Bookings)</span>
+            <strong>{{ funnel.overall_conversion }}%</strong>
+          </div>
+        </div>
+      </div>
+    }
     <div class="stats-row">
+      
       <div class="stat-card">
         <span class="stat-num">{{ analytics.total_bookings }}</span>
         <span class="stat-label">Total Bookings</span>

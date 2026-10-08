@@ -1,0 +1,433 @@
+/* ================================
+   PAGE
+================================ */
+
+.nearby-container {
+  min-height: calc(100vh - 70px);
+  padding: 32px;
+  background: #08090d;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+
+/* ================================
+   PAGE HEADER
+================================ */
+
+.page-header {
+  max-width: 1400px;
+  margin: 0 auto 28px;
+}
+
+.page-header h1 {
+  margin: 0 0 7px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.4px;
+}
+
+.page-header p {
+  margin: 0;
+  color: #9295a3;
+  font-size: 14px;
+}
+
+
+/* ================================
+   LOCATION PROMPT
+================================ */
+
+.location-prompt {
+  max-width: 550px;
+  margin: 80px auto;
+  padding: 40px 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  background: #111218;
+  border: 1px solid #292b35;
+  border-radius: 18px;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+}
+
+.location-prompt mat-icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+
+  font-size: 52px;
+  color: #8a2be2;
+}
+
+.location-prompt p {
+  margin: 0 0 24px;
+  color: #c4c5ce;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.location-prompt button {
+  min-width: 170px;
+  height: 44px;
+
+  border-radius: 9px !important;
+  font-weight: 600;
+}
+
+
+/* ================================
+   MAP + SIDE LIST
+================================ */
+
+.map-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+
+  padding: 18px;
+
+  background: #111218;
+  border: 1px solid #292b35;
+  border-radius: 18px;
+
+  box-sizing: border-box;
+}
+
+
+/* ================================
+   GOOGLE MAP
+================================ */
+
+.map-layout google-map {
+  display: block;
+  width: 100%;
+
+  overflow: hidden;
+
+  border-radius: 13px;
+  border: 1px solid #2b2d38;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+
+/* ================================
+   VENDOR SIDE LIST
+================================ */
+
+.vendor-side-list {
+  height: 520px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 4px;
+
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+
+/* Scrollbar */
+
+.vendor-side-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.vendor-side-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.vendor-side-list::-webkit-scrollbar-thumb {
+  background: #353744;
+  border-radius: 10px;
+}
+
+.vendor-side-list::-webkit-scrollbar-thumb:hover {
+  background: #8a2be2;
+}
+
+
+/* ================================
+   VENDOR CARD
+================================ */
+
+.vendor-mini-card {
+  position: relative;
+
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  background: #181a22;
+  border: 1px solid #2b2d38;
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  box-sizing: border-box;
+}
+
+
+/* Hover */
+
+.vendor-mini-card:hover {
+  background: #1d1f28;
+  border-color: #6230a0;
+  transform: translateY(-1px);
+
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Selected card */
+
+.vendor-mini-card.active {
+  background: rgba(138, 43, 226, 0.09);
+  border-color: #8a2be2;
+
+  box-shadow:
+    0 0 0 1px rgba(138, 43, 226, 0.15),
+    0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Small purple indicator */
+
+.vendor-mini-card.active::before {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+
+  width: 3px;
+
+  background: #8a2be2;
+  border-radius: 0 4px 4px 0;
+}
+
+
+/* ================================
+   VENDOR NAME
+================================ */
+
+.v-name {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.3;
+
+  padding-right: 5px;
+}
+
+
+/* ================================
+   DISTANCE
+================================ */
+
+.v-distance {
+  color: #d4af37;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* ================================
+   RATING
+================================ */
+
+.v-rating {
+  color: #bfc1cc;
+
+  font-size: 13px;
+}
+
+
+/* ================================
+   VIEW PROFILE BUTTON
+================================ */
+
+.vendor-mini-card button {
+  align-self: flex-start;
+
+  min-height: 34px;
+  margin-top: 5px;
+  padding: 0 14px;
+
+  border: 1px solid #8a2be2 !important;
+  border-radius: 7px !important;
+
+  color: #c78cff !important;
+  background: transparent !important;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  transition: all 0.2s ease;
+}
+
+.vendor-mini-card button:hover {
+  color: #ffffff !important;
+  background: rgba(138, 43, 226, 0.16) !important;
+}
+
+
+/* ================================
+   LOADING
+================================ */
+
+.loading-text {
+  min-height: 200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+
+  color: #a7a9b5;
+  font-size: 14px;
+  text-align: center;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-text {
+  min-height: 200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  padding: 25px;
+
+  color: #9295a3;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+
+/* ================================
+   RESPONSIVE - TABLET
+================================ */
+
+@media (max-width: 1000px) {
+
+  .nearby-container {
+    padding: 24px;
+  }
+
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .vendor-side-list {
+    height: auto;
+    max-height: 420px;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* ================================
+   RESPONSIVE - MOBILE
+================================ */
+
+@media (max-width: 650px) {
+
+  .nearby-container {
+    padding: 16px;
+  }
+
+  .page-header {
+    margin-bottom: 20px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .page-header p {
+    font-size: 13px;
+  }
+
+  .map-layout {
+    padding: 10px;
+    gap: 12px;
+    border-radius: 14px;
+  }
+
+  .map-layout google-map {
+    height: 360px !important;
+    border-radius: 10px;
+  }
+
+  .vendor-side-list {
+    grid-template-columns: 1fr;
+    max-height: 450px;
+  }
+
+  .vendor-mini-card {
+    padding: 14px;
+  }
+}
+
+
+/* ================================
+   SMALL MOBILE
+================================ */
+
+@media (max-width: 400px) {
+
+  .nearby-container {
+    padding: 12px;
+  }
+
+  .page-header h1 {
+    font-size: 21px;
+  }
+
+  .page-header p {
+    font-size: 12px;
+  }
+
+  .location-prompt {
+    margin: 50px auto;
+    padding: 30px 20px;
+  }
+
+  .map-layout google-map {
+    height: 300px !important;
+  }
+}

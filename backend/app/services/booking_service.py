@@ -18,7 +18,7 @@ from app.services.notification_service import notification_service
 from app.utils.vendor_scoring import calculate_rank_score
 from app.models.booking import Booking, BookingService, EventType
 from app.models.vendor import VendorService as VendorServiceModel
-
+from app.services.engagement_service import engagement_service
 class BookingService_:
 
     # ── CREATE BOOKING ──
@@ -173,6 +173,7 @@ class BookingService_:
         )
         db.commit()
         db.refresh(booking)
+        engagement_service.track(db, vendor.id, "booking_created", customer_id)
         return booking
 
 

@@ -13,3 +13,6 @@ from app.models.message import Message
 from app.models.event_post import EventPost
 from app.models.data_request import DataDeletionRequest, DataExportRequest
 from app.models.vendor import VendorVideo
+from app.models.quote import Quote
+from app.models.event_post_item import EventPostItem
+from app.models.vendor_event import VendorEngagementEvent

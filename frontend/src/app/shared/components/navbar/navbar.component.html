@@ -160,6 +160,12 @@
       <a routerLink="/customer/reviews" routerLinkActive="active" (click)="menuOpen=false">
         <span class="ic"><mat-icon>reviews</mat-icon></span>Reviews
       </a>
+      <a routerLink="/nearby" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>Near Me</mat-icon></span>Near Me
+      </a>
+      <a routerLink="/customer/quotes" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>request_quote</mat-icon></span>My Quotes
+      </a>
     }
 
     @if (authService.getRole() === 'vendor') {
@@ -178,6 +184,9 @@
       </a>
       <a routerLink="/vendor/reviews" routerLinkActive="active" (click)="menuOpen=false">
         <span class="ic"><mat-icon>star_rate</mat-icon></span>Reviews
+      </a>
+      <a routerLink="/vendor/quotes" routerLinkActive="active" (click)="menuOpen=false">
+        <span class="ic"><mat-icon>request_quote</mat-icon></span>Quotes Received
       </a>
     }
 

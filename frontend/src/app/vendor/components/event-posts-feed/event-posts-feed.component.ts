@@ -11,6 +11,15 @@ import { LocationService, State, City } from '../../../core/services/location.se
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { EventPost } from '../../../core/models/event-post.model';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { SendQuoteDialogComponent } from '../../../shared/components/send-quote-dialog/send-quote-dialog.component';
+import { VendorService } from '../../../core/services/vendor.service';
+export interface Category {
+  id: number;
+  name: string;
+  description?: string;
+  icon?: string;
+}
 @Component({
   selector: 'app-event-posts-feed',
   standalone: true,
@@ -29,16 +38,22 @@ export class EventPostsFeedComponent implements OnInit {
   filterCityId: number | null = null;
   highlightPostId: number | null = null;
   loading = true;
+  categories: Category[] = [];
+  selectedEventTypeId: number | null = null;
+
   isFiltering = false;   // tracks whether vendor has actively chosen to look outside their own area
 
   constructor(
     private eventPostService: EventPostService,
     private locationService: LocationService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private vendorService:VendorService
   ) {}
 
   ngOnInit() {
+    this.vendorService.getCategories().subscribe({ next: (data:any) => this.categories = data });
     this.route.queryParams.subscribe(params => {
       this.highlightPostId = params['highlight'] ? Number(params['highlight']) : null;
     });
@@ -47,19 +62,7 @@ export class EventPostsFeedComponent implements OnInit {
     this.loadFeed();
   }
 
-  loadFeed() {
-    this.loading = true;
-    this.eventPostService.getVendorFeed(
-      this.filterStateId || undefined,
-      this.filterCityId || undefined
-    ).subscribe({
-      next: (data) => {
-        this.posts = data;
-        this.loading = false;
-      },
-      error: () => this.loading = false
-    });
-  }
+
 
   onStateFilterChange() {
     this.filterCityId = null;
@@ -93,6 +96,40 @@ export class EventPostsFeedComponent implements OnInit {
   messageCustomer(post: EventPost) {
     this.router.navigate(['/chat/user', post.customer_id], {
       queryParams: { name: post.customer_name || 'Customer' }
+    });
+  }
+sendQuote(post: EventPost) {
+  console.log('Post items:', post.items);   // ← temporary debug line
+  const dialogRef = this.dialog.open(SendQuoteDialogComponent, {
+    width: '460px',
+    data: {
+      eventPostId: post.id,
+      customerName: post.customer_name,
+      items: post.items?.map(i => ({ category_id: i.category_id, category_name: i.category_name })),
+      singleCategoryId: post.category_id,
+      singleCategoryName: post.category_name
+    }
+  });
+  dialogRef.afterClosed().subscribe(result => {
+    if (result === 'success') {
+      alert('Quote sent to the customer!');
+      this.loadFeed();
+    }
+  });
+}
+  onEventTypeChange() {
+    this.loadFeed();
+  }
+
+  loadFeed() {
+    this.loading = true;
+    this.eventPostService.getVendorFeed(
+      this.filterStateId || undefined,
+      this.filterCityId || undefined,
+      this.selectedEventTypeId || undefined   // pass through as event_type_id
+    ).subscribe({
+      next: (data) => { this.posts = data; this.loading = false; },
+      error: () => this.loading = false
     });
   }
 }

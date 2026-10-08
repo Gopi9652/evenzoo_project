@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import Optional, List
 
 from app.database import get_db
-from app.middleware.auth_middleware import get_current_user, get_vendor
+from app.middleware.auth_middleware import get_current_user, get_vendor, get_optional_current_user
 from app.models.user import User
 from app.services.vendor_service import vendor_service
 from app.schemas.vendor import (
@@ -30,7 +30,8 @@ from app.utils.video_processing import process_video, generate_thumbnail, ABSOLU
 from app.utils.cloudinary_client import upload_video, upload_image
 from app.models.vendor import VendorVideo, VendorProfile
 from app.schemas.vendor import VendorVideoResponse
-
+from app.services.engagement_service import engagement_service
+from app.services.analytics_service import analytics_service
 ALLOWED_VIDEO_TYPES = {"video/mp4", "video/quicktime", "video/webm"}
 
 
@@ -72,6 +73,23 @@ def get_categories(db: Session = Depends(get_db)):
 @router.get("/by-slug/{slug}", response_model=VendorProfileResponse)
 def get_vendor_by_slug(slug: str, db: Session = Depends(get_db)):
     return vendor_service.get_profile_by_slug(db, slug)
+
+@router.get("/{vendor_id}/similar", response_model=List[VendorListResponse])
+def get_similar_vendors(vendor_id: int, db: Session = Depends(get_db)):
+    return vendor_service.get_similar_vendors(db, vendor_id)
+from app.schemas.vendor import NearbyVendorResponse
+
+@router.get("/nearby", response_model=List[NearbyVendorResponse])
+def get_nearby_vendors(
+    latitude: float = Query(...),
+    longitude: float = Query(...),
+    radius_km: float = Query(25),
+    category_id: Optional[int] = Query(None),
+    skip: int = Query(0),
+    limit: int = Query(20),
+    db: Session = Depends(get_db)
+):
+    return vendor_service.get_nearby_vendors(db, latitude, longitude, radius_km, category_id, skip, limit)
 
 @router.get("/{vendor_id}", response_model=VendorProfileResponse)
 def get_vendor_detail(
@@ -401,4 +419,23 @@ def delete_vendor_video(
     db.commit()
     return {"message": "Video deleted"}
 
-    
+@router.get("/by-slug/{slug}", response_model=VendorProfileResponse)
+def get_vendor_by_slug(
+    slug: str,
+    current_user: Optional[User] = Depends(get_optional_current_user),  # a lenient dependency that returns None instead of raising if no/invalid token
+    db: Session = Depends(get_db)
+):
+    vendor = vendor_service.get_profile_by_slug(db, slug)
+    engagement_service.track(db, vendor.id, "profile_view", current_user.id if current_user else None)
+    return vendor
+
+
+@router.get("/me/growth-funnel")
+def get_my_growth_funnel(
+    month: Optional[int] = Query(None),
+    year: Optional[int] = Query(None),
+    current_user: User = Depends(get_vendor),
+    db: Session = Depends(get_db)
+):
+    vendor = vendor_service.get_profile(db, current_user.id)
+    return analytics_service.get_growth_funnel(db, vendor.id, month, year)
