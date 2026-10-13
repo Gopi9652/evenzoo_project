@@ -1,20 +1,93 @@
 <div class="location-picker">
-  <button mat-stroked-button class="current-location-btn" (click)="useCurrentLocation()" [disabled]="loadingLocation">
-    <mat-icon>my_location</mat-icon>
-    {{ loadingLocation ? 'Finding you...' : 'Use my current location' }}
-  </button>
 
-  <div class="address-box">
-    <mat-icon>place</mat-icon>
-    <span>{{ address || 'Click on the map, or use your current location' }}</span>
+  <div class="location-header">
+
+    <div class="location-title">
+
+      <div class="title-icon">
+        <mat-icon>location_on</mat-icon>
+      </div>
+
+      <div>
+        <h3>Select Location</h3>
+
+        <p>
+          Choose a location on the map
+        </p>
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      mat-stroked-button
+      class="current-location-btn"
+      (click)="useCurrentLocation()"
+      [disabled]="loadingLocation">
+
+      <mat-icon>
+        my_location
+      </mat-icon>
+
+      <span>
+        {{ loadingLocation
+          ? 'Finding you...'
+          : 'Use my current location'
+        }}
+      </span>
+
+    </button>
+
   </div>
 
-  <google-map
-    height="320px"
-    width="100%"
-    [center]="center"
-    [zoom]="zoom"
-    (mapClick)="onMapClick($event)">
-    <map-marker [position]="markerPosition"></map-marker>
-  </google-map>
+
+  <div class="address-box">
+
+    <div class="address-icon">
+      <mat-icon>
+        place
+      </mat-icon>
+    </div>
+
+    <div class="address-content">
+
+      <span class="address-label">
+        Selected location
+      </span>
+
+      <span class="address-text">
+        {{ address ||
+          'Click on the map or use your current location'
+        }}
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <div class="map-wrapper">
+
+    <div
+      id="location-map"
+      class="location-map">
+    </div>
+
+  </div>
+
+
+  <div class="map-help">
+
+    <mat-icon>
+      touch_app
+    </mat-icon>
+
+    <span>
+      Click anywhere on the map or drag the marker
+      to choose your exact location.
+    </span>
+
+  </div>
+
 </div>

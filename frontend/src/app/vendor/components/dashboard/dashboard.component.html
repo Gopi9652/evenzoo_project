@@ -6,7 +6,33 @@
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 } @else {
+  @if (publicPath) {
+    <div class="public-profile-card">
+      <div class="ppc-info">
+        <span class="ppc-label">Your public profile</span>
+        <a [routerLink]="publicPath" class="ppc-link">
+          <mat-icon>storefront</mat-icon> Profile — see what customers see
+        </a>
+        @if (!profile?.is_approved) {
+          <span class="ppc-note">Visible to the public once the admin approves your account.</span>
+        }
+      </div>
 
+      <div class="ppc-actions">
+        <button mat-stroked-button (click)="copyLink()" [disabled]="!canShare">
+          <mat-icon>{{ copied ? 'check' : 'content_copy' }}</mat-icon>
+          {{ copied ? 'Copied!' : 'Copy link' }}
+        </button>
+        <a mat-stroked-button [href]="whatsappShareUrl" target="_blank" rel="noopener"
+          [class.disabled]="!canShare">
+          <mat-icon>share</mat-icon> WhatsApp
+        </a>
+        <button mat-raised-button color="primary" (click)="nativeShare()" [disabled]="!canShare">
+          <mat-icon>ios_share</mat-icon> Share
+        </button>
+      </div>
+    </div>
+  }
   <div class="dashboard-container">
     <div class="dashboard-header">
       <div>

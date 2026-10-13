@@ -730,26 +730,37 @@
       <aside class="detail-sidebar">
 
         <div class="booking-card">
+          @if (isOwnProfile) {
+            <h3>This is how customers see you</h3>
+            <p>Share this page to get enquiries and bookings.</p>
+            <a mat-raised-button color="primary" routerLink="/vendor/profile" class="book-btn">
+              ✏️ Edit my profile
+            </a>
+            <a mat-stroked-button routerLink="/vendor/dashboard" class="message-btn">
+              ← Back to dashboard
+            </a>
+          }
+          @else{
+            <div class="booking-card-header">
 
-          <div class="booking-card-header">
+              <span class="booking-icon">
+                <mat-icon>event</mat-icon>
+              </span>
 
-            <span class="booking-icon">
-              <mat-icon>event</mat-icon>
-            </span>
+              <div>
 
-            <div>
+                <h3>
+                  Ready to book?
+                </h3>
 
-              <h3>
-                Ready to book?
-              </h3>
+                <p>
+                  Select services and pick your event date
+                </p>
 
-              <p>
-                Select services and pick your event date
-              </p>
+              </div>
 
             </div>
-
-          </div>
+          
 
 
           <!-- Book -->
@@ -796,7 +807,7 @@
           <button mat-stroked-button class="message-btn" (click)="messageVendor()">
             💬 Message on Evenzoo
           </button>
-
+        
 
 
           <!-- WhatsApp -->
@@ -856,7 +867,7 @@
             </div>
 
           }
-
+        }
         </div>
 
       </aside>
@@ -894,6 +905,7 @@
   </div>
 
 }
+<!--
 @if (similarVendors.length > 0) {
   <div class="similar-section">
     <h3>Similar Vendors Nearby</h3>
@@ -913,7 +925,7 @@
       }
     </div>
   </div>
-}
+}-->
 
 @if (lightboxOpen) {
   <app-photo-lightbox

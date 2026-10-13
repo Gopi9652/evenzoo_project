@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   profile: VendorProfile | null = null;
   recentBookings: Booking[] = [];
   loading = true;
+  copied = false;
 
   constructor(
     private vendorService: VendorService,
@@ -80,5 +81,49 @@ export class DashboardComponent implements OnInit {
       cancelled: '#dc2626'
     };
     return colors[status] || '#64748b';
+  }
+
+  
+
+  get publicPath(): string | null {
+    return this.profile?.slug ? `/browse/vendor/${this.profile.slug}` : null;
+  }
+
+  get publicUrl(): string {
+    return this.publicPath ? `${window.location.origin}${this.publicPath}` : '';
+  }
+
+  get canShare(): boolean {
+    // Unapproved vendors aren't listed publicly yet, so don't encourage sharing
+    return !!this.profile?.is_approved && !!this.publicPath;
+  }
+
+  async copyLink() {
+    try {
+      await navigator.clipboard.writeText(this.publicUrl);
+      this.copied = true;
+      setTimeout(() => this.copied = false, 2000);
+    } catch {
+      prompt('Copy your profile link:', this.publicUrl);
+    }
+  }
+
+  get whatsappShareUrl(): string {
+    const text = encodeURIComponent(
+      `Check out ${this.profile?.business_name} on Evenzoo: ${this.publicUrl}`
+    );
+    return `https://wa.me/?text=${text}`;
+  }
+
+  async nativeShare() {
+    if (navigator.share) {
+      await navigator.share({
+        title: this.profile?.business_name,
+        text: `Check out ${this.profile?.business_name} on Evenzoo`,
+        url: this.publicUrl
+      }).catch(() => {});
+    } else {
+      this.copyLink();
+    }
   }
 }

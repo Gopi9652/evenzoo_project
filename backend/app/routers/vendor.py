@@ -72,8 +72,19 @@ def get_categories(db: Session = Depends(get_db)):
     return vendor_service.get_categories(db)
 
 @router.get("/by-slug/{slug}", response_model=VendorProfileResponse)
-def get_vendor_by_slug(slug: str, db: Session = Depends(get_db)):
-    return vendor_service.get_profile_by_slug(db, slug)
+def get_vendor_by_slug(
+    slug: str,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
+    vendor = vendor_service.get_profile_by_slug(db, slug)
+
+    # Don't count a vendor previewing or sharing their own profile as a customer view
+    is_owner = current_user is not None and current_user.id == vendor.user_id
+    if not is_owner:
+        engagement_service.track(db, vendor.id, "profile_view", current_user.id if current_user else None)
+
+    return vendor
 
 @router.get("/{vendor_id}/similar", response_model=List[VendorListResponse])
 def get_similar_vendors(vendor_id: int, db: Session = Depends(get_db)):
@@ -420,15 +431,6 @@ def delete_vendor_video(
     db.commit()
     return {"message": "Video deleted"}
 
-@router.get("/by-slug/{slug}", response_model=VendorProfileResponse)
-def get_vendor_by_slug(
-    slug: str,
-    current_user: Optional[User] = Depends(get_optional_current_user),  # a lenient dependency that returns None instead of raising if no/invalid token
-    db: Session = Depends(get_db)
-):
-    vendor = vendor_service.get_profile_by_slug(db, slug)
-    engagement_service.track(db, vendor.id, "profile_view", current_user.id if current_user else None)
-    return vendor
 
 
 @router.get("/me/growth-funnel")

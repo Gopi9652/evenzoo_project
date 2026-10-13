@@ -18,6 +18,7 @@ import { Location } from '@angular/common';
 import { LoginGateService } from '../../../core/services/login-gate.service';
 import { RequestQuoteDialogComponent } from '../../../shared/components/request-quote-dialog/request-quote-dialog.component';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 @Component({
   selector: 'app-vendor-detail',
   standalone: true,
@@ -52,7 +53,8 @@ export class VendorDetailComponent implements OnInit {
     private dialog: MatDialog,
     public compareService: CompareService,
     private location: Location,
-    private loginGate: LoginGateService
+    private loginGate: LoginGateService,
+    private authService:AuthService
   ) {}
 
   ngOnInit() {
@@ -228,5 +230,8 @@ requestQuote() {
       if (result === 'success') alert('Quote request sent! You\'ll be notified when the vendor responds.');
     });
   });
+}
+get isOwnProfile(): boolean {
+  return !!this.vendor && this.authService.getUserId() === this.vendor.user_id;
 }
 }
