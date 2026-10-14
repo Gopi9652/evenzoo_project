@@ -49,4 +49,3 @@ for event in event_types:
 db.commit()
 db.close()
 
-print("✅ Event types seeded successfully")

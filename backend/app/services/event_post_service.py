@@ -5,7 +5,7 @@ from app.utils.geo import calculate_distance_km
 from app.models.event_post import EventPost
 from app.models.user import User
 from app.models.location import City
-from app.schemas.event_post import EventPostCreate, EventPostUpdate
+from app.schemas.event_post import EventPostCreate, EventPostUpdate, EventPostResponse
 from app.services.notification_service import notification_service
 
 from app.models.vendor import VendorProfile, VendorCategoryMap, VendorCategory
@@ -269,5 +269,12 @@ class EventPostService_:
 
         results.sort(key=lambda p: p.distance_km)
         return results[skip: skip + limit]
-
+    def redact_for_viewer(self, post_resp: EventPostResponse, viewer: User) -> EventPostResponse:
+        if viewer.id == post_resp.customer_id or viewer.role == "admin":
+            return post_resp
+        return post_resp.model_copy(update={
+            "latitude": round(post_resp.latitude, 2) if post_resp.latitude is not None else None,  # ~1 km
+            "longitude": round(post_resp.longitude, 2) if post_resp.longitude is not None else None,
+            "place_id": None,
+        })
 event_post_service = EventPostService_()

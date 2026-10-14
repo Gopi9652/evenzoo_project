@@ -14,6 +14,7 @@ import { LocationService, State, City } from '../../../core/services/location.se
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 @Component({
@@ -51,7 +52,8 @@ export class VendorCardComponent {
     public compareService: CompareService,
     private route: ActivatedRoute,
     private vendorService: VendorService,
-    private locationService: LocationService
+    private locationService: LocationService,
+     private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -81,7 +83,10 @@ export class VendorCardComponent {
         this.hasMore = data.length === this.limit;
         this.loading = false;
         this.loadingMore = false;
-        this.loadWishlistStatus();
+        //this.loadWishlistStatus();
+          if (this.authService.isLoggedIn()) {
+            this.loadWishlistStatus();
+          }
       },
       error: () => {
         console.error('error');
@@ -99,13 +104,23 @@ export class VendorCardComponent {
 
   private loadWishlistStatus() {
     this.wishlistedIds.clear();
-    this.vendors.forEach(v => {
-      this.wishlistService.checkWishlisted(v.id).subscribe({
-        next: (res) => { if (res.is_wishlisted) this.wishlistedIds.add(v.id); },
-        error: () => {}
-      });
+
+    // Guests should not make wishlist API calls
+    if (!this.authService.isLoggedIn()) {
+    return;
+    }
+
+    // One API request for all wishlisted vendor IDs
+    this.wishlistService.getWishlistedVendorIds().subscribe({
+    next: (res) => {
+    this.wishlistedIds = new Set(res.vendor_ids);
+    },
+    error: (err) => {
+    console.error('Failed to load wishlist status', err);
+    }
     });
   }
+
 
   isWishlisted(v: VendorProfile): boolean {
     return this.wishlistedIds.has(v.id);

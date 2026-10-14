@@ -41,14 +41,9 @@ export class WebsocketService implements OnDestroy {
 
     console.log('🔌 Connecting to:', fullUrl);
 
-    this.socket = new WebSocket(fullUrl);
-
+    this.socket = new WebSocket(`${wsUrl}/ws`);
     this.socket.onopen = () => {
-      console.log('✅ WebSocket connected successfully');
-
-      this.zone.run(() => {
-        // Update UI if needed
-      });
+      this.socket?.send(JSON.stringify({ type: 'auth', token }));
     };
 
     this.socket.onmessage = (event) => {

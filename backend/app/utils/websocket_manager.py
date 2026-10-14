@@ -14,7 +14,7 @@ class ConnectionManager:
         websocket: WebSocket
     ):
         # Accept WebSocket connection
-        await websocket.accept()
+        #await websocket.accept()
 
         # Create list for new user
         if user_id not in self.active_connections:
@@ -23,14 +23,7 @@ class ConnectionManager:
         # Add this connection
         self.active_connections[user_id].append(websocket)
 
-        print(
-            f"✅ User {user_id} connected"
-        )
 
-        print(
-            "Active connections:",
-            self.active_connections
-        )
 
     def disconnect(
         self,
@@ -52,9 +45,6 @@ class ConnectionManager:
 
             del self.active_connections[user_id]
 
-        print(
-            f"🔴 User {user_id} disconnected"
-        )
 
     async def send_to_user(
         self,
@@ -62,21 +52,11 @@ class ConnectionManager:
         message: dict
     ):
 
-        print(
-            f"📤 Sending message to user {user_id}"
-        )
 
-        print(
-            "Active users:",
-            list(self.active_connections.keys())
-        )
 
         # User is offline
         if user_id not in self.active_connections:
 
-            print(
-                f"⚠️ User {user_id} is offline"
-            )
 
             return
 
@@ -89,15 +69,9 @@ class ConnectionManager:
 
                 await websocket.send_json(message)
 
-                print(
-                    f"✅ Message sent to user {user_id}"
-                )
 
             except Exception as error:
 
-                print(
-                    f"❌ Failed to send message: {error}"
-                )
 
                 dead_connections.append(websocket)
 

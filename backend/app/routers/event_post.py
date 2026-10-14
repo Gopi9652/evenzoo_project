@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from typing import Optional, List
 
@@ -75,11 +75,11 @@ def get_posts_for_vendor(
         filter_state_id, filter_city_id, event_type_id, skip, limit
     )
 @router.get("/{post_id}", response_model=EventPostResponse)
-def get_post(
-    post_id: int,
-    db: Session = Depends(get_db)
-):
-    return event_post_service.get_post_by_id(db, post_id)
+def get_post(post_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    post = event_post_service.get_post_by_id(db, post_id)
+    if current_user.role == "customer" and post.customer_id != current_user.id:
+        raise HTTPException(404, "Post not found")      # customers can't browse each other's posts
+    return event_post_service.redact_for_viewer(EventPostResponse.model_validate(post), current_user)
 @router.get("/vendor-feed-nearby", response_model=List[EventPostResponse])
 def get_posts_near_vendor(
     latitude: float = Query(...),

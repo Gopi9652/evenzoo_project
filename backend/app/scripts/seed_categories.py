@@ -33,4 +33,3 @@ for cat in categories:
 
 db.commit()
 db.close()
-print("✅ Categories seeded")

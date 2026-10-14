@@ -23,8 +23,6 @@ async def send_email(to_email: str, subject: str, html_body: str) -> bool:
     dev-fallback pattern used for SMS OTP earlier in the build.
     """
     if settings.SMTP_USERNAME == "placeholder":
-        print(f"[DEV MODE] Email to {to_email} | Subject: {subject}")
-        print(f"[DEV MODE] Body: {html_body}")
         return True
 
     message = MIMEMultipart("alternative")
@@ -44,8 +42,6 @@ async def send_email(to_email: str, subject: str, html_body: str) -> bool:
         )
         return True
     except Exception as e:
-        print(f"Email sending failed: {e}")
-        print(f"[FALLBACK] Email to {to_email} | Subject: {subject}")
         return False
 
 

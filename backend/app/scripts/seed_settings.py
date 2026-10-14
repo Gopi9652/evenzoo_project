@@ -22,4 +22,3 @@ for s in settings_data:
 
 db.commit()
 db.close()
-print("✅ Settings seeded")

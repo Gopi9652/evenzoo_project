@@ -48,7 +48,3 @@ deleted_tokens = db.query(RefreshToken).filter(
 db.commit()
 db.close()
 
-print(f"Retention cleanup complete:")
-print(f"  Notifications deleted: {deleted_notifs}")
-print(f"  OTP records deleted: {deleted_otps}")
-print(f"  Refresh tokens deleted: {deleted_tokens}")

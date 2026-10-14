@@ -58,4 +58,3 @@ for city_name, state_name, lat, lng in cities_data:
 
 db.commit()
 db.close()
-print("✅ States and cities seeded/updated with coordinates")

@@ -227,7 +227,7 @@ class BookingService_:
         bookings = query.order_by(Booking.created_at.desc()).all()
 
         for booking in bookings:
-            print(booking.vendor.business_name)
+            pass
 
         return bookings
 

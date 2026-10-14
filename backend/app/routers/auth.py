@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi import Request
 from sqlalchemy.orm import Session
-from app.utils.rate_limiter import limiter
+from app.utils.rate_limiter import limiter, get_real_client_ip
 from app.database import get_db
 from app.schemas.auth import (
     RegisterRequest, RegisterResponse,
@@ -38,7 +38,7 @@ def register(
 @router.post("/login", response_model=LoginResponse)
 def login(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
     user_agent = request.headers.get("user-agent")
-    ip_address = request.client.host if request.client else None
+    ip_address = get_real_client_ip(request) if request.client else None
     return auth_service.login(db, data, user_agent, ip_address)
 
 '''

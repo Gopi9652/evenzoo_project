@@ -37,6 +37,7 @@ class OTPVerification(Base):
     is_used     = Column(Boolean, default=False)
     expires_at  = Column(DateTime, nullable=False)
     created_at  = Column(DateTime, default=datetime.utcnow)
+    attempts = Column(Integer, default=0, nullable=False)
 
 
 

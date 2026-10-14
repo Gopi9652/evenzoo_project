@@ -55,7 +55,6 @@ class AccountService_:
 
         # TODO: send this link via real email once email sending is added (see earlier build notes)
         confirm_link = f"https://evenzoo.vercel.app/settings/confirm-email?token={token}"
-        print(f"[DEV MODE] Email change confirmation link for {data.new_email}: {confirm_link}")
 
         return {"message": f"A confirmation link has been sent to {data.new_email}. Your email will not change until you confirm it."}
 

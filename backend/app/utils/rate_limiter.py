@@ -1,7 +1,7 @@
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from starlette.requests import Request
-
+from app.config import settings
 
 def get_real_client_ip(request: Request) -> str:
     """
@@ -15,4 +15,20 @@ def get_real_client_ip(request: Request) -> str:
     return get_remote_address(request)
 
 
-limiter = Limiter(key_func=get_real_client_ip)
+
+def get_real_client_ip(request: Request) -> str:
+    # Each trusted proxy appends the address it saw, so the Nth entry from the
+    # RIGHT is the real client. Anything to the left is client-supplied.
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        parts = [p.strip() for p in forwarded.split(",") if p.strip()]
+        n = settings.TRUSTED_PROXY_COUNT
+        if parts and 0 < n <= len(parts):
+            return parts[-n]
+    return request.client.host if request.client else "unknown"
+
+
+limiter = Limiter(
+    key_func=get_real_client_ip,
+    storage_uri=settings.REDIS_URL or "memory://",   # see C18
+)

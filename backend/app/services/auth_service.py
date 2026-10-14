@@ -339,7 +339,6 @@ class AuthService:
         db.commit()
 
         # TODO: Send reset email
-        print(f"Reset token: {token}")
 
         return {"message": "Password reset link sent to email"}
 

@@ -9,7 +9,6 @@ from app.models.location import State, City
 
 db = SessionLocal()
 
-print("Fetching all Indian states...")
 response = requests.post(
     "https://countriesnow.space/api/v0.1/countries/states",
     json={"country": "India"}
@@ -26,7 +25,6 @@ for state_info in states_data:
         existing_state = State(name=state_name)
         db.add(existing_state)
         db.flush()
-        print(f"  + Added state: {state_name}")
 
     # Fetch cities for this state
     city_response = requests.post(
@@ -44,7 +42,5 @@ for state_info in states_data:
                 db.add(City(name=city_name, state_id=existing_state.id))
 
     db.commit()
-    print(f"  ✓ Synced cities for {state_name}")
 
-print("✅ All Indian states and cities synced from live API")
 db.close()

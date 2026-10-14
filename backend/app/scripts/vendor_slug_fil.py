@@ -13,4 +13,3 @@ for vendor in vendors:
 
 db.commit()
 db.close()
-print(f"✅ Backfilled slugs for {len(vendors)} vendors")

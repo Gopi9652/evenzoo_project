@@ -10,8 +10,10 @@ from app.models.vendor import VendorProfile
 from app.schemas.message import MessageCreate
 from app.utils.websocket_manager import manager
 from app.utils.encryption import encrypt_message, decrypt_message
-
-
+from app.services.engagement_service import engagement_service, VendorEngagementEvent
+from app.models.safety import UserBlock
+from app.models.event_post import EventPost
+from app.models.quote import Quote
 logger = logging.getLogger(__name__)
 
 
@@ -134,6 +136,16 @@ class MessageService_:
                     ).first()
                     if not already_tracked:
                         engagement_service.track(db, vendor_sending.id, "conversation", data.receiver_id)
+        sender = db.query(User).filter(User.id == sender_id).first()
+
+        blocked = db.query(UserBlock).filter(or_(
+            and_(UserBlock.blocker_id == sender_id, UserBlock.blocked_id == receiver.id),
+            and_(UserBlock.blocker_id == receiver.id, UserBlock.blocked_id == sender_id))).first()
+        if blocked:
+            raise HTTPException(403, "You can't message this user")
+
+        if not data.booking_id and not self._may_start_direct_thread(db, sender, receiver):
+            raise HTTPException(403, "You can't start a conversation with this user")
         # --------------------------------------------------------
         # 4. Encrypt BEFORE storing
         # --------------------------------------------------------
@@ -179,7 +191,24 @@ class MessageService_:
         # --------------------------------------------------------
         return response_data
 
-
+    def _may_start_direct_thread(self, db, sender, receiver) -> bool:
+        if "admin" in (sender.role, receiver.role):
+            return True
+        existing = db.query(Message).filter(Message.booking_id.is_(None), or_(
+            and_(Message.sender_id == sender.id, Message.receiver_id == receiver.id),
+            and_(Message.sender_id == receiver.id, Message.receiver_id == sender.id))).first()
+        if existing:
+            return True
+        if sender.role == "customer" and receiver.role == "vendor":
+            return True
+        if sender.role == "vendor" and receiver.role == "customer":
+            vendor = db.query(VendorProfile).filter(VendorProfile.user_id == sender.id).first()
+            has_open_post = db.query(EventPost).filter(EventPost.customer_id == receiver.id,
+                EventPost.is_active == True, EventPost.allow_messages == True).first()
+            has_quote = vendor and db.query(Quote).filter(Quote.customer_id == receiver.id,
+                Quote.vendor_id == vendor.id).first()
+            return bool(has_open_post or has_quote)
+        return False       # customer-to-customer and vendor-to-vendor are not allowed
     # ============================================================
     # GET BOOKING CONVERSATION
     # ============================================================

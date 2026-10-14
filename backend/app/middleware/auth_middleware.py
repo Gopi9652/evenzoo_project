@@ -8,6 +8,8 @@ from fastapi import Request
 from fastapi.security.utils import get_authorization_scheme_param
 from fastapi import Request
 from fastapi.security.utils import get_authorization_scheme_param
+from app.services.vendor_service import VendorProfile
+from typing import Optional
 
 bearer = HTTPBearer()
 
@@ -106,3 +108,15 @@ def get_admin(
     user: User = Depends(require_role("admin"))
 ):
     return user
+
+def public_vendor_or_404(
+    vendor_id: int,
+    db: Session = Depends(get_db),
+    viewer: Optional[User] = Depends(get_optional_current_user),
+) -> VendorProfile:
+    vendor = db.query(VendorProfile).filter(VendorProfile.id == vendor_id).first()
+    if not vendor:
+        raise HTTPException(404, "Vendor not found")
+    if vendor.is_approved or (viewer and (viewer.role == "admin" or viewer.id == vendor.user_id)):
+        return vendor
+    raise HTTPException(404, "Vendor not found")      # same response as "doesn't exist"

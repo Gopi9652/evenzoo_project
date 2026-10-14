@@ -1,12 +1,29 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
+import re
+from pydantic import field_validator
+
+COMMON = {"password", "password1", "12345678", "123456789", "qwerty123", "iloveyou", "admin123", "welcome1", "evenzoo1"}
+
+def validate_password_strength(v: str) -> str:
+    if len(v) < 8:
+        raise ValueError("Password must be at least 8 characters")
+    if len(v.encode()) > 72:                    # bcrypt silently truncates beyond 72 bytes
+        raise ValueError("Password must be at most 72 characters")
+    if not re.search(r"[A-Za-z]", v) or not re.search(r"\d", v):
+        raise ValueError("Password must contain letters and numbers")
+    if v.lower() in COMMON:
+        raise ValueError("That password is too common")
+    return v
+
 class RegisterRequest(BaseModel):
     name: str
     email: EmailStr
     phone: str
     password: str
     role: str  # customer or vendor
+    _pw = field_validator("password")(validate_password_strength)
 
 class RegisterResponse(BaseModel):
     message: str
@@ -61,6 +78,7 @@ class ForgotPasswordRequest(BaseModel):
 class ResetPasswordRequest(BaseModel):
     token: str
     new_password: str
+    _pw = field_validator("new_password")(validate_password_strength)
 
 class UserResponse(BaseModel):
     id: int

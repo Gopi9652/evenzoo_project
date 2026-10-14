@@ -8,7 +8,6 @@ def send_otp_sms(phone: str, otp_code: str) -> bool:
     Falls back to console print if MSG91 isn't configured yet.
     """
     if settings.MSG91_AUTH_KEY == "placeholder":
-        print(f"[DEV MODE] OTP for {phone}: {otp_code}")
         return True
 
     url = "https://control.msg91.com/api/v5/otp"
@@ -24,7 +23,5 @@ def send_otp_sms(phone: str, otp_code: str) -> bool:
         response.raise_for_status()
         return True
     except requests.RequestException as e:
-        print(f"SMS sending failed: {e}")
         # Fallback — still print so you're not locked out during testing
-        print(f"[FALLBACK] OTP for {phone}: {otp_code}")
         return False

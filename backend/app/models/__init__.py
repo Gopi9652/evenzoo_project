@@ -16,3 +16,4 @@ from app.models.vendor import VendorVideo
 from app.models.quote import Quote
 from app.models.event_post_item import EventPostItem
 from app.models.vendor_event import VendorEngagementEvent
+from app.models.safety import UserBlock, UserReport

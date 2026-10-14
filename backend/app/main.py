@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 from app.models import *
@@ -30,18 +30,25 @@ app = FastAPI(
 # ── Rate Limiting Setup ──
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
+#allow_origins=[o.strip() for o in settings.CORS_ORIGINS.split(",")],
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:4200",
-                   "http://localhost:65491",
-                    "http://10.239.249.79:4200", "https://evenzoo-frontend.gopithagulla0.workers.dev", "https://frontend.gopithagulla0.workers.dev"],
+                    "https://frontend.gopithagulla0.workers.dev"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
+import logging
+from fastapi.responses import JSONResponse
+logger = logging.getLogger("evenzoo")
+
+@app.exception_handler(Exception)
+async def unhandled_exception(request: Request, exc: Exception):
+    logger.exception("Unhandled error %s %s", request.method, request.url.path)
+    return JSONResponse(status_code=500, content={"detail": "Something went wrong. Please try again."})
 
 app.include_router(ws_router.router)
 app.include_router(auth.router,         prefix="/api/auth")

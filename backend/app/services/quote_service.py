@@ -69,7 +69,8 @@ class QuoteService_:
 
         if not quote:
             raise HTTPException(status_code=404, detail="Quote not found")
-
+        if quote.status != "pending":
+            raise HTTPException(400, "This quote can no longer be changed")
         quote.quoted_amount = data.quoted_amount
         quote.message = data.message or quote.message
         quote.status = "pending"   # still pending customer's decision, now with a real price attached
@@ -90,45 +91,82 @@ class QuoteService_:
         engagement_service.track(db, vendor.id, "quote_sent", quote.customer_id)
         return self._attach_names(db, quote)
 
-
-    def update_quote_status(self, db: Session, user_id: int, quote_id: int, new_status: str):
-        """Customer accepts/declines a quote, or either party withdraws it."""
-        quote = db.query(Quote).filter(Quote.id == quote_id).first()
+    def update_quote_status(self, db, user_id, quote_id, new_status):
+        quote = db.query(Quote).filter(Quote.id == quote_id).with_for_update().first()   # row lock: no accept/withdraw race
         if not quote:
-            raise HTTPException(status_code=404, detail="Quote not found")
+            raise HTTPException(404, "Quote not found")
 
         vendor = db.query(VendorProfile).filter(VendorProfile.user_id == user_id).first()
         is_customer = quote.customer_id == user_id
-        is_vendor = vendor and quote.vendor_id == vendor.id
+        is_vendor = bool(vendor and quote.vendor_id == vendor.id)
+        if not (is_customer or is_vendor):
+            raise HTTPException(403, "Not authorized")
 
-        if not is_customer and not is_vendor:
-            raise HTTPException(status_code=403, detail="Not authorized")
+        if quote.status != "pending":
+            raise HTTPException(400, f"This quote is already {quote.status} and can't be changed")
 
-        if new_status not in {"accepted", "declined", "withdrawn"}:
-            raise HTTPException(status_code=400, detail="Invalid status")
+        if new_status in ("accepted", "declined"):
+            if not is_customer:
+                raise HTTPException(403, "Only the customer can accept or decline a quote")
+            if not quote.quoted_amount or quote.quoted_amount <= 0:
+                raise HTTPException(400, "This quote has no price yet")
+        elif new_status == "withdrawn":
+            if not is_vendor:
+                raise HTTPException(403, "Only the vendor can withdraw a quote")
+        else:
+            raise HTTPException(400, "Invalid status")
 
         quote.status = new_status
-        from datetime import datetime
         quote.responded_at = datetime.utcnow()
         db.commit()
         db.refresh(quote)
 
-        # Notify the other party
-        notify_user_id = quote.vendor_id if is_customer else quote.customer_id
-        if is_customer:
-            vendor_row = db.query(VendorProfile).filter(VendorProfile.id == quote.vendor_id).first()
-            notify_user_id = vendor_row.user_id if vendor_row else None
-
-        if notify_user_id:
-            notification_service.create(
-                db, user_id=notify_user_id,
-                title=f"Quote {new_status.title()}",
-                message=f"Your quote was {new_status}.",
-                type="quote",
-                link="/vendor/quotes" if is_customer else "/customer/quotes"
-            )
-
+        other_user_id = (db.query(VendorProfile).filter(VendorProfile.id == quote.vendor_id).first().user_id
+                        if is_customer else quote.customer_id)
+        notification_service.create(
+            db, user_id=other_user_id, title=f"Quote {new_status.title()}",
+            message=f"A quote was {new_status}.", type="quote",
+            link="/vendor/quotes" if is_customer else "/customer/quotes")
         return self._attach_names(db, quote)
+    
+    # def update_quote_status(self, db: Session, user_id: int, quote_id: int, new_status: str):
+    #     """Customer accepts/declines a quote, or either party withdraws it."""
+    #     quote = db.query(Quote).filter(Quote.id == quote_id).first()
+    #     if not quote:
+    #         raise HTTPException(status_code=404, detail="Quote not found")
+
+    #     vendor = db.query(VendorProfile).filter(VendorProfile.user_id == user_id).first()
+    #     is_customer = quote.customer_id == user_id
+    #     is_vendor = vendor and quote.vendor_id == vendor.id
+
+    #     if not is_customer and not is_vendor:
+    #         raise HTTPException(status_code=403, detail="Not authorized")
+
+    #     if new_status not in {"accepted", "declined", "withdrawn"}:
+    #         raise HTTPException(status_code=400, detail="Invalid status")
+
+    #     quote.status = new_status
+    #     from datetime import datetime
+    #     quote.responded_at = datetime.utcnow()
+    #     db.commit()
+    #     db.refresh(quote)
+
+    #     # Notify the other party
+    #     notify_user_id = quote.vendor_id if is_customer else quote.customer_id
+    #     if is_customer:
+    #         vendor_row = db.query(VendorProfile).filter(VendorProfile.id == quote.vendor_id).first()
+    #         notify_user_id = vendor_row.user_id if vendor_row else None
+
+    #     if notify_user_id:
+    #         notification_service.create(
+    #             db, user_id=notify_user_id,
+    #             title=f"Quote {new_status.title()}",
+    #             message=f"Your quote was {new_status}.",
+    #             type="quote",
+    #             link="/vendor/quotes" if is_customer else "/customer/quotes"
+    #         )
+
+    #     return self._attach_names(db, quote)
 
 
     def get_my_quotes_as_customer(self, db: Session, customer_id: int, category_id: int = None):

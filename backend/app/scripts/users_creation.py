@@ -23,10 +23,8 @@ cities = db.query(City).all()
 categories = db.query(VendorCategory).all()
 
 if not cities or not categories:
-    print("❌ Run seed_cities.py and seed_categories.py first!")
     sys.exit(1)
 
-print("Creating 50 vendors...")
 for i in range(1, 51):
     name = f"{random.choice(FIRST_NAMES)} {random.choice(BUSINESS_TYPES)}"
     email = f"vendor{i}@loadtest.com"
@@ -78,9 +76,7 @@ for i in range(1, 51):
         db.add(VendorCategoryMap(vendor_id=vendor.id, category_id=cat.id))
 
 db.commit()
-print("✅ 50 vendors created")
 
-print("Creating 100 customers...")
 for i in range(1, 101):
     email = f"customer{i}@loadtest.com"
     phone = f"80000{i:05d}"
@@ -109,7 +105,3 @@ for i in range(1, 101):
 
 db.commit()
 db.close()
-print("✅ 100 customers created")
-print("\n📋 All test accounts use password: Test@1234")
-print("Vendors: vendor1@loadtest.com to vendor50@loadtest.com")
-print("Customers: customer1@loadtest.com to customer100@loadtest.com")

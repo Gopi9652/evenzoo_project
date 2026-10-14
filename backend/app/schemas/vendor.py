@@ -220,4 +220,6 @@ class VendorVideoResponse(BaseModel):
     class Config:
         from_attributes = True
 class NearbyVendorResponse(VendorListResponse):
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
     distance_km: float
