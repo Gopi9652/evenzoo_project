@@ -30,14 +30,23 @@ app = FastAPI(
 # ── Rate Limiting Setup ──
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-#allow_origins=[o.strip() for o in settings.CORS_ORIGINS.split(",")],
+#allow_origins=[o.strip() for o in settings.CORS_ORIGINS.split(",")]
+from fastapi.middleware.cors import CORSMiddleware
+from app.config import settings
+
+# Configure CORS using environment settings
+allowed_origins = [
+    origin.strip()
+    for origin in settings.CORS_ORIGINS.split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200",
-                    "https://frontend.gopithagulla0.workers.dev"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Accept"],
 )
 
 
