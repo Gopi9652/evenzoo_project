@@ -31,8 +31,6 @@ class Settings(BaseSettings):
     FIELD_ENCRYPTION_KEY: str | None = None
     RESEND_API_KEY: str | None = None
     CORS_ORIGINS: str = (
-        "http://localhost:4200,"
-        "http://127.0.0.1:4200,"
         "https://frontend.gopithagulla0.workers.dev"
     )
     @model_validator(mode="after")
