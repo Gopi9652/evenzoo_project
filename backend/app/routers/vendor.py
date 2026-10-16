@@ -257,52 +257,53 @@ def assign_category(
         db, current_user.id, category_id
     )
 
-
-from starlette.concurrency import run_in_threadpool
-MAX_PHOTOS, MAX_VIDEOS = 30, 5
-
-@router.post("/me/upload-photo")
-@limiter.limit("30/hour")
-async def upload_photo_file(request: Request, file: UploadFile = File(...),
-                            current_user: User = Depends(get_vendor), db: Session = Depends(get_db)):
-    if file.content_type not in {"image/jpeg", "image/png", "image/webp"}:
-        raise HTTPException(400, "Only JPEG, PNG, or WEBP images are allowed")
-    vendor = db.query(VendorProfile).filter(VendorProfile.user_id == current_user.id).first()
-    if db.query(VendorPhoto).filter(VendorPhoto.vendor_id == vendor.id).count() >= MAX_PHOTOS:
-        raise HTTPException(400, f"Photo limit reached ({MAX_PHOTOS})")
-
-    data = await read_limited(file, 25 * 1024 * 1024)
-    assert_real_image(data)
-    processed = await run_in_threadpool(process_image, data, file.filename)   # off the event loop
-    url = await run_in_threadpool(upload_image, io.BytesIO(processed))
-    return {"photo_url": url}
+################# below is the working
+# from starlette.concurrency import run_in_threadpool
+# MAX_PHOTOS, MAX_VIDEOS = 30, 5
 
 # @router.post("/me/upload-photo")
-# async def upload_photo_file(
-#     file: UploadFile = File(...),
-#     current_user: User = Depends(get_vendor),
-#     db: Session = Depends(get_db)
-# ):
-#     allowed_types = {"image/jpeg", "image/png", "image/webp"}
-#     if file.content_type not in allowed_types:
-#         raise HTTPException(
-#             status_code=400,
-#             detail="Only JPEG, PNG, or WEBP images are allowed"
-#         )
+# @limiter.limit("30/hour")
+# async def upload_photo_file(request: Request, file: UploadFile = File(...),
+#                             current_user: User = Depends(get_vendor), db: Session = Depends(get_db)):
+#     if file.content_type not in {"image/jpeg", "image/png", "image/webp"}:
+#         raise HTTPException(400, "Only JPEG, PNG, or WEBP images are allowed")
+#     vendor = db.query(VendorProfile).filter(VendorProfile.user_id == current_user.id).first()
+#     if db.query(VendorPhoto).filter(VendorPhoto.vendor_id == vendor.id).count() >= MAX_PHOTOS:
+#         raise HTTPException(400, f"Photo limit reached ({MAX_PHOTOS})")
 
-#     file_bytes = await file.read()
+#     data = await read_limited(file, 25 * 1024 * 1024)
+#     assert_real_image(data)
+#     processed = await run_in_threadpool(process_image, data, file.filename)   # off the event loop
+#     url = await run_in_threadpool(upload_image, io.BytesIO(processed))
+#     return {"photo_url": url}
 
-#     if len(file_bytes) > ABSOLUTE_MAX_SIZE:
-#         raise HTTPException(
-#             status_code=400,
-#             detail="Image is too large. Please choose a file under 25MB."
-#         )
+@router.post("/me/upload-photo")
+async def upload_photo_file(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_vendor),
+    db: Session = Depends(get_db)
+):
+    allowed_types = {"image/jpeg", "image/png", "image/webp"}
+    if file.content_type not in allowed_types:
+        raise HTTPException(
+            status_code=400,
+            detail="Only JPEG, PNG, or WEBP images are allowed"
+        )
 
-#     # Auto-compress if over 10MB, otherwise pass through unchanged
-#     processed_bytes = process_image(file_bytes, file.filename)
+    file_bytes = await file.read()
 
-#     photo_url = upload_image(io.BytesIO(processed_bytes))
-#     return {"photo_url": photo_url}
+    if len(file_bytes) > ABSOLUTE_MAX_SIZE:
+        raise HTTPException(
+            status_code=400,
+            detail="Image is too large. Please choose a file under 25MB."
+        )
+
+    # Auto-compress if over 10MB, otherwise pass through unchanged
+    processed_bytes = process_image(file_bytes, file.filename)
+
+    photo_url = upload_image(io.BytesIO(processed_bytes))
+    return {"photo_url": photo_url}
+
 @router.post("/me/categories/custom")
 def request_custom_category(
     data: CustomCategoryRequest,
@@ -381,84 +382,87 @@ def get_my_analytics(
     vendor = vendor_service.get_profile(db, current_user.id)
     return analytics_service.get_vendor_analytics(db, vendor.id)
 
-# @router.post("/me/upload-video", response_model=VendorVideoResponse)
-# async def upload_vendor_video(
-#     file: UploadFile = File(...),
-#     caption: Optional[str] = None,
-#     current_user: User = Depends(get_vendor),
-#     db: Session = Depends(get_db)
-# ):
-#     if file.content_type not in ALLOWED_VIDEO_TYPES:
-#         raise HTTPException(status_code=400, detail="Only MP4, MOV, or WEBM videos are allowed")
-
-#     vendor = db.query(VendorProfile).filter(VendorProfile.user_id == current_user.id).first()
-
-#     file_bytes = await file.read()
-#     if len(file_bytes) > ABSOLUTE_MAX_VIDEO_SIZE:
-#         raise HTTPException(status_code=400, detail="Video is too large. Please choose a file under 50MB.")
-
-#     # Write to a temp file since moviepy needs a real file path, not bytes in memory
-#     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
-#         tmp.write(file_bytes)
-#         tmp_path = tmp.name
-
-#     try:
-#         processed_path = process_video(tmp_path)
-#         thumb_path = generate_thumbnail(processed_path)
-
-#         video_url = upload_video(processed_path)
-#         thumbnail_url = upload_image(open(thumb_path, "rb"))
-
-#         video_record = VendorVideo(
-#             vendor_id=vendor.id,
-#             video_url=video_url,
-#             thumbnail_url=thumbnail_url,
-#             caption=caption
-#         )
-#         db.add(video_record)
-#         db.commit()
-#         db.refresh(video_record)
-
-#         return video_record
-#     finally:
-#         # Clean up every temp file, whether processing succeeded or failed
-#         for path in {tmp_path, processed_path if 'processed_path' in dir() else None, thumb_path if 'thumb_path' in dir() else None}:
-#             if path and os.path.exists(path):
-#                 os.remove(path)
-import asyncio
-_video_slot = asyncio.Semaphore(1)
-
 @router.post("/me/upload-video", response_model=VendorVideoResponse)
-@limiter.limit("10/hour")
-async def upload_vendor_video(request: Request, file: UploadFile = File(...), caption: Optional[str] = None,
-                              current_user: User = Depends(get_vendor), db: Session = Depends(get_db)):
+async def upload_vendor_video(
+    file: UploadFile = File(...),
+    caption: Optional[str] = None,
+    current_user: User = Depends(get_vendor),
+    db: Session = Depends(get_db)
+):
     if file.content_type not in ALLOWED_VIDEO_TYPES:
-        raise HTTPException(400, "Only MP4, MOV, or WEBM videos are allowed")
+        raise HTTPException(status_code=400, detail="Only MP4, MOV, or WEBM videos are allowed")
+
     vendor = db.query(VendorProfile).filter(VendorProfile.user_id == current_user.id).first()
-    if db.query(VendorVideo).filter(VendorVideo.vendor_id == vendor.id).count() >= MAX_VIDEOS:
-        raise HTTPException(400, f"Video limit reached ({MAX_VIDEOS})")
 
-    data = await read_limited(file, 30 * 1024 * 1024)       # 30MB: safe for a small Render instance
-    assert_real_video(data)
+    file_bytes = await file.read()
+    if len(file_bytes) > ABSOLUTE_MAX_VIDEO_SIZE:
+        raise HTTPException(status_code=400, detail="Video is too large. Please choose a file under 50MB.")
 
-    tmp_path = processed_path = thumb_path = None
+    # Write to a temp file since moviepy needs a real file path, not bytes in memory
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
+        tmp.write(file_bytes)
+        tmp_path = tmp.name
+
     try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
-            tmp.write(data)
-            tmp_path = tmp.name
-        async with _video_slot:
-            processed_path = await run_in_threadpool(process_video, tmp_path)
-            thumb_path = await run_in_threadpool(generate_thumbnail, processed_path)
-        video_url = await run_in_threadpool(upload_video, processed_path)
-        with open(thumb_path, "rb") as f:
-            thumb_url = await run_in_threadpool(upload_image, f)
-        record = VendorVideo(vendor_id=vendor.id, video_url=video_url, thumbnail_url=thumb_url, caption=caption)
-        db.add(record); db.commit(); db.refresh(record)
-        return record
+        processed_path = process_video(tmp_path)
+        thumb_path = generate_thumbnail(processed_path)
+
+        video_url = upload_video(processed_path)
+        thumbnail_url = upload_image(open(thumb_path, "rb"))
+
+        video_record = VendorVideo(
+            vendor_id=vendor.id,
+            video_url=video_url,
+            thumbnail_url=thumbnail_url,
+            caption=caption
+        )
+        db.add(video_record)
+        db.commit()
+        db.refresh(video_record)
+
+        return video_record
     finally:
-        for p in {tmp_path, processed_path, thumb_path}:
-            if p and os.path.exists(p):
-                os.remove(p)
+        # Clean up every temp file, whether processing succeeded or failed
+        for path in {tmp_path, processed_path if 'processed_path' in dir() else None, thumb_path if 'thumb_path' in dir() else None}:
+            if path and os.path.exists(path):
+                os.remove(path)
+
+
+################# below is the working
+# import asyncio
+# _video_slot = asyncio.Semaphore(1)
+
+# @router.post("/me/upload-video", response_model=VendorVideoResponse)
+# @limiter.limit("10/hour")
+# async def upload_vendor_video(request: Request, file: UploadFile = File(...), caption: Optional[str] = None,
+#                               current_user: User = Depends(get_vendor), db: Session = Depends(get_db)):
+#     if file.content_type not in ALLOWED_VIDEO_TYPES:
+#         raise HTTPException(400, "Only MP4, MOV, or WEBM videos are allowed")
+#     vendor = db.query(VendorProfile).filter(VendorProfile.user_id == current_user.id).first()
+#     if db.query(VendorVideo).filter(VendorVideo.vendor_id == vendor.id).count() >= MAX_VIDEOS:
+#         raise HTTPException(400, f"Video limit reached ({MAX_VIDEOS})")
+
+#     data = await read_limited(file, 30 * 1024 * 1024)       # 30MB: safe for a small Render instance
+#     assert_real_video(data)
+
+#     tmp_path = processed_path = thumb_path = None
+#     try:
+#         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
+#             tmp.write(data)
+#             tmp_path = tmp.name
+#         async with _video_slot:
+#             processed_path = await run_in_threadpool(process_video, tmp_path)
+#             thumb_path = await run_in_threadpool(generate_thumbnail, processed_path)
+#         video_url = await run_in_threadpool(upload_video, processed_path)
+#         with open(thumb_path, "rb") as f:
+#             thumb_url = await run_in_threadpool(upload_image, f)
+#         record = VendorVideo(vendor_id=vendor.id, video_url=video_url, thumbnail_url=thumb_url, caption=caption)
+#         db.add(record); db.commit(); db.refresh(record)
+#         return record
+#     finally:
+#         for p in {tmp_path, processed_path, thumb_path}:
+#             if p and os.path.exists(p):
+#                 os.remove(p)
 
 @router.get("/{vendor_id}/videos", response_model=List[VendorVideoResponse])
 def get_vendor_videos(vendor_id: int, db: Session = Depends(get_db)):
